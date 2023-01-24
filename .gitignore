@@ -1,0 +1,51 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+.npm
+
+# next.js
+.next
+out
+
+# production
+build
+dist
+
+# testing
+coverage
+cypress/screenshots
+cypress/videos
+cypress/downloads
+
+# envs
+.env
+.env.production
+
+# debug
+npm-debug.log*
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+.DS_Store
+.lighthouseci
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

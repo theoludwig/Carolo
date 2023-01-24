@@ -1,0 +1,14 @@
+{
+  "extends": ["conventions", "next/core-web-vitals", "prettier"],
+  "plugins": ["prettier"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}
