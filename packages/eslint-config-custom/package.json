@@ -1,0 +1,25 @@
+{
+  "name": "@carolo/eslint-config-custom",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "index.js",
+    ".eslintrc.json"
+  ],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "5.49.0",
+    "@typescript-eslint/parser": "5.49.0",
+    "eslint": "8.32.0",
+    "eslint-config-conventions": "6.0.0",
+    "eslint-config-prettier": "8.6.0",
+    "eslint-config-turbo": "0.0.7",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-promise": "6.1.1",
+    "eslint-plugin-unicorn": "45.0.2"
+  },
+  "devDependencies": {
+    "typescript": "4.9.4"
+  }
+}

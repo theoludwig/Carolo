@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/strictest/tsconfig.json",
+  "extends": "@carolo/tsconfig/base.json",
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
@@ -19,8 +19,7 @@
       {
         "name": "next"
       }
-    ],
-    "exactOptionalPropertyTypes": false
+    ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

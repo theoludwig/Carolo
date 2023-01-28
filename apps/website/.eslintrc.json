@@ -1,0 +1,7 @@
+{
+  "root": true,
+  "extends": ["@carolo/eslint-config-custom", "next/core-web-vitals"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
+}

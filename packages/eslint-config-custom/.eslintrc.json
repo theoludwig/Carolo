@@ -1,0 +1,11 @@
+{
+  "extends": ["conventions", "turbo", "prettier"],
+  "plugins": ["prettier"],
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}

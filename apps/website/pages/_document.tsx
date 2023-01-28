@@ -4,7 +4,7 @@ const Document: React.FC = () => {
   return (
     <Html lang='fr' className='dark' style={{ colorScheme: 'dark' }}>
       <Head />
-      <body className='bg-[#312E2B] font-inter'>
+      <body className='font-inter bg-[#312E2B]'>
         <Main />
         <NextScript />
       </body>

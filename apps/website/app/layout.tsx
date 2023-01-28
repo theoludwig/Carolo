@@ -8,7 +8,7 @@ const RootLayout = (props: RootLayoutProps): JSX.Element => {
   return (
     <html lang='fr' className='dark' style={{ colorScheme: 'dark' }}>
       <head />
-      <body className='bg-[#312E2B] font-inter'>{children}</body>
+      <body className='font-inter bg-[#312E2B]'>{children}</body>
     </html>
   )
 }

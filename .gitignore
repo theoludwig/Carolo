@@ -33,18 +33,13 @@ npm-debug.log*
 *.launch
 .settings/
 *.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode/
 
 # misc
 .DS_Store
-.lighthouseci
+*.pem
 .vercel
+.turbo
 
 # typescript
 *.tsbuildinfo
