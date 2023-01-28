@@ -6,29 +6,22 @@ export const Features = (): JSX.Element => {
       <Feature
         title='Dynamique'
         icon='/feature-icons/run.png'
-        description='Le Carolo est un jeu dynamique qui saura plaire aux joueurs
-          impatients.'
+        description='Le Carolo est un jeu dynamique qui saura plaire aux joueurs audacieux.'
       />
       <Feature
         title='Stratégique'
         icon='/feature-icons/brain.png'
-        description='Le Carolo est un jeu tactique
-        qui comporte des combinaisons
-        grandioses !'
+        description='Le Carolo est un jeu tactique qui comporte des combinaisons grandioses !'
       />
       <Feature
         title='Innovant'
         icon='/feature-icons/innovation.png'
-        description='Le Carolo est un jeu original
-        comportant des mécaniques
-        nouvelles.'
+        description='Le Carolo est un jeu original comportant des nouvelles mécaniques.'
       />
       <Feature
         title='Subjuguant'
         icon='/feature-icons/book.png'
-        description='Le Carolo est un jeu envoûtant
-        qui comporte une histoire dont
-        le joueur est le héros.'
+        description='Le Carolo est un jeu envoûtant qui comporte une histoire dont le joueur est le héros.'
       />
     </section>
   )

@@ -30,9 +30,11 @@ const HomePage = (): JSX.Element => {
               communauté, pour la communauté, qui allie autant l{"'"}aspect
               tactique que romantique !
             </p>
-            <ButtonLink className='mt-6' href='/play'>
-              Jouer
-            </ButtonLink>
+            <div className='flex justify-center sm:justify-start'>
+              <ButtonLink className='mt-6' href='/play'>
+                Jouer
+              </ButtonLink>
+            </div>
           </div>
           <div className='mt-8 w-full sm:mt-0 sm:w-8/12 md:w-6/12'>
             <Image src={Home} quality={100} alt='Carolo Home' />
@@ -56,9 +58,11 @@ const HomePage = (): JSX.Element => {
               Apprenez à jouer en moins de 5 minutes, éveillez le champion que
               vous êtes, et lancez-vous à la conquête du classement !{' '}
             </p>
-            <ButtonLink className='mt-6' href='/rules'>
-              Les règles
-            </ButtonLink>
+            <div className='flex justify-center sm:justify-start'>
+              <ButtonLink className='mt-6' href='/rules'>
+                Les règles
+              </ButtonLink>
+            </div>
           </div>
         </section>
       </main>
