@@ -28,7 +28,7 @@ export const Header = (): JSX.Element => {
               <Link href='/play'>Jouer</Link>
             </li>
             <li>
-              <Link href='/rules'>Règles</Link>
+              <Link href='/rules/index.html'>Règles</Link>
             </li>
           </ul>
         </nav>

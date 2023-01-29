@@ -1,15 +1,18 @@
 image: 'node:18'
 
+cache:
+  key:
+    files:
+      - 'package-lock.json'
+  paths:
+    - '.npm/'
+
+before_script:
+  - 'npm ci --cache .npm --prefer-offline'
+
 test:
   stage: 'test'
-  cache:
-    key:
-      files:
-        - 'package-lock.json'
-    paths:
-      - '.npm/'
   script:
-    - 'npm ci --cache .npm --prefer-offline'
     - 'echo "${CI_COMMIT_MESSAGE}" | npm run lint:commit'
     - 'npm run lint:editorconfig'
     - 'npm run lint:prettier'
@@ -22,6 +25,7 @@ deploy-production:
   stage: 'deploy'
   script:
     - 'npm install --global vercel'
+    - 'npm run build'
     - 'vercel --token="${VERCEL_TOKEN}" --prod'
   only:
     - 'main'
@@ -30,6 +34,7 @@ deploy-preview:
   stage: 'deploy'
   script:
     - 'npm install --global vercel'
+    - 'npm run build'
     - 'vercel --token="${VERCEL_TOKEN}" > domain.txt'
     - echo "$(cat domain.txt)"
     - vercel --token="${VERCEL_TOKEN}" alias set "$(cat domain.txt)" "${VERCEL_PREVIEW_URL}"

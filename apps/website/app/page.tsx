@@ -59,7 +59,7 @@ const HomePage = (): JSX.Element => {
               vous êtes, et lancez-vous à la conquête du classement !{' '}
             </p>
             <div className='flex justify-center sm:justify-start'>
-              <ButtonLink className='mt-6' href='/rules'>
+              <ButtonLink className='mt-6' href='/rules/index.html'>
                 Les règles
               </ButtonLink>
             </div>

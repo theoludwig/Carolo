@@ -17,6 +17,7 @@
     "lint:commit": "commitlint",
     "lint:editorconfig": "editorconfig-checker",
     "lint:prettier": "prettier \".\" --check --ignore-path \".gitignore\"",
+    "lint:markdown": "markdownlint-cli2",
     "deploy": "vercel"
   },
   "devDependencies": {
@@ -24,6 +25,7 @@
     "@commitlint/cli": "17.4.2",
     "@commitlint/config-conventional": "17.4.2",
     "editorconfig-checker": "5.0.1",
+    "markdownlint-cli2": "0.6.0",
     "prettier": "2.8.3",
     "prettier-plugin-tailwindcss": "0.2.2",
     "turbo": "1.7.0",

@@ -40,6 +40,8 @@ npm-debug.log*
 *.pem
 .vercel
 .turbo
+apps/website/public/rules
+bin/
 
 # typescript
 *.tsbuildinfo
