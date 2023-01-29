@@ -21,7 +21,7 @@ export const updateRelativePaths = async () => {
     })
     const updatedFileContent = fileContent
       .replaceAll(`href="`, `href="/rules/`)
-      .replaceAll(`src="`, `src="/rules/`)
+      .replaceAll(`script src="`, `script src="/rules/`)
       .replaceAll(`path_to_root = ""`, `path_to_root = "/rules/"`)
     await fs.promises.writeFile(filePath, updatedFileContent)
   }
