@@ -1,0 +1,133 @@
+@startuml UML
+
+skinparam style strictuml
+skinparam classAttributeIconSize 0
+skinparam classFontStyle Bold
+hide enum methods
+
+enum GameStatus <<enumeration>> {
+  LOBBY
+  PLAY
+  WHITE_WON
+  BLACK_WON
+}
+
+class Game {
+  {field} - currentPlayerIndex: Number
+
+  {method} + Game(board: Board, players: Player[2])
+  {method} + getCurrentPlayer(): Player
+  {method} + getPlayer(index: Number): Player
+  {method} + setPlayerName(index: Number, name: String)
+  {method} + setPlayerColor(index: Number, color: PieceColor)
+  {method} + getBoard(): Board
+  {method} + play()
+  {method} + playMove(fromPosition: Position, toPosition: Position)
+  {method} + getStatus(): GameStatus
+  {method} - nextPlayer()
+}
+Game o--> "1\n- board" Board : <<Owns>>
+Game o--> "2\n- players" Player : <<Owns>>
+Game *--> "1\n- status" GameStatus : <<Has>>
+Game ..> Position : <<Uses>>
+
+class Player {
+  {field} - name: String
+
+  {method} + Player(name: String, color: PieceColor)
+  {method} + setName(name: String)
+  {method} + setColor(color: PieceColor)
+  {method} + addCapturedPiece(piece: Piece)
+  {method} + removeAllCapturedPieces()
+
+  {method} + getName(): String
+  {method} + getColor(): PieceColor
+  {method} + getCapturedPieces(): Piece[*]
+}
+Player o--> "1\n- color" PieceColor : <<Chooses>>
+Player *--> "*\n- capturedPieces" Piece : <<Captures>>
+
+enum PieceType <<enumeration>> {
+  AYMOND
+  BAYARD
+  CAROLO
+  EGO
+  HUBRIS
+}
+
+enum PieceColor <<enumeration>> {
+  BLACK
+  WHITE
+
+  {method} + getOpposite(): PieceColor
+}
+
+abstract class Piece <<abstract>> {
+  {field} - hasMoved: Boolean
+
+  {method} + Piece(color: PieceColor)
+
+  {method} + getDirection(color: PieceColor): Number {static}
+  {method} + getDirection(): Number
+  {method} + setHasMoved()
+  {method} + hasMoved(): Boolean
+  {method} + canJumpOverPieces(): Boolean
+  {method} + getColor(): PieceColor
+  {method} + getMovesOffsets(maximumOffset: Number): Position[*] {abstract}
+  {method} + getCapturesPieceTypes(maximumOffset: Number): PieceType[*]
+  {method} + getType(): PieceType {abstract}
+}
+Piece o--> "1\n- color" PieceColor : <<Has>>
+Piece ..> Position : <<Uses>>
+Piece ..> PieceType : <<Is>>
+
+class Aymond extends Piece {
+  {method} + Aymond(color: PieceColor)
+  {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + getType(): PieceType
+}
+
+abstract class BoardBase <<abstract>> {
+  {field} + {static} SIZE = 8 : Number {readOnly}
+
+  {method} + reset()
+  {method} + getGamePosition(position: Position): GamePosition
+  {method} + getLastRow(color: PieceColor): Number
+  {method} - setupPieces(color: PieceColor)
+}
+BoardBase *--> "64\n- board" GamePosition : <<Owns>>
+BoardBase ..> Position : <<Uses>>
+BoardBase ..> PieceColor : <<Uses>>
+
+class Board extends BoardBase {
+  {method} + Board()
+  {method} + move(fromPosition: Position, toPosition: Position)
+}
+Board ..> Position : <<Uses>>
+Board ..> PieceColor : <<Uses>>
+Board ..> PieceType : <<Uses>>
+
+class Position {
+  {field} + column: Number
+  {field} + row: Number
+
+  {method} + Position(column: Number, row: Number)
+  {method} + add(position: Position)
+  {method} + isInsideSquare(position: Position): boolean
+  {method} + getIntermediatePositions(position: Position): Position[*]
+}
+
+class GamePosition {
+  {method} + GamePosition(position: Position, piece: Piece)
+  {method} + GamePosition(position: Position)
+  {method} + setPiece(piece: Piece)
+
+  {method} + isOccupied(): Boolean
+  {method} + isFree(): Boolean
+  {method} + getPiece(): Piece
+  {method} + getPosition(): Position
+}
+GamePosition o--> "1\n- piece" Piece : <<Owns>>
+GamePosition o--> "1\n- position" Position : <<Is Located>>
+
+@enduml
