@@ -22,6 +22,7 @@ class Game {
   {method} + setPlayerColor(index: Number, color: PieceColor)
   {method} + getBoard(): Board
   {method} + play()
+  {method} + restart()
   {method} + playMove(fromPosition: Position, toPosition: Position)
   {method} + getStatus(): GameStatus
   {method} - nextPlayer()
@@ -71,10 +72,13 @@ abstract class Piece <<abstract>> {
   {method} + getDirection(): Number
   {method} + setHasMoved()
   {method} + hasMoved(): Boolean
-  {method} + canJumpOverPieces(): Boolean
   {method} + getColor(): PieceColor
+  {method} + canBeCapturedBy(piece: PieceType): Boolean
+  {method} + canJumpOverPieces(): Boolean
+  {method} + shouldMoveUntilObstacle(): Boolean
+  {method} + canMoveTeleportAnywhere(): Boolean
   {method} + getMovesOffsets(maximumOffset: Number): Position[*] {abstract}
-  {method} + getCapturesPieceTypes(maximumOffset: Number): PieceType[*]
+  {method} + getCapturablePiecesTypes(): PieceType[*] {abstract}
   {method} + getType(): PieceType {abstract}
 }
 Piece o--> "1\n- color" PieceColor : <<Has>>
@@ -83,7 +87,39 @@ Piece ..> PieceType : <<Is>>
 
 class Aymond extends Piece {
   {method} + Aymond(color: PieceColor)
+  {method} + canMoveTeleportAnywhere(): Boolean
   {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + getCapturablePiecesTypes(): PieceType[*]
+  {method} + getType(): PieceType
+}
+
+class Bayard extends Piece {
+  {method} + Bayard(color: PieceColor)
+  {method} + canJumpOverPieces(): Boolean
+  {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + getCapturablePiecesTypes(): PieceType[*]
+  {method} + getType(): PieceType
+}
+
+class Carolo extends Piece {
+  {method} + Carolo(color: PieceColor)
+  {method} + shouldMoveUntilObstacle(): Boolean
+  {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + getCapturablePiecesTypes(): PieceType[*]
+  {method} + getType(): PieceType
+}
+
+class Ego extends Piece {
+  {method} + Ego(color: PieceColor)
+  {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + getCapturablePiecesTypes(): PieceType[*]
+  {method} + getType(): PieceType
+}
+
+class Hubris extends Piece {
+  {method} + Hubris(color: PieceColor)
+  {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + getCapturablePiecesTypes(): PieceType[*]
   {method} + getType(): PieceType
 }
 
@@ -91,21 +127,32 @@ abstract class BoardBase <<abstract>> {
   {field} + {static} SIZE = 8 : Number {readOnly}
 
   {method} + reset()
-  {method} + getGamePosition(position: Position): GamePosition
+  {method} + getPiecePosition(position: Position): PiecePosition
   {method} + getLastRow(color: PieceColor): Number
+  {method} + getAymondInitialRow(color: PieceColor): Number
+  {method} + getHubrisInitialRow(color: PieceColor): Number
+  {method} + getEgoPiecePosition(color: PieceColor): PiecePosition
   {method} - setupPieces(color: PieceColor)
 }
-BoardBase *--> "64\n- board" GamePosition : <<Owns>>
+BoardBase *--> "64\n- board" PiecePosition : <<Owns>>
 BoardBase ..> Position : <<Uses>>
 BoardBase ..> PieceColor : <<Uses>>
 
 class Board extends BoardBase {
   {method} + Board()
-  {method} + move(fromPosition: Position, toPosition: Position)
+  {method} + getAvailableMoves(fromPosition: Position): PiecePosition[*]
+  {method} + canMove(fromPosition: Position, toPosition: Position): Boolean
+  {method} + isCaptureMove(fromPosition: Position, toPosition: Position): Boolean
+  {method} + move(fromPosition: Position, toPosition: Position): Boolean
+  {method} + powerOfHubrisAttraction(fromPosition: Position): Boolean
+  {method} + isReconquest(color: PieceColor): Boolean
+  {method} + isCheck(color: PieceColor): Boolean
+  {method} + isCheckAfterMove(fromPosition: Position, toPosition: Position): Boolean
 }
 Board ..> Position : <<Uses>>
 Board ..> PieceColor : <<Uses>>
 Board ..> PieceType : <<Uses>>
+Board o--> "*\n- lastMovedPositions" Position : <<Saves>>
 
 class Position {
   {field} + column: Number
@@ -117,9 +164,9 @@ class Position {
   {method} + getIntermediatePositions(position: Position): Position[*]
 }
 
-class GamePosition {
-  {method} + GamePosition(position: Position, piece: Piece)
-  {method} + GamePosition(position: Position)
+class PiecePosition {
+  {method} + PiecePosition(position: Position, piece: Piece)
+  {method} + PiecePosition(position: Position)
   {method} + setPiece(piece: Piece)
 
   {method} + isOccupied(): Boolean
@@ -127,7 +174,7 @@ class GamePosition {
   {method} + getPiece(): Piece
   {method} + getPosition(): Position
 }
-GamePosition o--> "1\n- piece" Piece : <<Owns>>
-GamePosition o--> "1\n- position" Position : <<Is Located>>
+PiecePosition o--> "1\n- piece" Piece : <<Owns>>
+PiecePosition o--> "1\n- position" Position : <<Is Located>>
 
 @enduml
