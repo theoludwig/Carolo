@@ -76,7 +76,6 @@ abstract class Piece <<abstract>> {
   {method} + canBeCapturedBy(piece: PieceType): Boolean
   {method} + canJumpOverPieces(): Boolean
   {method} + shouldMoveUntilObstacle(): Boolean
-  {method} + canMoveTeleportAnywhere(): Boolean
   {method} + getMovesOffsets(maximumOffset: Number): Position[*] {abstract}
   {method} + getCapturablePiecesTypes(): PieceType[*] {abstract}
   {method} + getType(): PieceType {abstract}
@@ -87,7 +86,6 @@ Piece ..> PieceType : <<Is>>
 
 class Aymond extends Piece {
   {method} + Aymond(color: PieceColor)
-  {method} + canMoveTeleportAnywhere(): Boolean
   {method} + getMovesOffsets(maximumOffset: Number): Position[*]
   {method} + getCapturablePiecesTypes(): PieceType[*]
   {method} + getType(): PieceType
@@ -143,7 +141,7 @@ class Board extends BoardBase {
   {method} + getAvailableMoves(fromPosition: Position): PiecePosition[*]
   {method} + canMove(fromPosition: Position, toPosition: Position): Boolean
   {method} + isCaptureMove(fromPosition: Position, toPosition: Position): Boolean
-  {method} + move(fromPosition: Position, toPosition: Position): Boolean
+  {method} + move(fromPosition: Position, toPosition: Position): Move[*]
   {method} + powerOfHubrisAttraction(fromPosition: Position): Boolean
   {method} + isReconquest(color: PieceColor): Boolean
   {method} + isCheck(color: PieceColor): Boolean
@@ -152,7 +150,14 @@ class Board extends BoardBase {
 Board ..> Position : <<Uses>>
 Board ..> PieceColor : <<Uses>>
 Board ..> PieceType : <<Uses>>
-Board o--> "*\n- lastMovedPositions" Position : <<Saves>>
+Board o--> "*\n- moves" Move : <<Saves>>
+
+interface Move <<interface>> {
+  {field} + fromPosition: Position
+  {field} + toPosition: Position
+  {field} + capturedPiece: Piece?
+  {field} + isNextPlayerTurn: Boolean
+}
 
 class Position {
   {field} + column: Number

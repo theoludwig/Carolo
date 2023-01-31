@@ -45,8 +45,8 @@ export abstract class Piece {
     return this._color
   }
 
-  public canBeCapturedBy(): boolean {
-    return false
+  public canBeCapturedBy(piece: PieceType): boolean {
+    return this.getCapturablePiecesTypes().includes(piece)
   }
 
   public canJumpOverPieces(): boolean {
@@ -54,10 +54,6 @@ export abstract class Piece {
   }
 
   public shouldMoveUntilObstacle(): boolean {
-    return false
-  }
-
-  public canMoveTeleportAnywhere(): boolean {
     return false
   }
 

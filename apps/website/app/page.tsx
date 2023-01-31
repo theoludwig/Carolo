@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import { ButtonLink } from '@/components/Button'
+import { Button } from '@/components/Button'
 import { Header } from '@/components/Header'
 import { SocialMediaLink } from '@/components/SocialMediaLink'
 import Home from '@/public/home.png'
@@ -26,14 +26,14 @@ const HomePage = (): JSX.Element => {
               JOUEZ GRATUITEMENT AU CAROLO !
             </h2>
             <p className='mt-4 text-lg opacity-75'>
-              Le Carolo est un nouveau jeu de plateau stratégique, fait par la
+              Le Carolo est un jeu de plateau stratégique, fait par la
               communauté, pour la communauté, qui allie autant l{"'"}aspect
               tactique que romantique !
             </p>
             <div className='flex justify-center sm:justify-start'>
-              <ButtonLink className='mt-6' href='/play'>
+              <Button className='mt-6' href='/play'>
                 Jouer
-              </ButtonLink>
+              </Button>
             </div>
           </div>
           <div className='mt-8 w-full sm:mt-0 sm:w-8/12 md:w-6/12'>
@@ -59,9 +59,9 @@ const HomePage = (): JSX.Element => {
               vous êtes, et lancez-vous à la conquête du classement !{' '}
             </p>
             <div className='flex justify-center sm:justify-start'>
-              <ButtonLink className='mt-6' href='/rules/index.html'>
+              <Button className='mt-6' href='/rules/index.html'>
                 Les règles
-              </ButtonLink>
+              </Button>
             </div>
           </div>
         </section>

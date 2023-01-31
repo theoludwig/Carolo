@@ -46,7 +46,7 @@ export abstract class BoardBase {
         const piecePosition = this._board[row][column]
         if (
           piecePosition.isOccupied() &&
-          piecePosition?.piece?.color === color &&
+          piecePosition.piece.color === color &&
           piecePosition.piece.getType() === 'EGO'
         ) {
           return piecePosition

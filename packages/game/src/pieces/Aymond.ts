@@ -3,10 +3,6 @@ import { Piece } from './Piece.js'
 import { Position } from '../Position.js'
 
 export class Aymond extends Piece {
-  public override canMoveTeleportAnywhere(): boolean {
-    return true
-  }
-
   /**
    * Can teleport to any position on the board.
    * @param maximumOffset
@@ -20,6 +16,12 @@ export class Aymond extends Piece {
           new Position({
             column,
             row
+          })
+        )
+        movesOffsets.push(
+          new Position({
+            column: -column,
+            row: -row
           })
         )
       }

@@ -68,7 +68,6 @@ export class Game {
       return
     }
     const from = this._board.getPiecePosition(fromPosition)
-    const to = this._board.getPiecePosition(toPosition)
     if (from.isFree()) {
       return
     }
@@ -76,11 +75,14 @@ export class Game {
     if (from.piece.color !== currentPlayer.color) {
       return
     }
-    const isCaptureMove = this._board.isCaptureMove(fromPosition, toPosition)
-    if (this._board.move(fromPosition, toPosition)) {
-      if (isCaptureMove) {
-        currentPlayer.addCapturedPiece(to.piece)
-      }
+    if (!this._board.canMove(fromPosition, toPosition)) {
+      return
+    }
+    const move = this._board.move(fromPosition, toPosition)
+    if (move.capturedPiece != null) {
+      currentPlayer.addCapturedPiece(move.capturedPiece)
+    }
+    if (move.isNextPlayerTurn) {
       this.nextPlayer()
     }
   }

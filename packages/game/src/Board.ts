@@ -1,10 +1,33 @@
 import { BoardBase } from './BoardBase.js'
 import type { PiecePosition } from './PiecePosition.js'
-import type { PieceColor } from './pieces/Piece.js'
+import type { Piece, PieceColor } from './pieces/Piece.js'
 import { getOppositePieceColor } from './pieces/Piece.js'
 import type { Position } from './Position.js'
 
+export interface Move {
+  fromPosition: Position
+  toPosition: Position
+  capturedPiece?: Piece
+  isNextPlayerTurn: boolean
+}
+
 export class Board extends BoardBase {
+  private _moves: Move[]
+
+  public constructor() {
+    super()
+    this._moves = []
+  }
+
+  public get moves(): Move[] {
+    return this._moves
+  }
+
+  public override reset(): void {
+    super.reset()
+    this._moves = []
+  }
+
   public getAvailableMoves(fromPosition: Position): PiecePosition[] {
     const from = this.getPiecePosition(fromPosition)
     if (from.isFree()) {
@@ -14,7 +37,41 @@ export class Board extends BoardBase {
     if (this.isCheck(from.piece.color) || this.isReconquest(oppositeColor)) {
       return []
     }
+    // TODO: Hubris `powerOfHubrisAttraction`: Opposing Ego must get as close as possible to the Hubris, if the diagonal of the Hubris is free (only needed to check if last move was from a Hubris)
     let availableMoves: PiecePosition[] = []
+    const movesOffsets = from.piece.getMovesOffsets(BoardBase.SIZE)
+    // TODO: Carolo `shouldMoveUntilObstacle` only the last possible (until obstacle) position is available, get maximum possible offset for top, bottom, left, right
+    for (const moveOffset of movesOffsets) {
+      const toPosition = fromPosition.add(moveOffset)
+      if (!toPosition.isInsideSquare(BoardBase.SIZE)) {
+        continue
+      }
+      const to = this.getPiecePosition(toPosition)
+      if (to.isOccupied() && to.piece.color === from.piece.color) {
+        continue
+      }
+      if (!from.piece.canJumpOverPieces()) {
+        let isPathwayBlocked = false
+        for (const intermediatePosition of fromPosition.getIntermediatePositions(
+          toPosition
+        )) {
+          if (this.getPiecePosition(intermediatePosition).isOccupied()) {
+            isPathwayBlocked = true
+            break
+          }
+        }
+        if (isPathwayBlocked) {
+          continue
+        }
+      }
+      if (
+        this.isCaptureMove(fromPosition, toPosition) &&
+        !to.piece.canBeCapturedBy(from.piece.getType())
+      ) {
+        continue
+      }
+      availableMoves.push(to)
+    }
     availableMoves = availableMoves.filter((to) => {
       return !this.isCheckAfterMove(fromPosition, to.position)
     })
@@ -33,16 +90,23 @@ export class Board extends BoardBase {
     return to.isOccupied() && from.piece.color !== to.piece.color
   }
 
-  public move(fromPosition: Position, toPosition: Position): boolean {
-    if (!this.canMove(fromPosition, toPosition)) {
-      return false
-    }
+  public move(fromPosition: Position, toPosition: Position): Move {
     const from = this.getPiecePosition(fromPosition)
     const to = this.getPiecePosition(toPosition)
+    const capturedPiece = to.isOccupied() ? to.piece : undefined
     to.piece = from.piece
     from.piece = null
     to.piece.setHasMoved()
-    return true
+    const move: Move = {
+      fromPosition,
+      toPosition,
+      capturedPiece,
+      // TODO: Carolo can move again after bounce (Border or Aymond)
+      // TODO: Carolo automatically stop bouncing after 2 seconds
+      isNextPlayerTurn: true
+    }
+    this._moves.push(move)
+    return move
   }
 
   public isReconquest(color: PieceColor): boolean {

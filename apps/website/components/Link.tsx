@@ -1,8 +1,12 @@
 import NextLink from 'next/link'
+import type { LinkProps as NextLinkProps } from 'next/link'
 import classNames from 'clsx'
 
-export interface LinkProps extends React.ComponentPropsWithoutRef<'a'> {
-  href: string
+type LinkTypeProps = NextLinkProps &
+  Omit<React.ComponentPropsWithoutRef<'a'>, 'href'>
+
+export interface LinkProps extends LinkTypeProps {
+  href: LinkTypeProps['href'] | `/rules/${string}`
 }
 
 export const Link = (props: LinkProps): JSX.Element => {
