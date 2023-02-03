@@ -1,5 +1,11 @@
 import { create } from 'zustand'
-import type { GameState, PlayerState, BoardBaseState } from '@carolo/game'
+import type {
+  GameState,
+  PlayerState,
+  BoardBaseState,
+  PiecePosition,
+  Position
+} from '@carolo/game'
 import { Game, Board, Player } from '@carolo/game'
 
 export interface GameStore {
@@ -11,9 +17,12 @@ export interface GameStore {
 
   game: Game
   gameState: GameState
+
+  availablePiecePositions: PiecePosition[]
+  getAvailablePiecePositions: (fromPosition: Position) => void
 }
 
-export const useGame = create<GameStore>()(() => {
+export const useGame = create<GameStore>()((set) => {
   const board = new Board()
   const player1 = new Player('Joueur 1', 'WHITE')
   const player2 = new Player('Joueur 2', 'BLACK')
@@ -29,6 +38,16 @@ export const useGame = create<GameStore>()(() => {
     }),
 
     game,
-    gameState: game.state
+    gameState: game.state,
+
+    availablePiecePositions: [],
+    getAvailablePiecePositions: (fromPosition: Position) => {
+      return set((state) => {
+        return {
+          availablePiecePositions:
+            state.board.getAvailablePiecePositions(fromPosition)
+        }
+      })
+    }
   }
 })

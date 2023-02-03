@@ -2,9 +2,11 @@ import Image from 'next/image'
 import classNames from 'clsx'
 
 import { useGame } from '@/stores/game'
+import AvailablePosition from '@/public/pieces/AVAILABLE_POSITION.png'
 
 export const PlayScreen = (): JSX.Element => {
-  const { boardState } = useGame()
+  const { getAvailablePiecePositions, boardState, availablePiecePositions } =
+    useGame()
 
   return (
     <>
@@ -14,6 +16,14 @@ export const PlayScreen = (): JSX.Element => {
             <div id={`board-row-${rowIndex}`} className='flex' key={rowIndex}>
               {row.map((piecePosition, columnIndex) => {
                 const isEven = (rowIndex + columnIndex) % 2 === 0
+
+                const isAvailable = availablePiecePositions.some(
+                  (availablePiecePosition) => {
+                    return availablePiecePosition.position.equals(
+                      piecePosition.position
+                    )
+                  }
+                )
 
                 return (
                   <div
@@ -26,6 +36,9 @@ export const PlayScreen = (): JSX.Element => {
                         'bg-[#EFEFEF]': isEven
                       }
                     )}
+                    onClick={() => {
+                      getAvailablePiecePositions(piecePosition.position)
+                    }}
                   >
                     {piecePosition.isOccupied() ? (
                       <Image
@@ -37,6 +50,14 @@ export const PlayScreen = (): JSX.Element => {
                         alt='Piece'
                         width={64}
                         height={64}
+                      />
+                    ) : null}
+                    {isAvailable ? (
+                      <Image
+                        className='h-full w-full object-contain'
+                        quality={100}
+                        src={AvailablePosition}
+                        alt='Available'
                       />
                     ) : null}
                   </div>

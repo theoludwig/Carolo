@@ -107,6 +107,9 @@ export class Board extends BoardBase {
     const movesOffsets = egoPiecePosition.piece.getMovesOffsets(BoardBase.SIZE)
     for (const moveOffset of movesOffsets) {
       const position = fromPosition.add(moveOffset)
+      if (!position.isInsideSquare(BoardBase.SIZE)) {
+        continue
+      }
       const piecePosition = this.getPiecePosition(position)
       if (
         piecePosition.isOccupied() &&
@@ -125,6 +128,12 @@ export class Board extends BoardBase {
   ): boolean {
     const from = this.getPiecePosition(fromPosition)
     const to = this.getPiecePosition(toPosition)
+    if (from.isFree()) {
+      return false
+    }
+    if (to.isFree()) {
+      return false
+    }
     const fromPiece = from.piece
     const toPiece = to.piece
     from.piece = null
