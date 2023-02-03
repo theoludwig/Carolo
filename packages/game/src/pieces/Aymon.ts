@@ -2,7 +2,7 @@ import type { PieceType } from './Piece.js'
 import { Piece } from './Piece.js'
 import { Position } from '../Position.js'
 
-export class Aymond extends Piece {
+export class Aymon extends Piece {
   /**
    * Can teleport to any position on the board.
    * @param maximumOffset
@@ -34,6 +34,6 @@ export class Aymond extends Piece {
   }
 
   public getType(): PieceType {
-    return 'AYMOND'
+    return 'AYMON'
   }
 }

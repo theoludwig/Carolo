@@ -1,6 +1,5 @@
 import type { Board } from './Board.js'
 import { Observer } from './Observer.js'
-import type { PieceColor } from './pieces/Piece.js'
 import { getOppositePieceColor } from './pieces/Piece.js'
 import type { Player } from './Player.js'
 import type { Position } from './Position.js'
@@ -40,10 +39,10 @@ export class Game extends Observer<GameState> {
     this._players[index].name = name
   }
 
-  public setPlayerColor(index: number, color: PieceColor): void {
-    const oppositeColor = getOppositePieceColor(color)
-    this._players[index].color = color
-    this._players[1 - index].color = oppositeColor
+  public setPlayerColor(index: number): void {
+    const color = this._players[index].color
+    this._players[index].color = getOppositePieceColor(color)
+    this._players[1 - index].color = color
   }
 
   public get board(): Board {

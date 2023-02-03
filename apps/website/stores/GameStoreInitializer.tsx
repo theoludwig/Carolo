@@ -5,6 +5,8 @@ import { useEffect } from 'react'
 
 import { useGame } from './game'
 
+type PlayerSubscription = (playerState: PlayerState) => void
+
 export const GameStoreInitializer = (): JSX.Element => {
   const gameStore = useGame()
 
@@ -14,15 +16,22 @@ export const GameStoreInitializer = (): JSX.Element => {
     }
     gameStore.board.subscribe(boardSubscription)
 
-    const player1Subscription = (player1State: PlayerState): void => {
-      useGame.setState({ player1State })
+    const playerSubscriptions: PlayerSubscription[] = []
+    for (
+      let playerIndex = 0;
+      playerIndex < gameStore.players.length;
+      playerIndex++
+    ) {
+      const playerSubscription: PlayerSubscription = (playerState) => {
+        useGame.setState((state) => {
+          const playersState = [...state.playersState]
+          playersState[playerIndex] = playerState
+          return { playersState }
+        })
+      }
+      gameStore.players[playerIndex].subscribe(playerSubscription)
+      playerSubscriptions.push(playerSubscription)
     }
-    gameStore.player1.subscribe(player1Subscription)
-
-    const player2Subscription = (player2State: PlayerState): void => {
-      useGame.setState({ player2State })
-    }
-    gameStore.player2.subscribe(player2Subscription)
 
     const gameSubscription = (gameState: GameState): void => {
       useGame.setState({ gameState })
@@ -32,12 +41,19 @@ export const GameStoreInitializer = (): JSX.Element => {
     return () => {
       gameStore.board.unsubscribe(boardSubscription)
 
-      gameStore.player1.unsubscribe(player1Subscription)
-      gameStore.player2.unsubscribe(player2Subscription)
+      for (
+        let playerIndex = 0;
+        playerIndex < gameStore.players.length;
+        playerIndex++
+      ) {
+        gameStore.players[playerIndex].unsubscribe(
+          playerSubscriptions[playerIndex]
+        )
+      }
 
       gameStore.game.unsubscribe(gameSubscription)
     }
-  }, [gameStore.board, gameStore.player1, gameStore.player2, gameStore.game])
+  }, [gameStore.board, gameStore.players, gameStore.game])
 
   return <></>
 }

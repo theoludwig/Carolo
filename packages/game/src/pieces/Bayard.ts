@@ -66,7 +66,7 @@ export class Bayard extends Piece {
   }
 
   public getCapturablePiecesTypes(): PieceType[] {
-    return ['AYMOND']
+    return ['AYMON']
   }
 
   public getType(): PieceType {

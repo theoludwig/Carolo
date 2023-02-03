@@ -24,7 +24,7 @@ class Game<GameState> extends Observer {
   {method} + getCurrentPlayer(): Player
   {method} + getPlayer(index: Number): Player
   {method} + setPlayerName(index: Number, name: String)
-  {method} + setPlayerColor(index: Number, color: PieceColor)
+  {method} + setPlayerColor(index: Number)
   {method} + getBoard(): Board
   {method} + play()
   {method} + restart()
@@ -55,7 +55,7 @@ class Player<PlayerState> extends Observer {
 Player ..> PlayerState : <<Uses>>
 
 enum PieceType <<enumeration>> {
-  AYMOND
+  AYMON
   BAYARD
   CAROLO
   EGO
@@ -90,8 +90,8 @@ Piece o--> "1\n- color" PieceColor : <<Has>>
 Piece ..> Position : <<Uses>>
 Piece ..> PieceType : <<Is>>
 
-class Aymond extends Piece {
-  {method} + Aymond(color: PieceColor)
+class Aymon extends Piece {
+  {method} + Aymon(color: PieceColor)
   {method} + getMovesOffsets(maximumOffset: Number): Position[*]
   {method} + getCapturablePiecesTypes(): PieceType[*]
   {method} + getType(): PieceType
@@ -137,7 +137,7 @@ abstract class BoardBase<BoardBaseState> <<abstract>> extends Observer {
   {method} + reset()
   {method} + getPiecePosition(position: Position): PiecePosition
   {method} + getLastRow(color: PieceColor): Number
-  {method} + getAymondInitialRow(color: PieceColor): Number
+  {method} + getAymonInitialRow(color: PieceColor): Number
   {method} + getHubrisInitialRow(color: PieceColor): Number
   {method} + getEgoPiecePosition(color: PieceColor): PiecePosition
   {method} - setupPieces(color: PieceColor)

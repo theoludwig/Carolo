@@ -8,7 +8,7 @@ export const getOppositePieceColor = (color: PieceColor): PieceColor => {
 }
 
 export const PieceTypes = [
-  'AYMOND',
+  'AYMON',
   'BAYARD',
   'CAROLO',
   'EGO',

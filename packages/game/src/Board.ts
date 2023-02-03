@@ -83,7 +83,7 @@ export class Board extends BoardBase {
       fromPosition,
       toPosition,
       capturedPiece,
-      // TODO: Carolo can move again after bounce (Border or Aymond)
+      // TODO: Carolo can move again after bounce (Border or Aymon)
       // TODO: Carolo automatically stop bouncing after 2 seconds
       isNextPlayerTurn: true
     }

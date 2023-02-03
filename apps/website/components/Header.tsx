@@ -25,7 +25,7 @@ export const Header = (): JSX.Element => {
         <nav>
           <ul className='flex space-x-6 font-semibold'>
             <li>
-              <Link href='/play'>Jouer</Link>
+              <Link href='/game'>Jouer</Link>
             </li>
             <li>
               <Link href='/rules/index.html'>Règles</Link>

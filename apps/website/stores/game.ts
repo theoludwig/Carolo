@@ -6,11 +6,8 @@ export interface GameStore {
   board: Board
   boardState: BoardBaseState
 
-  player1: Player
-  player1State: PlayerState
-
-  player2: Player
-  player2State: PlayerState
+  players: Player[]
+  playersState: PlayerState[]
 
   game: Game
   gameState: GameState
@@ -18,19 +15,18 @@ export interface GameStore {
 
 export const useGame = create<GameStore>()(() => {
   const board = new Board()
-  const player1 = new Player('Player 1', 'WHITE')
-  const player2 = new Player('Player 2', 'BLACK')
+  const player1 = new Player('Joueur 1', 'WHITE')
+  const player2 = new Player('Joueur 2', 'BLACK')
   const players = [player1, player2]
   const game = new Game(board, players)
   return {
     board,
     boardState: board.state,
 
-    player1,
-    player1State: player1.state,
-
-    player2,
-    player2State: player2.state,
+    players,
+    playersState: players.map((player) => {
+      return player.state
+    }),
 
     game,
     gameState: game.state

@@ -31,7 +31,7 @@ const HomePage = (): JSX.Element => {
               tactique que romantique !
             </p>
             <div className='flex justify-center sm:justify-start'>
-              <Button className='mt-6' href='/play'>
+              <Button className='mt-6' href='/game'>
                 Jouer
               </Button>
             </div>

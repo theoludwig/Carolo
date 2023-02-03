@@ -1,6 +1,6 @@
 import { Observer } from './Observer.js'
 import { PiecePosition } from './PiecePosition.js'
-import { Aymond } from './pieces/Aymond.js'
+import { Aymon } from './pieces/Aymon.js'
 import { Bayard } from './pieces/Bayard.js'
 import { Carolo } from './pieces/Carolo.js'
 import { Ego } from './pieces/Ego.js'
@@ -24,7 +24,11 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
   public static readonly SIZE = 8
 
   public constructor() {
-    super({ board: new Array(BoardBase.SIZE), moves: [] })
+    const board = new Array(BoardBase.SIZE)
+    for (let row = 0; row < BoardBase.SIZE; row++) {
+      board[row] = new Array(BoardBase.SIZE)
+    }
+    super({ board, moves: [] })
     this.reset()
   }
 
@@ -47,7 +51,7 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
     return color === 'BLACK' ? 0 : BoardBase.SIZE - 1
   }
 
-  public getAymondInitialRow(color: PieceColor): number {
+  public getAymonInitialRow(color: PieceColor): number {
     return color === 'BLACK' ? 1 : BoardBase.SIZE - 2
   }
 
@@ -87,9 +91,9 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
     board[hubrisRow][2].piece = new Hubris(color)
     board[hubrisRow][5].piece = new Hubris(color)
 
-    const aymondRow = this.getAymondInitialRow(color)
+    const aymonRow = this.getAymonInitialRow(color)
     for (let column = 2; column <= 5; column++) {
-      board[aymondRow][column].piece = new Aymond(color)
+      board[aymonRow][column].piece = new Aymon(color)
     }
   }
 }
