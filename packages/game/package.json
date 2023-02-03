@@ -19,12 +19,12 @@
     "@carolo/eslint-config-custom": "*",
     "@carolo/tsconfig": "*",
     "@swc/cli": "0.1.57",
-    "@swc/core": "1.3.30",
+    "@swc/core": "1.3.32",
     "@types/node": "18.11.18",
     "concurrently": "7.6.0",
-    "eslint": "8.32.0",
+    "eslint": "8.33.0",
     "rimraf": "4.1.2",
-    "typescript": "4.9.4"
+    "typescript": "4.9.5"
   },
   "dependencies": {
     "immer": "9.0.19"

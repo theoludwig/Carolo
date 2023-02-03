@@ -11,6 +11,7 @@
       "@/*": ["./*"]
     },
     "noEmit": true,
+    "noUncheckedIndexedAccess": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
