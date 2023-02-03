@@ -7,7 +7,7 @@ export class Position implements PositionOptions {
   private readonly _column: number
   private readonly _row: number
 
-  constructor(options: PositionOptions) {
+  public constructor(options: PositionOptions) {
     this._column = options.column
     this._row = options.row
   }

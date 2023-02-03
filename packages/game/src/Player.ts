@@ -5,7 +5,7 @@ export class Player {
   private _color: PieceColor
   private _capturedPieces: Piece[]
 
-  constructor(name: string, color: PieceColor) {
+  public constructor(name: string, color: PieceColor) {
     this._name = name
     this._color = color
     this._capturedPieces = []

@@ -11,7 +11,7 @@ export abstract class BoardBase {
   public static readonly SIZE = 8
   private readonly _board: PiecePosition[][]
 
-  constructor() {
+  public constructor() {
     this._board = new Array(BoardBase.SIZE)
     this.reset()
   }
@@ -73,7 +73,7 @@ export abstract class BoardBase {
     this._board[hubrisRow][5].piece = new Hubris(color)
 
     const aymondRow = this.getAymondInitialRow(color)
-    for (let column = 0; column < BoardBase.SIZE; column++) {
+    for (let column = 2; column <= 5; column++) {
       this._board[aymondRow][column].piece = new Aymond(color)
     }
   }

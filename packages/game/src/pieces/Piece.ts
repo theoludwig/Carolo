@@ -20,7 +20,7 @@ export abstract class Piece {
   private _hasMoved: boolean
   private readonly _color: PieceColor
 
-  constructor(color: PieceColor) {
+  public constructor(color: PieceColor) {
     this._hasMoved = false
     this._color = color
   }

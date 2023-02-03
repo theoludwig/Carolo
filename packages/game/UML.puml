@@ -12,9 +12,14 @@ enum GameStatus <<enumeration>> {
   BLACK_WON
 }
 
-class Game {
-  {field} - currentPlayerIndex: Number
+interface GameState <<interface>> {
+  {field} + currentPlayerIndex: Number {abstract}
+}
+GameState o--> "1\n- board" Board : <<Owns>>
+GameState o--> "2\n- players" Player : <<Owns>>
+GameState *--> "1\n- status" GameStatus : <<Has>>
 
+class Game<GameState> extends Observer {
   {method} + Game(board: Board, players: Player[2])
   {method} + getCurrentPlayer(): Player
   {method} + getPlayer(index: Number): Player
@@ -27,12 +32,16 @@ class Game {
   {method} + getStatus(): GameStatus
   {method} - nextPlayer()
 }
-Game o--> "1\n- board" Board : <<Owns>>
-Game o--> "2\n- players" Player : <<Owns>>
-Game *--> "1\n- status" GameStatus : <<Has>>
+Game ..> GameState : <<Uses>>
 Game ..> Position : <<Uses>>
 
-class Player {
+interface PlayerState <<interface>> {
+  {field} + name: String {abstract}
+}
+PlayerState o--> "1\n- color" PieceColor : <<Chooses>>
+PlayerState *--> "*\n- capturedPieces" Piece : <<Captures>>
+
+class Player<PlayerState> extends Observer {
   {field} - name: String
 
   {method} + Player(name: String, color: PieceColor)
@@ -45,8 +54,7 @@ class Player {
   {method} + getColor(): PieceColor
   {method} + getCapturedPieces(): Piece[*]
 }
-Player o--> "1\n- color" PieceColor : <<Chooses>>
-Player *--> "*\n- capturedPieces" Piece : <<Captures>>
+Player ..> PlayerState : <<Uses>>
 
 enum PieceType <<enumeration>> {
   AYMOND
@@ -121,7 +129,10 @@ class Hubris extends Piece {
   {method} + getType(): PieceType
 }
 
-abstract class BoardBase <<abstract>> {
+interface BoardBaseState <<interface>> {}
+BoardBaseState *--> "64\n- board" PiecePosition : <<Owns>>
+
+abstract class BoardBase<BoardBaseState> <<abstract>> extends Observer {
   {field} + {static} SIZE = 8 : Number {readOnly}
 
   {method} + reset()
@@ -132,13 +143,13 @@ abstract class BoardBase <<abstract>> {
   {method} + getEgoPiecePosition(color: PieceColor): PiecePosition
   {method} - setupPieces(color: PieceColor)
 }
-BoardBase *--> "64\n- board" PiecePosition : <<Owns>>
+BoardBase ..> BoardBaseState : <<Uses>>
 BoardBase ..> Position : <<Uses>>
 BoardBase ..> PieceColor : <<Uses>>
 
 class Board extends BoardBase {
   {method} + Board()
-  {method} + getAvailableMoves(fromPosition: Position): PiecePosition[*]
+  {method} + getAvailablePiecePositions(fromPosition: Position): PiecePosition[*]
   {method} + canMove(fromPosition: Position, toPosition: Position): Boolean
   {method} + isCaptureMove(fromPosition: Position, toPosition: Position): Boolean
   {method} + move(fromPosition: Position, toPosition: Position): Move[*]
@@ -181,5 +192,17 @@ class PiecePosition {
 }
 PiecePosition o--> "1\n- piece" Piece : <<Owns>>
 PiecePosition o--> "1\n- position" Position : <<Is Located>>
+
+abstract class Observer<S> <<abstract>> {
+  {field} - internalState: S
+  {field} - listeners: Listener<S>[]
+
+  {method} + <<Create>> Observer(initialState: S)
+  {method} + getState(): S
+  {method} - setState(state: S)
+  {method} + getState(): S
+  {method} + subscribe(listener: Listener<S>)
+  {method} + unsubscribe(listener: Listener<S>)
+}
 
 @enduml

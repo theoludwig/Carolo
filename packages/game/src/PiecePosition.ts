@@ -10,7 +10,7 @@ export class PiecePosition implements PiecePositionOptions {
   private readonly _position: Position
   private _piece: Piece | null
 
-  constructor(options: PiecePositionOptions) {
+  public constructor(options: PiecePositionOptions) {
     this._piece = options.piece ?? null
     this._position = options.position
   }

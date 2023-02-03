@@ -28,7 +28,7 @@ export class Board extends BoardBase {
     this._moves = []
   }
 
-  public getAvailableMoves(fromPosition: Position): PiecePosition[] {
+  public getAvailablePiecePositions(fromPosition: Position): PiecePosition[] {
     const from = this.getPiecePosition(fromPosition)
     if (from.isFree()) {
       return []
@@ -79,7 +79,7 @@ export class Board extends BoardBase {
   }
 
   public canMove(fromPosition: Position, toPosition: Position): boolean {
-    return this.getAvailableMoves(fromPosition).includes(
+    return this.getAvailablePiecePositions(fromPosition).includes(
       this.getPiecePosition(toPosition)
     )
   }
