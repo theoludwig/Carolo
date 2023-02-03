@@ -1,4 +1,5 @@
 import type { Board } from './Board.js'
+import { Observer } from './Observer.js'
 import type { PieceColor } from './pieces/Piece.js'
 import { getOppositePieceColor } from './pieces/Piece.js'
 import type { Player } from './Player.js'
@@ -7,13 +8,17 @@ import type { Position } from './Position.js'
 export const GameStatuses = ['LOBBY', 'PLAY', 'WHITE_WON', 'BLACK_WON'] as const
 export type GameStatus = (typeof GameStatuses)[number]
 
-export class Game {
+export interface GameState {
+  currentPlayerIndex: number
+  status: GameStatus
+}
+
+export class Game extends Observer<GameState> {
   private readonly _board: Board
   private readonly _players: Player[]
-  private _currentPlayerIndex: number
-  private _status: GameStatus
 
   public constructor(board: Board, players: Player[]) {
+    super({ currentPlayerIndex: 0, status: 'LOBBY' })
     if (players.length !== 2) {
       throw new Error('Game must have 2 players.')
     }
@@ -21,12 +26,10 @@ export class Game {
     this._players = new Array(2)
     this._players[0] = players[0]
     this._players[1] = players[1]
-    this._currentPlayerIndex = 0
-    this._status = 'LOBBY'
   }
 
   public getCurrentPlayer(): Player {
-    return this._players[this._currentPlayerIndex]
+    return this._players[this.state.currentPlayerIndex]
   }
 
   public getPlayer(index: number): Player {
@@ -52,19 +55,25 @@ export class Game {
     for (const player of this._players) {
       player.removeAllCapturedPiece()
     }
-    this._status = 'PLAY'
+    this.setState((state) => {
+      state.status = 'PLAY'
+    })
     if (this._players[1].color === 'WHITE') {
-      this._currentPlayerIndex = 1
+      this.setState((state) => {
+        state.currentPlayerIndex = 1
+      })
     }
   }
 
   public restart(): void {
-    this._status = 'LOBBY'
-    this._currentPlayerIndex = 0
+    this.setState((state) => {
+      state.status = 'LOBBY'
+      state.currentPlayerIndex = 0
+    })
   }
 
   public playMove(fromPosition: Position, toPosition: Position): void {
-    if (this._status !== 'PLAY') {
+    if (this.state.status !== 'PLAY') {
       return
     }
     const from = this._board.getPiecePosition(fromPosition)
@@ -88,10 +97,10 @@ export class Game {
   }
 
   public get status(): GameStatus {
-    return this._status
+    return this.state.status
   }
 
   private nextPlayer(): void {
-    this._currentPlayerIndex = 1 - this._currentPlayerIndex
+    this.state.currentPlayerIndex = 1 - this.state.currentPlayerIndex
   }
 }

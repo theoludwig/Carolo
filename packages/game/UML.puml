@@ -42,8 +42,6 @@ PlayerState o--> "1\n- color" PieceColor : <<Chooses>>
 PlayerState *--> "*\n- capturedPieces" Piece : <<Captures>>
 
 class Player<PlayerState> extends Observer {
-  {field} - name: String
-
   {method} + Player(name: String, color: PieceColor)
   {method} + setName(name: String)
   {method} + setColor(color: PieceColor)
@@ -131,6 +129,7 @@ class Hubris extends Piece {
 
 interface BoardBaseState <<interface>> {}
 BoardBaseState *--> "64\n- board" PiecePosition : <<Owns>>
+BoardBaseState o--> "*\n- moves" Move : <<Saves>>
 
 abstract class BoardBase<BoardBaseState> <<abstract>> extends Observer {
   {field} + {static} SIZE = 8 : Number {readOnly}
@@ -161,7 +160,6 @@ class Board extends BoardBase {
 Board ..> Position : <<Uses>>
 Board ..> PieceColor : <<Uses>>
 Board ..> PieceType : <<Uses>>
-Board o--> "*\n- moves" Move : <<Saves>>
 
 interface Move <<interface>> {
   {field} + fromPosition: Position

@@ -1,31 +1,13 @@
+import type { Move } from './BoardBase.js'
 import { BoardBase } from './BoardBase.js'
 import type { PiecePosition } from './PiecePosition.js'
-import type { Piece, PieceColor } from './pieces/Piece.js'
+import type { PieceColor } from './pieces/Piece.js'
 import { getOppositePieceColor } from './pieces/Piece.js'
 import type { Position } from './Position.js'
 
-export interface Move {
-  fromPosition: Position
-  toPosition: Position
-  capturedPiece?: Piece
-  isNextPlayerTurn: boolean
-}
-
 export class Board extends BoardBase {
-  private _moves: Move[]
-
   public constructor() {
     super()
-    this._moves = []
-  }
-
-  public get moves(): Move[] {
-    return this._moves
-  }
-
-  public override reset(): void {
-    super.reset()
-    this._moves = []
   }
 
   public getAvailablePiecePositions(fromPosition: Position): PiecePosition[] {
@@ -105,7 +87,9 @@ export class Board extends BoardBase {
       // TODO: Carolo automatically stop bouncing after 2 seconds
       isNextPlayerTurn: true
     }
-    this._moves.push(move)
+    this.setState((state) => {
+      state.moves.push(move)
+    })
     return move
   }
 

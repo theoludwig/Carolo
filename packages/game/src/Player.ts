@@ -1,41 +1,50 @@
+import { Observer } from './Observer.js'
 import type { Piece, PieceColor } from './pieces/Piece'
 
-export class Player {
-  private _name: string
-  private _color: PieceColor
-  private _capturedPieces: Piece[]
+export interface PlayerState {
+  name: string
+  color: PieceColor
+  capturedPieces: Piece[]
+}
 
+export class Player extends Observer<PlayerState> {
   public constructor(name: string, color: PieceColor) {
-    this._name = name
-    this._color = color
-    this._capturedPieces = []
+    super({ name, color, capturedPieces: [] })
   }
 
   public get name(): string {
-    return this._name
+    return this.state.name
   }
 
   public set name(name: string) {
-    this._name = name
+    this.setState((state) => {
+      state.name = name
+    })
   }
 
   public get color(): PieceColor {
-    return this._color
+    return this.state.color
   }
 
   public set color(color: PieceColor) {
-    this._color = color
+    this.setState((state) => {
+      state.color = color
+    })
   }
 
-  public get capturedPieces(): Piece[] {
-    return [...this._capturedPieces]
+  public get capturedPieces(): readonly Piece[] {
+    return this.state.capturedPieces
   }
 
   public addCapturedPiece(piece: Piece): void {
-    this._capturedPieces.push(piece)
+    this.setState((state) => {
+      state.capturedPieces.push(piece)
+    })
   }
 
   public removeAllCapturedPiece(): void {
-    this._capturedPieces = []
+    this.setState((state) => {
+      state.capturedPieces = []
+    })
   }
 }
