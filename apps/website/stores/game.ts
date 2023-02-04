@@ -3,8 +3,8 @@ import type {
   GameState,
   PlayerState,
   BoardBaseState,
-  PiecePosition,
-  Position
+  Position,
+  AvailablePiecePositions
 } from '@carolo/game'
 import { Game, Board, Player } from '@carolo/game'
 
@@ -18,7 +18,7 @@ export interface GameStore {
   game: Game
   gameState: GameState
 
-  availablePiecePositions: PiecePosition[]
+  availablePiecePositions: AvailablePiecePositions
   getAvailablePiecePositions: (fromPosition: Position) => void
 }
 
@@ -40,9 +40,21 @@ export const useGame = create<GameStore>()((set) => {
     game,
     gameState: game.state,
 
-    availablePiecePositions: [],
+    availablePiecePositions: new Map(),
     getAvailablePiecePositions: (fromPosition: Position) => {
       return set((state) => {
+        const piecePosition = state.board.getPiecePosition(fromPosition)
+        if (piecePosition.isFree()) {
+          return {
+            availablePiecePositions: new Map()
+          }
+        }
+        const currentPlayer = state.game.getCurrentPlayer()
+        if (currentPlayer.color !== piecePosition.piece.color) {
+          return {
+            availablePiecePositions: new Map()
+          }
+        }
         return {
           availablePiecePositions:
             state.board.getAvailablePiecePositions(fromPosition)

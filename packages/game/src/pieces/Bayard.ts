@@ -7,7 +7,7 @@ export class Bayard extends Piece {
     return true
   }
 
-  public getMovesOffsets(): Position[] {
+  public getPositionsOffsets(): Position[] {
     const shouldApplyNeyRule = !this.hasMoved
     const topOffsets = [
       new Position({
@@ -39,10 +39,7 @@ export class Bayard extends Piece {
         column: -1,
         row: -2
       }),
-      new Position({
-        column: 0,
-        row: -3
-      }),
+      ...(shouldApplyNeyRule ? [] : [new Position({ column: 0, row: -3 })]),
       new Position({
         column: 1,
         row: -2

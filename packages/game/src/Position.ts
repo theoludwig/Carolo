@@ -3,6 +3,8 @@ export interface PositionOptions {
   row: number
 }
 
+export type PositionString = `column-${number}-row-${number}`
+
 export class Position implements PositionOptions {
   private readonly _column: number
   private readonly _row: number
@@ -63,5 +65,17 @@ export class Position implements PositionOptions {
       return this.column === position.column && this.row === position.row
     }
     return false
+  }
+
+  public toString(): PositionString {
+    return `column-${this.column}-row-${this.row}`
+  }
+
+  public static fromString(positionString: PositionString): Position {
+    const [, column, , row] = positionString.split('-')
+    return new Position({
+      column: parseInt(column, 10),
+      row: parseInt(row, 10)
+    })
   }
 }

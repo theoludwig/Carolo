@@ -3,7 +3,7 @@ import { Piece } from './Piece.js'
 import { Position } from '../Position.js'
 
 export class Ego extends Piece {
-  public getMovesOffsets(): Position[] {
+  public getPositionsOffsets(): Position[] {
     const top = new Position({ column: 0, row: 1 })
     const right = new Position({ column: 1, row: 0 })
     const bottom = new Position({ column: 0, row: -1 })

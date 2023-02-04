@@ -81,8 +81,9 @@ abstract class Piece <<abstract>> {
   {method} + getColor(): PieceColor
   {method} + canBeCapturedBy(piece: PieceType): Boolean
   {method} + canJumpOverPieces(): Boolean
+  {method} + canMoveTeleportAnywhere(): Boolean
   {method} + shouldMoveUntilObstacle(): Boolean
-  {method} + getMovesOffsets(maximumOffset: Number): Position[*] {abstract}
+  {method} + getPositionsOffsets(maximumOffset: Number): Position[*] {abstract}
   {method} + getCapturablePiecesTypes(): PieceType[*] {abstract}
   {method} + getType(): PieceType {abstract}
 }
@@ -92,7 +93,8 @@ Piece ..> PieceType : <<Is>>
 
 class Aymon extends Piece {
   {method} + Aymon(color: PieceColor)
-  {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + canMoveTeleportAnywhere(): Boolean
+  {method} + getPositionsOffsets(maximumOffset: Number): Position[*]
   {method} + getCapturablePiecesTypes(): PieceType[*]
   {method} + getType(): PieceType
 }
@@ -100,7 +102,7 @@ class Aymon extends Piece {
 class Bayard extends Piece {
   {method} + Bayard(color: PieceColor)
   {method} + canJumpOverPieces(): Boolean
-  {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + getPositionsOffsets(maximumOffset: Number): Position[*]
   {method} + getCapturablePiecesTypes(): PieceType[*]
   {method} + getType(): PieceType
 }
@@ -108,21 +110,21 @@ class Bayard extends Piece {
 class Carolo extends Piece {
   {method} + Carolo(color: PieceColor)
   {method} + shouldMoveUntilObstacle(): Boolean
-  {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + getPositionsOffsets(maximumOffset: Number): Position[*]
   {method} + getCapturablePiecesTypes(): PieceType[*]
   {method} + getType(): PieceType
 }
 
 class Ego extends Piece {
   {method} + Ego(color: PieceColor)
-  {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + getPositionsOffsets(maximumOffset: Number): Position[*]
   {method} + getCapturablePiecesTypes(): PieceType[*]
   {method} + getType(): PieceType
 }
 
 class Hubris extends Piece {
   {method} + Hubris(color: PieceColor)
-  {method} + getMovesOffsets(maximumOffset: Number): Position[*]
+  {method} + getPositionsOffsets(maximumOffset: Number): Position[*]
   {method} + getCapturablePiecesTypes(): PieceType[*]
   {method} + getType(): PieceType
 }
@@ -176,6 +178,9 @@ class Position {
   {method} + add(position: Position)
   {method} + isInsideSquare(position: Position): boolean
   {method} + getIntermediatePositions(position: Position): Position[*]
+  {method} + equals(position: Unknown): boolean
+  {method} + toString(): String
+  {method} + fromString(positionString: String): Position {static}
 }
 
 class PiecePosition {

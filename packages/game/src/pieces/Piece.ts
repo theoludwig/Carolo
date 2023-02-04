@@ -53,11 +53,15 @@ export abstract class Piece {
     return false
   }
 
+  public canMoveTeleportAnywhere(): boolean {
+    return false
+  }
+
   public shouldMoveUntilObstacle(): boolean {
     return false
   }
 
-  public abstract getMovesOffsets(maximumOffset: number): Position[]
+  public abstract getPositionsOffsets(maximumOffset: number): Position[]
 
   public abstract getCapturablePiecesTypes(): PieceType[]
 

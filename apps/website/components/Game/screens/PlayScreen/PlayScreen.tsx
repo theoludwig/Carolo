@@ -13,21 +13,15 @@ export const PlayScreen = (): JSX.Element => {
       <section id='board'>
         {boardState.board.map((row, rowIndex) => {
           return (
-            <div id={`board-row-${rowIndex}`} className='flex' key={rowIndex}>
+            <div className='flex' key={rowIndex}>
               {row.map((piecePosition, columnIndex) => {
+                const positionString = piecePosition.position.toString()
                 const isEven = (rowIndex + columnIndex) % 2 === 0
-
-                const isAvailable = availablePiecePositions.some(
-                  (availablePiecePosition) => {
-                    return availablePiecePosition.position.equals(
-                      piecePosition.position
-                    )
-                  }
-                )
+                const isAvailable = availablePiecePositions.has(positionString)
 
                 return (
                   <div
-                    id={`board-row-${rowIndex}-column-${columnIndex}`}
+                    id={`board-${positionString}}`}
                     key={columnIndex}
                     className={classNames(
                       'h-16 w-16 cursor-pointer hover:bg-opacity-80',

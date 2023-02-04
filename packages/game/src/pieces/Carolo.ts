@@ -7,19 +7,19 @@ export class Carolo extends Piece {
     return true
   }
 
-  public getMovesOffsets(maximumOffset: number): Position[] {
-    const movesOffsets: Position[] = []
+  public getPositionsOffsets(maximumOffset: number): Position[] {
+    const positionsOffsets: Position[] = []
     for (let iteration = 1; iteration < maximumOffset; iteration++) {
       const top = new Position({ column: 0, row: iteration })
       const bottom = new Position({ column: 0, row: -iteration })
       const left = new Position({ column: -iteration, row: 0 })
       const right = new Position({ column: iteration, row: 0 })
-      movesOffsets.push(top)
-      movesOffsets.push(bottom)
-      movesOffsets.push(left)
-      movesOffsets.push(right)
+      positionsOffsets.push(top)
+      positionsOffsets.push(bottom)
+      positionsOffsets.push(left)
+      positionsOffsets.push(right)
     }
-    return movesOffsets
+    return positionsOffsets
   }
 
   public getCapturablePiecesTypes(): PieceType[] {

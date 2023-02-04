@@ -3,28 +3,58 @@ import { BoardBase } from './BoardBase.js'
 import type { PiecePosition } from './PiecePosition.js'
 import type { PieceColor } from './pieces/Piece.js'
 import { getOppositePieceColor } from './pieces/Piece.js'
-import type { Position } from './Position.js'
+import type { PositionString } from './Position.js'
+import { Position } from './Position.js'
+
+export type AvailablePiecePositions = Map<PositionString, PiecePosition>
 
 export class Board extends BoardBase {
   public constructor() {
     super()
   }
 
-  public getAvailablePiecePositions(fromPosition: Position): PiecePosition[] {
+  /**
+   * Get all available positions for a piece.
+   * @param fromPosition
+   * @returns Map of available positions (key: `column-${column}-row-${row}`, value: PiecePosition).
+   */
+  public getAvailablePiecePositions(
+    fromPosition: Position
+  ): AvailablePiecePositions {
+    const availablePiecePositions: AvailablePiecePositions = new Map()
     const from = this.getPiecePosition(fromPosition)
     if (from.isFree()) {
-      return []
+      return availablePiecePositions
     }
     const oppositeColor = getOppositePieceColor(from.piece.color)
     if (this.isCheck(from.piece.color) || this.isReconquest(oppositeColor)) {
-      return []
+      return availablePiecePositions
     }
+
+    if (from.piece.canMoveTeleportAnywhere()) {
+      for (let row = 0; row < BoardBase.SIZE; row++) {
+        for (let column = 0; column < BoardBase.SIZE; column++) {
+          const toPosition = new Position({ row, column })
+          const to = this.getPiecePosition(toPosition)
+          if (to.isOccupied() && to.piece.color === from.piece.color) {
+            continue
+          }
+          if (to.isOccupied() && to.piece.color === oppositeColor) {
+            if (!to.piece.canBeCapturedBy(from.piece.getType())) {
+              continue
+            }
+          }
+          availablePiecePositions.set(toPosition.toString(), to)
+        }
+      }
+      return availablePiecePositions
+    }
+
     // TODO: Hubris `powerOfHubrisAttraction`: Opposing Ego must get as close as possible to the Hubris, if the diagonal of the Hubris is free (only needed to check if last move was from a Hubris)
-    let availableMoves: PiecePosition[] = []
-    const movesOffsets = from.piece.getMovesOffsets(BoardBase.SIZE)
+    const positionsOffsets = from.piece.getPositionsOffsets(BoardBase.SIZE)
     // TODO: Carolo `shouldMoveUntilObstacle` only the last possible (until obstacle) position is available, get maximum possible offset for top, bottom, left, right
-    for (const moveOffset of movesOffsets) {
-      const toPosition = fromPosition.add(moveOffset)
+    for (const positionOffset of positionsOffsets) {
+      const toPosition = fromPosition.add(positionOffset)
       if (!toPosition.isInsideSquare(BoardBase.SIZE)) {
         continue
       }
@@ -52,17 +82,19 @@ export class Board extends BoardBase {
       ) {
         continue
       }
-      availableMoves.push(to)
+      availablePiecePositions.set(toPosition.toString(), to)
     }
-    availableMoves = availableMoves.filter((to) => {
-      return !this.isCheckAfterMove(fromPosition, to.position)
-    })
-    return availableMoves
+    for (const [key, to] of availablePiecePositions) {
+      if (this.isCheckAfterMove(fromPosition, to.position)) {
+        availablePiecePositions.delete(key)
+      }
+    }
+    return availablePiecePositions
   }
 
   public canMove(fromPosition: Position, toPosition: Position): boolean {
-    return this.getAvailablePiecePositions(fromPosition).includes(
-      this.getPiecePosition(toPosition)
+    return this.getAvailablePiecePositions(fromPosition).has(
+      toPosition.toString()
     )
   }
 
@@ -104,9 +136,11 @@ export class Board extends BoardBase {
     const egoPiecePosition = this.getEgoPiecePosition(color)
     const fromPosition = egoPiecePosition.position
     const oppositeColor = getOppositePieceColor(color)
-    const movesOffsets = egoPiecePosition.piece.getMovesOffsets(BoardBase.SIZE)
-    for (const moveOffset of movesOffsets) {
-      const position = fromPosition.add(moveOffset)
+    const positionsOffsets = egoPiecePosition.piece.getPositionsOffsets(
+      BoardBase.SIZE
+    )
+    for (const positionOffset of positionsOffsets) {
+      const position = fromPosition.add(positionOffset)
       if (!position.isInsideSquare(BoardBase.SIZE)) {
         continue
       }
@@ -131,11 +165,8 @@ export class Board extends BoardBase {
     if (from.isFree()) {
       return false
     }
-    if (to.isFree()) {
-      return false
-    }
     const fromPiece = from.piece
-    const toPiece = to.piece
+    const toPiece = to.isOccupied() ? to.piece : null
     from.piece = null
     to.piece = fromPiece
     const isCheck = this.isCheck(fromPiece.color)
