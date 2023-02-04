@@ -100,6 +100,8 @@ export class Game extends Observer<GameState> {
   }
 
   private nextPlayer(): void {
-    this.state.currentPlayerIndex = 1 - this.state.currentPlayerIndex
+    this.setState((state) => {
+      state.currentPlayerIndex = 1 - state.currentPlayerIndex
+    })
   }
 }

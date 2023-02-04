@@ -39,7 +39,13 @@ export class Position implements PositionOptions {
   }
 
   private getOffsetDirection(offset: number): number {
-    return offset > 0 ? 1 : -1
+    if (offset === 0) {
+      return 0
+    }
+    if (offset < 0) {
+      return -1
+    }
+    return 1
   }
 
   public getIntermediatePositions(position: Position): Position[] {

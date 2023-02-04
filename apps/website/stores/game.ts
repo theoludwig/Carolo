@@ -18,8 +18,9 @@ export interface GameStore {
   game: Game
   gameState: GameState
 
+  selectedPosition: Position | null
   availablePiecePositions: AvailablePiecePositions
-  getAvailablePiecePositions: (fromPosition: Position) => void
+  selectPosition: (fromPosition: Position) => void
 }
 
 export const useGame = create<GameStore>()((set) => {
@@ -40,22 +41,36 @@ export const useGame = create<GameStore>()((set) => {
     game,
     gameState: game.state,
 
+    selectedPosition: null,
     availablePiecePositions: new Map(),
-    getAvailablePiecePositions: (fromPosition: Position) => {
+    selectPosition: (fromPosition: Position) => {
       return set((state) => {
         const piecePosition = state.board.getPiecePosition(fromPosition)
+        if (
+          state.selectedPosition != null &&
+          state.availablePiecePositions.has(fromPosition.toString())
+        ) {
+          game.playMove(state.selectedPosition, fromPosition)
+          return {
+            availablePiecePositions: new Map(),
+            selectedPosition: null
+          }
+        }
         if (piecePosition.isFree()) {
           return {
-            availablePiecePositions: new Map()
+            availablePiecePositions: new Map(),
+            selectedPosition: null
           }
         }
         const currentPlayer = state.game.getCurrentPlayer()
         if (currentPlayer.color !== piecePosition.piece.color) {
           return {
-            availablePiecePositions: new Map()
+            availablePiecePositions: new Map(),
+            selectedPosition: null
           }
         }
         return {
+          selectedPosition: fromPosition,
           availablePiecePositions:
             state.board.getAvailablePiecePositions(fromPosition)
         }

@@ -39,11 +39,10 @@ export class Board extends BoardBase {
           if (to.isOccupied() && to.piece.color === from.piece.color) {
             continue
           }
-          if (to.isOccupied() && to.piece.color === oppositeColor) {
-            if (!to.piece.canBeCapturedBy(from.piece.getType())) {
-              continue
-            }
+          if (this.isCaptureMove(fromPosition, toPosition)) {
+            continue
           }
+
           availablePiecePositions.set(toPosition.toString(), to)
         }
       }
@@ -76,10 +75,7 @@ export class Board extends BoardBase {
           continue
         }
       }
-      if (
-        this.isCaptureMove(fromPosition, toPosition) &&
-        !to.piece.canBeCapturedBy(from.piece.getType())
-      ) {
+      if (this.isCaptureMove(fromPosition, toPosition)) {
         continue
       }
       availablePiecePositions.set(toPosition.toString(), to)
@@ -101,7 +97,11 @@ export class Board extends BoardBase {
   public isCaptureMove(fromPosition: Position, toPosition: Position): boolean {
     const from = this.getPiecePosition(fromPosition)
     const to = this.getPiecePosition(toPosition)
-    return to.isOccupied() && from.piece.color !== to.piece.color
+    return (
+      to.isOccupied() &&
+      from.piece.color !== to.piece.color &&
+      !from.piece.canBeCapturedBy(to.piece.getType())
+    )
   }
 
   public move(fromPosition: Position, toPosition: Position): Move {
