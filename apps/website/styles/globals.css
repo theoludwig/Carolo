@@ -1,3 +1,61 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.square-corners {
+  --border-color: #939393;
+  --border-thickness: 4px;
+  --border-size: 16px;
+
+  background: linear-gradient(
+        to right,
+        var(--border-color) var(--border-thickness),
+        transparent var(--border-thickness)
+      )
+      0 0,
+    linear-gradient(
+        to right,
+        var(--border-color) var(--border-thickness),
+        transparent var(--border-thickness)
+      )
+      0 100%,
+    linear-gradient(
+        to left,
+        var(--border-color) var(--border-thickness),
+        transparent var(--border-thickness)
+      )
+      100% 0,
+    linear-gradient(
+        to left,
+        var(--border-color) var(--border-thickness),
+        transparent var(--border-thickness)
+      )
+      100% 100%,
+    linear-gradient(
+        to bottom,
+        var(--border-color) var(--border-thickness),
+        transparent var(--border-thickness)
+      )
+      0 0,
+    linear-gradient(
+        to bottom,
+        var(--border-color) var(--border-thickness),
+        transparent var(--border-thickness)
+      )
+      100% 0,
+    linear-gradient(
+        to top,
+        var(--border-color) var(--border-thickness),
+        transparent var(--border-thickness)
+      )
+      0 100%,
+    linear-gradient(
+        to top,
+        var(--border-color) var(--border-thickness),
+        transparent var(--border-thickness)
+      )
+      100% 100%;
+
+  background-repeat: no-repeat;
+  background-size: var(--border-size) var(--border-size);
+}

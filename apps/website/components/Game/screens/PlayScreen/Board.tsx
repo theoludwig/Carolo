@@ -22,13 +22,14 @@ export const Board = (): JSX.Element => {
               const isAvailable = availablePiecePositions.has(positionString)
               const isSelected =
                 selectedPosition?.equals(piecePosition.position) ?? false
+              const isCapture = isAvailable && piecePosition.isOccupied()
 
               return (
                 <div
                   id={`board-${positionString}`}
                   key={columnIndex}
                   className={classNames(
-                    'flex h-16 w-16 cursor-pointer items-center justify-center hover:bg-opacity-80',
+                    'flex h-16 w-16 cursor-pointer items-center justify-center p-[1px] hover:bg-opacity-80',
                     {
                       'bg-[#8578B3]': !isEven && !isSelected,
                       'bg-[#EFEFEF]': isEven && !isSelected,
@@ -41,7 +42,9 @@ export const Board = (): JSX.Element => {
                 >
                   {piecePosition.isOccupied() ? (
                     <Image
-                      className='h-full w-full object-contain'
+                      className={classNames('h-full w-full', {
+                        'square-corners': isCapture
+                      })}
                       quality={100}
                       src={`/pieces/${piecePosition.piece.getType()}_${
                         piecePosition.piece.color
@@ -51,7 +54,7 @@ export const Board = (): JSX.Element => {
                       height={64}
                     />
                   ) : null}
-                  {isAvailable ? (
+                  {isAvailable && piecePosition.isFree() ? (
                     <div className='h-3 w-3 rounded-sm bg-[#939393]'></div>
                   ) : null}
                 </div>
