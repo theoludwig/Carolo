@@ -4,7 +4,15 @@ const nextConfig = {
   experimental: {
     appDir: true
   },
-  transpilePackages: ['@carolo/game']
+  transpilePackages: ['@carolo/game'],
+  async rewrites() {
+    return [
+      {
+        source: '/rules',
+        destination: '/rules/index.html'
+      }
+    ]
+  }
 }
 
 module.exports = nextConfig

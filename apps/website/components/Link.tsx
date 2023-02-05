@@ -6,7 +6,7 @@ type LinkTypeProps = NextLinkProps &
   Omit<React.ComponentPropsWithoutRef<'a'>, 'href'>
 
 export interface LinkProps extends LinkTypeProps {
-  href: LinkTypeProps['href'] | `/rules/${string}`
+  href: LinkTypeProps['href'] | `/rules`
 }
 
 export const Link = (props: LinkProps): JSX.Element => {

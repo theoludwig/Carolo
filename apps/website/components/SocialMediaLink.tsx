@@ -28,6 +28,8 @@ export const SocialMediaLink = (props: SocialMediaLinkProps): JSX.Element => {
   return (
     <a
       {...rest}
+      target='_blank'
+      rel='noopener noreferrer'
       style={{ background: socialMediaColor }}
       className={classNames(
         'mt-4 inline-flex w-36 cursor-pointer items-center rounded-lg py-2 px-4 font-semibold uppercase outline-none transition duration-300 ease-in-out hover:opacity-80 focus:outline-none md:mt-0 md:w-auto',
@@ -35,6 +37,7 @@ export const SocialMediaLink = (props: SocialMediaLinkProps): JSX.Element => {
       )}
     >
       <Image
+        priority
         className='h-auto w-auto'
         quality={100}
         width={25}

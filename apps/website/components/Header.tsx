@@ -28,7 +28,9 @@ export const Header = (): JSX.Element => {
               <Link href='/game'>Jouer</Link>
             </li>
             <li>
-              <Link href='/rules/index.html'>Règles</Link>
+              <Link href='/rules' target='_blank' rel='noopener noreferrer'>
+                Règles
+              </Link>
             </li>
           </ul>
         </nav>
