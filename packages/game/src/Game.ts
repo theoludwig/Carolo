@@ -86,11 +86,20 @@ export class Game extends Observer<GameState> {
     if (!this._board.canMove(fromPosition, toPosition)) {
       return
     }
+    const oppositeColor = getOppositePieceColor(currentPlayer.color)
     const move = this._board.move(fromPosition, toPosition)
     if (move.capturedPiece != null) {
       currentPlayer.addCapturedPiece(move.capturedPiece)
     }
-    if (move.isNextPlayerTurn) {
+
+    if (
+      this._board.isReconquest(currentPlayer.color) ||
+      this._board.isCheck(oppositeColor)
+    ) {
+      this.setState((state) => {
+        state.status = `${currentPlayer.color}_WON`
+      })
+    } else if (move.isNextPlayerTurn) {
       this.nextPlayer()
     }
   }
