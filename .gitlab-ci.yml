@@ -13,11 +13,11 @@ before_script:
 test:
   stage: 'test'
   script:
+    - 'npm run build'
     - 'echo "${CI_COMMIT_MESSAGE}" | npm run lint:commit'
     - 'npm run lint:editorconfig'
     - 'npm run lint:prettier'
     - 'npm run lint'
-    - 'npm run build'
   only:
     - 'develop'
 
