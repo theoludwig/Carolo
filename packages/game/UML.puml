@@ -24,7 +24,7 @@ class Game<GameState> extends Observer {
   {method} + getCurrentPlayer(): Player
   {method} + getPlayer(index: Number): Player
   {method} + setPlayerName(index: Number, name: String)
-  {method} + setPlayerColor(index: Number)
+  {method} + setPlayerColor(index: Number, color: PieceColor)
   {method} + getBoard(): Board
   {method} + play()
   {method} + restart()

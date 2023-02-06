@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 .square-corners {
-  --border-color: #939393;
   --border-thickness: 4px;
   --border-size: 16px;
 

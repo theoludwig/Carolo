@@ -13,17 +13,21 @@
     "dev:build": "swc ./src --out-dir ./build --watch",
     "dev:tsc": "tsc --watch --preserveWatchOutput",
     "dev": "concurrently --names \"swc,tsc\" \"npm run dev:build\" \"npm run dev:tsc\"",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "test": "cross-env NODE_ENV=test tap"
   },
   "devDependencies": {
     "@carolo/eslint-config-custom": "*",
     "@carolo/tsconfig": "*",
     "@swc/cli": "0.1.57",
     "@swc/core": "1.3.32",
-    "@types/node": "18.11.18",
+    "@types/node": "18.11.19",
+    "@types/tap": "15.0.8",
     "concurrently": "7.6.0",
+    "cross-env": "7.0.3",
     "eslint": "8.33.0",
     "rimraf": "4.1.2",
+    "tap": "16.3.4",
     "typescript": "4.9.5"
   },
   "dependencies": {

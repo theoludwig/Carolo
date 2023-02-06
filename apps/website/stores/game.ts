@@ -8,6 +8,8 @@ import type {
 } from '@carolo/game'
 import { Game, Board, Player } from '@carolo/game'
 
+import { NODE_ENV } from '@/lib/configuration'
+
 export interface GameStore {
   board: Board
   boardState: BoardBaseState
@@ -28,7 +30,9 @@ export const useGame = create<GameStore>()((set) => {
   const player1 = new Player('Joueur 1', 'WHITE')
   const player2 = new Player('Joueur 2', 'BLACK')
   const players = [player1, player2]
-  const game = new Game(board, players)
+  const game = new Game(board, players, {
+    logger: NODE_ENV !== 'production'
+  })
   return {
     board,
     boardState: board.state,

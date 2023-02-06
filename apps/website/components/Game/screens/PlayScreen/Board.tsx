@@ -42,6 +42,11 @@ export const Board = (): JSX.Element => {
                 >
                   {piecePosition.isOccupied() ? (
                     <Image
+                      style={
+                        {
+                          '--border-color': isEven ? '#939393' : '#D3D3D3'
+                        } as React.CSSProperties
+                      }
                       className={classNames('h-full w-full', {
                         'square-corners': isCapture
                       })}
@@ -55,7 +60,12 @@ export const Board = (): JSX.Element => {
                     />
                   ) : null}
                   {isAvailable && piecePosition.isFree() ? (
-                    <div className='h-3 w-3 rounded-sm bg-[#939393]'></div>
+                    <div
+                      className={classNames('h-3 w-3 rounded-sm', {
+                        'bg-[#939393]': isEven,
+                        'bg-[#D3D3D3]': !isEven
+                      })}
+                    ></div>
                   ) : null}
                 </div>
               )

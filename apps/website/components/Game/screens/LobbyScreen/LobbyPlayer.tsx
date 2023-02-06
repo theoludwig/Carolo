@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import Image from 'next/image'
 import type { PlayerState } from '@carolo/game'
+import { getOppositePieceColor } from '@carolo/game'
 
 import { useGame } from '@/stores/game'
 import CaroloBlack from '@/public/pieces/CAROLO_BLACK.png'
@@ -34,7 +35,10 @@ export const LobbyPlayer = (props: LobbyPlayerProps): JSX.Element => {
         type='button'
         id={playerColorId}
         onClick={() => {
-          game.setPlayerColor(playerIndex)
+          game.setPlayerColor(
+            playerIndex,
+            getOppositePieceColor(playerState.color)
+          )
         }}
       >
         <Image

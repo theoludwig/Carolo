@@ -99,6 +99,7 @@ export class Board extends BoardBase {
     const to = this.getPiecePosition(toPosition)
     return (
       to.isOccupied() &&
+      from.isOccupied() &&
       from.piece.color !== to.piece.color &&
       !from.piece.canBeCapturedBy(to.piece.getType())
     )

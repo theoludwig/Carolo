@@ -1,5 +1,6 @@
 import type { Board } from './Board.js'
 import { Observer } from './Observer.js'
+import type { PieceColor } from './pieces/Piece.js'
 import { getOppositePieceColor } from './pieces/Piece.js'
 import type { Player } from './Player.js'
 import type { Position } from './Position.js'
@@ -12,15 +13,25 @@ export interface GameState {
   status: GameStatus
 }
 
-export class Game extends Observer<GameState> {
+export interface GameOptions {
+  logger?: boolean
+}
+
+export class Game extends Observer<GameState> implements GameOptions {
   private readonly _board: Board
   private readonly _players: Player[]
+  public readonly logger: boolean
 
-  public constructor(board: Board, players: Player[]) {
+  public constructor(
+    board: Board,
+    players: Player[],
+    options: GameOptions = {}
+  ) {
     super({ currentPlayerIndex: 0, status: 'LOBBY' })
     if (players.length !== 2) {
       throw new Error('Game must have 2 players.')
     }
+    this.logger = options.logger ?? false
     this._board = board
     this._players = new Array(2)
     this._players[0] = players[0]
@@ -39,10 +50,9 @@ export class Game extends Observer<GameState> {
     this._players[index].name = name
   }
 
-  public setPlayerColor(index: number): void {
-    const color = this._players[index].color
-    this._players[index].color = getOppositePieceColor(color)
-    this._players[1 - index].color = color
+  public setPlayerColor(index: number, color: PieceColor): void {
+    this._players[index].color = color
+    this._players[1 - index].color = getOppositePieceColor(color)
   }
 
   public get board(): Board {
@@ -87,6 +97,13 @@ export class Game extends Observer<GameState> {
       return
     }
     const oppositeColor = getOppositePieceColor(currentPlayer.color)
+
+    if (this.logger) {
+      console.log(
+        `game.playMove(new Position({ column: ${fromPosition.column}, row: ${fromPosition.row} }), new Position({ column: ${toPosition.column}, row: ${toPosition.row} }))`
+      )
+    }
+
     const move = this._board.move(fromPosition, toPosition)
     if (move.capturedPiece != null) {
       currentPlayer.addCapturedPiece(move.capturedPiece)
