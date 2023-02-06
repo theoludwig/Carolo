@@ -11,6 +11,7 @@
       "@/*": ["./*"]
     },
     "noEmit": true,
+    "types": ["cypress"],
     "noUncheckedIndexedAccess": false,
     "resolveJsonModule": true,
     "isolatedModules": true,

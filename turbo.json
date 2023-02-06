@@ -8,7 +8,7 @@
     },
     "test": {
       "dependsOn": ["build"],
-      "inputs": ["**/*.test.{ts,tsx}"]
+      "inputs": ["**/*.test.{ts,tsx}", "**/*.cy.{ts,tsx}"]
     },
     "lint": {
       "dependsOn": ["build"],
