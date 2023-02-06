@@ -26,7 +26,7 @@ export class Carolo extends Piece {
     return ['HUBRIS']
   }
 
-  public getType(): PieceType {
+  public get type(): PieceType {
     return 'CAROLO'
   }
 }

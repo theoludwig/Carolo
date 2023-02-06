@@ -51,9 +51,7 @@ export const Board = (): JSX.Element => {
                         'square-corners': isCapture
                       })}
                       quality={100}
-                      src={`/pieces/${piecePosition.piece.getType()}_${
-                        piecePosition.piece.color
-                      }.png`}
+                      src={`/pieces/${piecePosition.piece.type}_${piecePosition.piece.color}.png`}
                       alt='Piece'
                       width={64}
                       height={64}

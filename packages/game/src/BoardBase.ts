@@ -66,7 +66,7 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
         if (
           piecePosition.isOccupied() &&
           piecePosition.piece.color === color &&
-          piecePosition.piece.getType() === 'EGO'
+          piecePosition.piece.type === 'EGO'
         ) {
           return piecePosition
         }

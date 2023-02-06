@@ -8,10 +8,10 @@
     ".eslintrc.json"
   ],
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "5.50.0",
-    "@typescript-eslint/parser": "5.50.0",
+    "@typescript-eslint/eslint-plugin": "5.51.0",
+    "@typescript-eslint/parser": "5.51.0",
     "eslint": "8.33.0",
-    "eslint-config-conventions": "6.0.0",
+    "eslint-config-conventions": "7.0.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-config-turbo": "0.0.7",
     "eslint-plugin-import": "2.27.5",

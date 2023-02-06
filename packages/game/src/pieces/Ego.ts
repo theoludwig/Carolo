@@ -15,7 +15,7 @@ export class Ego extends Piece {
     return ['BAYARD']
   }
 
-  public getType(): PieceType {
+  public get type(): PieceType {
     return 'EGO'
   }
 }

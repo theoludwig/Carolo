@@ -19,7 +19,7 @@ await tap.test('Pieces Initial Available Positions', async (t) => {
     t.equal(game.getCurrentPlayer().color, 'WHITE')
 
     const egoPiecePosition = board.getEgoPiecePosition('WHITE')
-    t.equal(egoPiecePosition.piece.getType(), 'EGO')
+    t.equal(egoPiecePosition.piece.type, 'EGO')
     t.same(
       board.getAvailablePiecePositions(egoPiecePosition.position),
       new Map()

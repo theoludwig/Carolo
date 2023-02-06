@@ -65,5 +65,5 @@ export abstract class Piece {
 
   public abstract getCapturablePiecesTypes(): PieceType[]
 
-  public abstract getType(): PieceType
+  public abstract get type(): PieceType
 }

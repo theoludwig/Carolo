@@ -101,7 +101,7 @@ export class Board extends BoardBase {
       to.isOccupied() &&
       from.isOccupied() &&
       from.piece.color !== to.piece.color &&
-      !from.piece.canBeCapturedBy(to.piece.getType())
+      !from.piece.canBeCapturedBy(to.piece.type)
     )
   }
 
@@ -149,7 +149,7 @@ export class Board extends BoardBase {
       if (
         piecePosition.isOccupied() &&
         piecePosition.piece.color === oppositeColor &&
-        piecePosition.piece.getType() === 'CAROLO'
+        piecePosition.piece.type === 'CAROLO'
       ) {
         return true
       }

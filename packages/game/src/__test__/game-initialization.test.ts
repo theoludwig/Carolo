@@ -49,7 +49,7 @@ await tap.test('Game Initialization', async (t) => {
       const egoPiecePosition = board.getEgoPiecePosition(color)
       t.equal(egoPiecePosition.isOccupied(), true)
       t.equal(egoPiecePosition.isFree(), false)
-      t.equal(egoPiecePosition.piece.getType(), 'EGO')
+      t.equal(egoPiecePosition.piece.type, 'EGO')
       t.equal(egoPiecePosition.piece.color, color)
       t.equal(egoPiecePosition.piece.hasMoved, false)
       const piecePosition =
@@ -61,21 +61,21 @@ await tap.test('Game Initialization', async (t) => {
         new Position({ row: lastRow, column: caroloColumn })
       )
       t.equal(caroloPiecePosition.isOccupied(), true)
-      t.equal(caroloPiecePosition.piece.getType(), 'CAROLO')
+      t.equal(caroloPiecePosition.piece.type, 'CAROLO')
       t.equal(caroloPiecePosition.piece.color, color)
 
       const bayardLeftPiecePosition = board.getPiecePosition(
         new Position({ row: lastRow, column: 2 })
       )
       t.equal(bayardLeftPiecePosition.isOccupied(), true)
-      t.equal(bayardLeftPiecePosition.piece.getType(), 'BAYARD')
+      t.equal(bayardLeftPiecePosition.piece.type, 'BAYARD')
       t.equal(bayardLeftPiecePosition.piece.color, color)
 
       const bayardRightPiecePosition = board.getPiecePosition(
         new Position({ row: lastRow, column: 5 })
       )
       t.equal(bayardRightPiecePosition.isOccupied(), true)
-      t.equal(bayardRightPiecePosition.piece.getType(), 'BAYARD')
+      t.equal(bayardRightPiecePosition.piece.type, 'BAYARD')
       t.equal(bayardRightPiecePosition.piece.color, color)
 
       const aymonRow = board.getAymonInitialRow(color)
@@ -84,7 +84,7 @@ await tap.test('Game Initialization', async (t) => {
           new Position({ row: aymonRow, column })
         )
         t.equal(aymonPiecePosition.isOccupied(), true)
-        t.equal(aymonPiecePosition.piece.getType(), 'AYMON')
+        t.equal(aymonPiecePosition.piece.type, 'AYMON')
         t.equal(aymonPiecePosition.piece.color, color)
       }
 
@@ -93,14 +93,14 @@ await tap.test('Game Initialization', async (t) => {
         new Position({ row: hubrisRow, column: 2 })
       )
       t.equal(hubrisLeftPiecePosition.isOccupied(), true)
-      t.equal(hubrisLeftPiecePosition.piece.getType(), 'HUBRIS')
+      t.equal(hubrisLeftPiecePosition.piece.type, 'HUBRIS')
       t.equal(hubrisLeftPiecePosition.piece.color, color)
 
       const hubrisRightPiecePosition = board.getPiecePosition(
         new Position({ row: hubrisRow, column: 5 })
       )
       t.equal(hubrisRightPiecePosition.isOccupied(), true)
-      t.equal(hubrisRightPiecePosition.piece.getType(), 'HUBRIS')
+      t.equal(hubrisRightPiecePosition.piece.type, 'HUBRIS')
       t.equal(hubrisRightPiecePosition.piece.color, color)
     }
 

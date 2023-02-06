@@ -20,7 +20,7 @@ export class Aymon extends Piece {
     return []
   }
 
-  public getType(): PieceType {
+  public get type(): PieceType {
     return 'AYMON'
   }
 }

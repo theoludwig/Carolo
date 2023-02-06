@@ -22,7 +22,7 @@ export class Hubris extends Piece {
     return ['BAYARD']
   }
 
-  public getType(): PieceType {
+  public get type(): PieceType {
     return 'HUBRIS'
   }
 }

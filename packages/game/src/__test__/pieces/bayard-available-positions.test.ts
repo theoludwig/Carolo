@@ -19,7 +19,7 @@ await tap.test('Bayard Available Positions', async (t) => {
     ['column-1-row-5', 'column-3-row-5', 'column-0-row-6']
   )
   t.equal(
-    board.getPiecePosition(new Position({ column: 2, row: 7 })).piece.getType(),
+    board.getPiecePosition(new Position({ column: 2, row: 7 })).piece.type,
     'BAYARD'
   )
   t.equal(
@@ -35,7 +35,7 @@ await tap.test('Bayard Available Positions', async (t) => {
     true
   )
   t.equal(
-    board.getPiecePosition(new Position({ column: 1, row: 5 })).piece.getType(),
+    board.getPiecePosition(new Position({ column: 1, row: 5 })).piece.type,
     'BAYARD'
   )
   t.equal(game.getCurrentPlayer().color, 'BLACK')

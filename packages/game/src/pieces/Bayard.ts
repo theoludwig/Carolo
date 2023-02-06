@@ -66,7 +66,7 @@ export class Bayard extends Piece {
     return ['AYMON']
   }
 
-  public getType(): PieceType {
+  public get type(): PieceType {
     return 'BAYARD'
   }
 }

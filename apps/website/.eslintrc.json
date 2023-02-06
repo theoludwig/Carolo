@@ -3,8 +3,5 @@
   "extends": ["@carolo/eslint-config-custom", "next/core-web-vitals"],
   "parserOptions": {
     "project": "./tsconfig.json"
-  },
-  "rules": {
-    "@typescript-eslint/consistent-type-assertions": "off"
   }
 }
