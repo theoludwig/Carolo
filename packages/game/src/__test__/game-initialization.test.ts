@@ -3,7 +3,7 @@ import tap from 'tap'
 import { createGame } from './utils.js'
 import type { CreateGameResult } from './utils.js'
 import type { PieceColor } from '../index.js'
-import { Position } from '../index.js'
+import { Position, Board, Game, Player } from '../index.js'
 
 await tap.test('Game Initialization', async (t) => {
   let createGameResult: CreateGameResult
@@ -11,6 +11,18 @@ await tap.test('Game Initialization', async (t) => {
   t.beforeEach(async () => {
     createGameResult = createGame()
   })
+
+  await t.test(
+    "Lobby Initialization throws if there aren't 2 players",
+    async (t) => {
+      const board = new Board()
+      const player1 = new Player('Player 1', 'WHITE')
+      const players = [player1]
+      t.throws(() => {
+        new Game(board, players)
+      })
+    }
+  )
 
   await t.test('Lobby Initialization', async (t) => {
     const { game } = createGameResult

@@ -12,12 +12,6 @@ await tap.test('Bayard Available Positions', async (t) => {
   t.equal(game.status, 'PLAY')
   t.equal(game.getCurrentPlayer().color, 'WHITE')
 
-  t.same(
-    board
-      .getAvailablePiecePositions(new Position({ column: 2, row: 7 }))
-      .keys(),
-    ['column-1-row-5', 'column-3-row-5', 'column-0-row-6']
-  )
   t.equal(
     board.getPiecePosition(new Position({ column: 2, row: 7 })).piece.type,
     'BAYARD'
@@ -25,6 +19,12 @@ await tap.test('Bayard Available Positions', async (t) => {
   t.equal(
     board.getPiecePosition(new Position({ column: 1, row: 5 })).isFree(),
     true
+  )
+  t.same(
+    board
+      .getAvailablePiecePositions(new Position({ column: 2, row: 7 }))
+      .keys(),
+    ['column-1-row-5', 'column-3-row-5', 'column-0-row-6']
   )
   game.playMove(
     new Position({ column: 2, row: 7 }),
@@ -106,5 +106,26 @@ await tap.test('Bayard Available Positions', async (t) => {
       new Position({ column: 3, row: 4 })
     ),
     false
+  )
+
+  game.playMove(
+    new Position({ column: 3, row: 4 }),
+    new Position({ column: 5, row: 3 })
+  )
+  t.same(
+    board
+      .getAvailablePiecePositions(new Position({ column: 5, row: 3 }))
+      .keys(),
+    [
+      'column-6-row-5',
+      'column-4-row-5',
+      'column-7-row-2',
+      'column-7-row-4',
+      'column-4-row-1',
+      'column-6-row-1',
+      'column-3-row-4',
+      'column-2-row-3',
+      'column-3-row-2'
+    ]
   )
 })

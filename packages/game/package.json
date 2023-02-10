@@ -14,15 +14,16 @@
     "dev:tsc": "tsc --watch --preserveWatchOutput",
     "dev": "concurrently --names \"swc,tsc\" \"npm run dev:build\" \"npm run dev:tsc\"",
     "lint": "eslint ./src",
-    "test": "cross-env NODE_ENV=test tap"
+    "test": "cross-env NODE_ENV=test c8 tap"
   },
   "devDependencies": {
     "@carolo/eslint-config-custom": "*",
     "@carolo/tsconfig": "*",
     "@swc/cli": "0.1.57",
-    "@swc/core": "1.3.32",
-    "@types/node": "18.11.19",
+    "@swc/core": "1.3.35",
+    "@types/node": "18.13.0",
     "@types/tap": "15.0.8",
+    "c8": "7.12.0",
     "concurrently": "7.6.0",
     "cross-env": "7.0.3",
     "eslint": "8.33.0",
