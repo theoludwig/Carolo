@@ -42,16 +42,15 @@ export class Board extends BoardBase {
           if (this.isCaptureMove(fromPosition, toPosition)) {
             continue
           }
-
           availablePiecePositions.set(toPosition.toString(), to)
         }
       }
       return availablePiecePositions
     }
+    const positionsOffsets = from.piece.getPositionsOffsets(BoardBase.SIZE)
 
     // TODO: Hubris `powerOfHubrisAttraction`: Opposing Ego must get as close as possible to the Hubris, if the diagonal of the Hubris is free (only needed to check if last move was from a Hubris)
-    const positionsOffsets = from.piece.getPositionsOffsets(BoardBase.SIZE)
-    // TODO: Carolo `shouldMoveUntilObstacle` only the last possible (until obstacle) position is available, get maximum possible offset for top, bottom, left, right
+
     for (const positionOffset of positionsOffsets) {
       const toPosition = fromPosition.add(positionOffset)
       if (!toPosition.isInsideSquare(BoardBase.SIZE)) {
@@ -78,13 +77,78 @@ export class Board extends BoardBase {
       if (this.isCaptureMove(fromPosition, toPosition)) {
         continue
       }
+      if (this.isCheckAfterMove(fromPosition, toPosition)) {
+        continue
+      }
       availablePiecePositions.set(toPosition.toString(), to)
     }
-    for (const [key, to] of availablePiecePositions) {
-      if (this.isCheckAfterMove(fromPosition, to.position)) {
-        availablePiecePositions.delete(key)
+
+    if (from.piece.shouldMoveUntilObstacle()) {
+      let maximumTop: PiecePosition | null = null
+      let maximumBottom: PiecePosition | null = null
+      let maximumLeft: PiecePosition | null = null
+      let maximumRight: PiecePosition | null = null
+      for (const [_toPositionString, to] of availablePiecePositions) {
+        const toPosition = to.position
+        if (toPosition.row > fromPosition.row) {
+          if (maximumTop == null || toPosition.row > maximumTop.position.row) {
+            maximumTop = to
+          }
+        }
+        if (toPosition.row < fromPosition.row) {
+          if (
+            maximumBottom == null ||
+            toPosition.row < maximumBottom.position.row
+          ) {
+            maximumBottom = to
+          }
+        }
+        if (toPosition.column > fromPosition.column) {
+          if (
+            maximumLeft == null ||
+            toPosition.column > maximumLeft.position.column
+          ) {
+            maximumLeft = to
+          }
+        }
+        if (toPosition.column < fromPosition.column) {
+          if (
+            maximumRight == null ||
+            toPosition.column < maximumRight.position.column
+          ) {
+            maximumRight = to
+          }
+        }
       }
+
+      const availableOnlyPiecePositions: AvailablePiecePositions = new Map()
+      if (maximumTop != null) {
+        availableOnlyPiecePositions.set(
+          maximumTop.position.toString(),
+          maximumTop
+        )
+      }
+      if (maximumBottom != null) {
+        availableOnlyPiecePositions.set(
+          maximumBottom.position.toString(),
+          maximumBottom
+        )
+      }
+      if (maximumLeft != null) {
+        availableOnlyPiecePositions.set(
+          maximumLeft.position.toString(),
+          maximumLeft
+        )
+      }
+      if (maximumRight != null) {
+        availableOnlyPiecePositions.set(
+          maximumRight.position.toString(),
+          maximumRight
+        )
+      }
+      return availableOnlyPiecePositions
     }
+
     return availablePiecePositions
   }
 

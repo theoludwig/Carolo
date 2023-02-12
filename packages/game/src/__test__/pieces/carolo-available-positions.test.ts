@@ -33,13 +33,12 @@ await tap.test('Carolo Available Positions', async (t) => {
   )
 
   t.equal(game.getCurrentPlayer().color, 'WHITE')
-  // TODO: Fix this test
-  // t.same(
-  //   board
-  //     .getAvailablePiecePositions(new Position({ column: 4, row: 7 }))
-  //     .keys(),
-  //   ['column-4-row-2']
-  // )
+  t.same(
+    board
+      .getAvailablePiecePositions(new Position({ column: 4, row: 7 }))
+      .keys(),
+    ['column-4-row-2']
+  )
   game.playMove(
     new Position({ column: 0, row: 7 }),
     new Position({ column: 1, row: 7 })
@@ -58,13 +57,12 @@ await tap.test('Carolo Available Positions', async (t) => {
   )
 
   t.equal(game.getCurrentPlayer().color, 'WHITE')
-  // TODO: Fix this test
-  // t.same(
-  //   board
-  //     .getAvailablePiecePositions(new Position({ column: 4, row: 7 }))
-  //     .keys(),
-  //   ['column-4-row-4']
-  // )
+  t.same(
+    board
+      .getAvailablePiecePositions(new Position({ column: 4, row: 7 }))
+      .keys(),
+    ['column-4-row-4']
+  )
   t.equal(
     board.isCaptureMove(
       new Position({ column: 4, row: 4 }),
