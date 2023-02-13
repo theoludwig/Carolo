@@ -13,21 +13,12 @@ export class Board extends BoardBase {
     super()
   }
 
-  /**
-   * Get all available positions for a piece.
-   * @param fromPosition
-   * @returns Map of available positions (key: `column-${column}-row-${row}`, value: PiecePosition).
-   */
-  public getAvailablePiecePositions(
+  private getAvailablePiecePositionsWithoutHubrisAttraction(
     fromPosition: Position
   ): AvailablePiecePositions {
     const availablePiecePositions: AvailablePiecePositions = new Map()
     const from = this.getPiecePosition(fromPosition)
     if (from.isFree()) {
-      return availablePiecePositions
-    }
-    const oppositeColor = getOppositePieceColor(from.piece.color)
-    if (this.isCheck(from.piece.color) || this.isReconquest(oppositeColor)) {
       return availablePiecePositions
     }
 
@@ -48,8 +39,6 @@ export class Board extends BoardBase {
       return availablePiecePositions
     }
     const positionsOffsets = from.piece.getPositionsOffsets(BoardBase.SIZE)
-
-    // TODO: Hubris `powerOfHubrisAttraction`: Opposing Ego must get as close as possible to the Hubris, if the diagonal of the Hubris is free (only needed to check if last move was from a Hubris)
 
     for (const positionOffset of positionsOffsets) {
       const toPosition = fromPosition.add(positionOffset)
@@ -152,6 +141,100 @@ export class Board extends BoardBase {
     return availablePiecePositions
   }
 
+  /**
+   * Get all available positions for a piece.
+   * @param fromPosition
+   * @returns Map of available positions (key: `column-${column}-row-${row}`, value: PiecePosition).
+   */
+  public getAvailablePiecePositions(
+    fromPosition: Position
+  ): AvailablePiecePositions {
+    const availablePiecePositions: AvailablePiecePositions = new Map()
+    const from = this.getPiecePosition(fromPosition)
+    if (from.isFree()) {
+      return availablePiecePositions
+    }
+    const oppositeColor = getOppositePieceColor(from.piece.color)
+    if (this.isCheck(from.piece.color) || this.isReconquest(oppositeColor)) {
+      return availablePiecePositions
+    }
+
+    // Hubris Attraction Power
+    const lastMove = this.getLastMove()
+    if (
+      lastMove != null &&
+      lastMove.piece.type === 'HUBRIS' &&
+      lastMove.piece.color === oppositeColor
+    ) {
+      const positionsOffsets = lastMove.piece.getPositionsOffsets(
+        BoardBase.SIZE
+      )
+      const egoPiecePosition = this.getEgoPiecePosition(from.piece.color)
+      const isEgoCloseToHubris = positionsOffsets.some((positionOffset) => {
+        const toPosition = lastMove.toPosition.add(positionOffset)
+        return toPosition.equals(egoPiecePosition.position)
+      })
+
+      let column = 0
+      if (lastMove.toPosition.column < lastMove.fromPosition.column) {
+        column = 1
+      } else {
+        column = -1
+      }
+      const positionToAdd = new Position({
+        row: from.piece.getDirection(),
+        column
+      })
+      const toPosition = lastMove.toPosition.add(positionToAdd)
+      const to = this.getPiecePosition(toPosition)
+
+      let isPathwayBlocked = false
+      const positionsBetweenEgoAndHubris: Set<PositionString> = new Set()
+      const egoColumn = egoPiecePosition.position.column
+      const egoRow = egoPiecePosition.position.row
+      const toColumn = toPosition.column
+      const toRow = toPosition.row
+      const minColumn = Math.min(egoColumn, toColumn)
+      const maxColumn = Math.max(egoColumn, toColumn)
+      const minRow = Math.min(egoRow, toRow)
+      for (
+        let column = minColumn + 1, row = minRow + 1;
+        column < maxColumn;
+        column++, row++
+      ) {
+        const position = new Position({ row, column })
+        const piecePosition = this.getPiecePosition(position)
+        if (piecePosition.isOccupied()) {
+          isPathwayBlocked = true
+          break
+        } else {
+          positionsBetweenEgoAndHubris.add(position.toString())
+        }
+      }
+      positionsBetweenEgoAndHubris.add(toPosition.toString())
+
+      if (isEgoCloseToHubris && !isPathwayBlocked) {
+        if (from.piece.type === 'EGO') {
+          availablePiecePositions.set(toPosition.toString(), to)
+          return availablePiecePositions
+        }
+        if (from.piece.type === 'HUBRIS') {
+          const hubrisAvailablePiecePositions =
+            this.getAvailablePiecePositionsWithoutHubrisAttraction(fromPosition)
+          for (const [key, piecePosition] of hubrisAvailablePiecePositions) {
+            if (positionsBetweenEgoAndHubris.has(key)) {
+              availablePiecePositions.set(key, piecePosition)
+            }
+          }
+          return availablePiecePositions
+        }
+        return availablePiecePositions
+      }
+    }
+
+    return this.getAvailablePiecePositionsWithoutHubrisAttraction(fromPosition)
+  }
+
   public canMove(fromPosition: Position, toPosition: Position): boolean {
     return this.getAvailablePiecePositions(fromPosition).has(
       toPosition.toString()
@@ -180,6 +263,7 @@ export class Board extends BoardBase {
       fromPosition,
       toPosition,
       capturedPiece,
+      piece: to.piece,
       // TODO: Carolo can move again after bounce (Border or Aymon)
       // TODO: Carolo automatically stop bouncing after 2 seconds
       isNextPlayerTurn: true

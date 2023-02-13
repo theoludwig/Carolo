@@ -13,6 +13,7 @@ export interface Move {
   toPosition: Position
   capturedPiece?: Piece
   isNextPlayerTurn: boolean
+  piece: Piece
 }
 
 export interface BoardBaseState {
@@ -95,5 +96,9 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
     for (let column = 2; column <= 5; column++) {
       board[aymonRow][column].piece = new Aymon(color)
     }
+  }
+
+  public getLastMove(): Move | undefined {
+    return this.state.moves[this.state.moves.length - 1]
   }
 }
