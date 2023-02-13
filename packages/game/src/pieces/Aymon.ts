@@ -13,7 +13,7 @@ export class Aymon extends Piece {
    * @returns
    */
   public getPositionsOffsets(): Position[] {
-    return []
+    throw new Error('Not implemented')
   }
 
   public getCapturablePiecesTypes(): PieceType[] {

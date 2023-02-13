@@ -2,7 +2,7 @@ import tap from 'tap'
 
 import { createGame } from '../utils.js'
 import type { CreateGameResult } from '../utils.js'
-import { Position } from '../../index.js'
+import { Aymon, Position } from '../../index.js'
 
 await tap.test('Aymon Available Positions', async (t) => {
   const createGameResult: CreateGameResult = createGame()
@@ -25,4 +25,7 @@ await tap.test('Aymon Available Positions', async (t) => {
     44,
     'Aymon should be able to teleport to any position on the board'
   )
+  t.throws(() => {
+    new Aymon('WHITE').getPositionsOffsets()
+  }, 'Not implemented')
 })

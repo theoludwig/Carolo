@@ -132,4 +132,15 @@ await tap.test('Game Initialization', async (t) => {
       piecesInitialization(t, color)
     })
   })
+
+  await t.test('PiecePosition.piece throws if position is free', async (t) => {
+    const { board } = createGameResult
+    const freePosition = board.getPiecePosition(
+      new Position({ row: 0, column: 0 })
+    )
+    t.equal(freePosition.isFree(), true)
+    t.throws(() => {
+      console.log(freePosition.piece)
+    })
+  })
 })

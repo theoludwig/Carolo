@@ -19,6 +19,7 @@ await tap.test('Position', async (t) => {
     const position = new Position({ row: 0, column: 0 })
     const position2 = new Position({ row: 0, column: 0 })
     t.equal(position.equals(position2), true)
+    t.equal(position.equals({}), false)
 
     const position3 = new Position({ row: 6, column: 3 })
     const position4 = new Position({ row: 6, column: 3 })
@@ -82,5 +83,15 @@ await tap.test('Position', async (t) => {
       }),
       ['column-1-row-1', 'column-2-row-2', 'column-3-row-3', 'column-4-row-4']
     )
+  })
+
+  await t.test('fromString', async (t) => {
+    const position = Position.fromString('column-0-row-0')
+    t.equal(position.row, 0)
+    t.equal(position.column, 0)
+
+    const position2 = Position.fromString('column-6-row-3')
+    t.equal(position2.row, 3)
+    t.equal(position2.column, 6)
   })
 })

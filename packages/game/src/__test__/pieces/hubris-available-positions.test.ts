@@ -127,10 +127,14 @@ await tap.test('Hubris Available Positions', async (t) => {
     board.getPiecePosition(new Position({ column: 4, row: 5 })).piece.type,
     'BAYARD'
   )
+  const currentPlayer = game.getCurrentPlayer()
+  t.same(currentPlayer.capturedPieces, [])
   game.playMove(
     new Position({ column: 6, row: 3 }),
     new Position({ column: 4, row: 5 })
   )
+  t.same(currentPlayer.capturedPieces.length, 1)
+  t.equal(currentPlayer.capturedPieces[0].type, 'BAYARD')
   t.equal(
     board.getPiecePosition(new Position({ column: 4, row: 5 })).piece.type,
     'HUBRIS'
