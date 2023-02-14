@@ -65,6 +65,12 @@ export const useGame = create<GameStore>()((set) => {
         if (state.gameState.status !== 'PLAY') {
           return {}
         }
+        if (fromPosition.equals(state.selectedPosition)) {
+          return {
+            availablePiecePositions: new Map(),
+            selectedPosition: null
+          }
+        }
         const piecePosition = state.board.getPiecePosition(fromPosition)
         if (
           state.selectedPosition != null &&
