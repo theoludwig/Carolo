@@ -82,6 +82,9 @@ export class Game extends Observer<GameState> implements GameOptions {
   }
 
   public skipBouncing(): void {
+    if (!this.state.isBouncingOnGoing) {
+      return
+    }
     this.setState((state) => {
       state.isBouncingOnGoing = false
     })
@@ -122,6 +125,7 @@ export class Game extends Observer<GameState> implements GameOptions {
       this._board.isCheck(oppositeColor)
     ) {
       this.setState((state) => {
+        state.isBouncingOnGoing = false
         state.status = `${currentPlayer.color}_WON`
       })
     } else if (move.isNextPlayerTurn) {
