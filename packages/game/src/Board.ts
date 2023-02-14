@@ -62,7 +62,10 @@ export class Board extends BoardBase {
       if (this.isCaptureMove(fromPosition, toPosition)) {
         continue
       }
-      if (this.isCheckAfterMove(fromPosition, toPosition)) {
+      if (
+        this.isCheckAfterMove(fromPosition, toPosition) &&
+        !this.isReconquestAfterMove(fromPosition, toPosition)
+      ) {
         continue
       }
       availablePiecePositions.set(toPosition.toString(), to)
@@ -385,6 +388,25 @@ export class Board extends BoardBase {
     const oppositeColor = getOppositePieceColor(color)
     const lastOppositeRow = this.getLastRow(oppositeColor)
     return egoPiecePosition.position.row === lastOppositeRow
+  }
+
+  private isReconquestAfterMove(
+    fromPosition: Position,
+    toPosition: Position
+  ): boolean {
+    const from = this.getPiecePosition(fromPosition)
+    const to = this.getPiecePosition(toPosition)
+    if (from.isFree()) {
+      return false
+    }
+    const fromPiece = from.piece
+    const toPiece = to.isOccupied() ? to.piece : null
+    from.piece = null
+    to.piece = fromPiece
+    const isReconquest = this.isReconquest(fromPiece.color)
+    from.piece = fromPiece
+    to.piece = toPiece
+    return isReconquest
   }
 
   public isCheck(color: PieceColor): boolean {

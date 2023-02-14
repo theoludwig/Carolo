@@ -164,6 +164,7 @@ class Board extends BoardBase {
   {method} - canBounceAymon(fromPosition: Position, toPosition: Position): Boolean
   {method} + move(fromPosition: Position, toPosition: Position): Move
   {method} + isReconquest(color: PieceColor): Boolean
+  {method} - isReconquestAfterMove(fromPosition: Position, toPosition: Position): Boolean
   {method} + isCheck(color: PieceColor): Boolean
   {method} - isCheckAfterMove(fromPosition: Position, toPosition: Position): Boolean
 }
