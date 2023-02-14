@@ -146,6 +146,7 @@ export class Game extends Observer<GameState> implements GameOptions {
   private nextPlayer(): void {
     this.setState((state) => {
       state.currentPlayerIndex = 1 - state.currentPlayerIndex
+      state.isBouncingOnGoing = false
     })
   }
 }
