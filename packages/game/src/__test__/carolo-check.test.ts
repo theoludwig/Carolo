@@ -78,14 +78,20 @@ await tap.test('Carolo Check', async (t) => {
       new Position({ column: 5, row: 7 }),
       new Position({ column: 4, row: 5 })
     )
+    t.equal(game.getCurrentPlayer().color, 'BLACK')
+    t.equal(game.state.isBouncingOnGoing, false)
     game.playMove(
       new Position({ column: 3, row: 0 }),
       new Position({ column: 0, row: 0 })
     )
+    t.equal(game.getCurrentPlayer().color, 'BLACK')
+    t.equal(game.state.isBouncingOnGoing, true)
     game.playMove(
       new Position({ column: 0, row: 0 }),
       new Position({ column: 0, row: 7 })
     )
+    t.equal(game.getCurrentPlayer().color, 'BLACK')
+    t.equal(game.state.isBouncingOnGoing, true)
     game.playMove(
       new Position({ column: 0, row: 7 }),
       new Position({ column: 2, row: 7 })

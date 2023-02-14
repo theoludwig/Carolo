@@ -14,6 +14,7 @@ enum GameStatus <<enumeration>> {
 
 interface GameState <<interface>> {
   {field} + currentPlayerIndex: Number {abstract}
+  {field} + isBouncingOnGoing: Boolean {abstract}
 }
 GameState o--> "1\n- board" Board : <<Owns>>
 GameState o--> "2\n- players" Player : <<Owns>>
@@ -25,15 +26,16 @@ class Game<GameState> extends Observer {
   {method} + getPlayer(index: Number): Player
   {method} + setPlayerName(index: Number, name: String)
   {method} + setPlayerColor(index: Number, color: PieceColor)
-  {method} + getBoard(): Board
   {method} + play()
   {method} + restart()
-  {method} + playMove(fromPosition: Position, toPosition: Position)
+  {method} + skipBouncing()
+  {method} + playMove(fromPosition: Position, toPosition: Position): Move
   {method} + getStatus(): GameStatus
   {method} - nextPlayer()
 }
 Game ..> GameState : <<Uses>>
 Game ..> Position : <<Uses>>
+Game ..> Move : <<Uses>>
 
 interface PlayerState <<interface>> {
   {field} + name: String {abstract}
@@ -77,12 +79,13 @@ abstract class Piece <<abstract>> {
   {method} + getDirection(color: PieceColor): Number {static}
   {method} + getDirection(): Number
   {method} + setHasMoved()
-  {method} + hasMoved(): Boolean
+  {method} + getHasMoved(): Boolean
   {method} + getColor(): PieceColor
   {method} + canBeCapturedBy(piece: PieceType): Boolean
   {method} + canJumpOverPieces(): Boolean
   {method} + canMoveTeleportAnywhere(): Boolean
   {method} + shouldMoveUntilObstacle(): Boolean
+  {method} + canBounce(): Boolean
   {method} + getPositionsOffsets(maximumOffset: Number): Position[*] {abstract}
   {method} + getCapturablePiecesTypes(): PieceType[*] {abstract}
   {method} + getType(): PieceType {abstract}
@@ -110,6 +113,7 @@ class Bayard extends Piece {
 class Carolo extends Piece {
   {method} + Carolo(color: PieceColor)
   {method} + shouldMoveUntilObstacle(): Boolean
+  {method} + canBounce(): Boolean
   {method} + getPositionsOffsets(maximumOffset: Number): Position[*]
   {method} + getCapturablePiecesTypes(): PieceType[*]
   {method} + getType(): PieceType
@@ -137,12 +141,14 @@ abstract class BoardBase<BoardBaseState> <<abstract>> extends Observer {
   {field} + {static} SIZE = 8 : Number {readOnly}
 
   {method} + reset()
-  {method} + getPiecePosition(position: Position): PiecePosition
   {method} + getLastRow(color: PieceColor): Number
   {method} + getAymonInitialRow(color: PieceColor): Number
   {method} + getHubrisInitialRow(color: PieceColor): Number
   {method} + getEgoPiecePosition(color: PieceColor): PiecePosition
-  {method} - setupPieces(color: PieceColor)
+  {method} + getPiecePosition(position: Position): PiecePosition
+  {method} - setupPieces(board: PiecePosition[64], color: PieceColor)
+  {method} + getLastMove(): Move
+  {method} + setLastMoveIsNextPlayerTurn()
 }
 BoardBase ..> BoardBaseState : <<Uses>>
 BoardBase ..> Position : <<Uses>>
@@ -150,24 +156,28 @@ BoardBase ..> PieceColor : <<Uses>>
 
 class Board extends BoardBase {
   {method} + Board()
+  {method} - getAvailablePiecePositionsWithoutHubrisAttraction(fromPosition: Position): PiecePosition[*]
   {method} + getAvailablePiecePositions(fromPosition: Position): PiecePosition[*]
   {method} + canMove(fromPosition: Position, toPosition: Position): Boolean
   {method} + isCaptureMove(fromPosition: Position, toPosition: Position): Boolean
-  {method} + move(fromPosition: Position, toPosition: Position): Move[*]
-  {method} + powerOfHubrisAttraction(fromPosition: Position): Boolean
+  {method} - canBounceBorder(fromPosition: Position, toPosition: Position): Boolean
+  {method} - canBounceAymon(fromPosition: Position, toPosition: Position): Boolean
+  {method} + move(fromPosition: Position, toPosition: Position): Move
   {method} + isReconquest(color: PieceColor): Boolean
   {method} + isCheck(color: PieceColor): Boolean
-  {method} + isCheckAfterMove(fromPosition: Position, toPosition: Position): Boolean
+  {method} - isCheckAfterMove(fromPosition: Position, toPosition: Position): Boolean
 }
 Board ..> Position : <<Uses>>
 Board ..> PieceColor : <<Uses>>
 Board ..> PieceType : <<Uses>>
+Board ..> Move : <<Uses>>
 
 interface Move <<interface>> {
   {field} + fromPosition: Position
   {field} + toPosition: Position
   {field} + capturedPiece: Piece?
   {field} + isNextPlayerTurn: Boolean
+  {field} + piece: Piece
 }
 
 class Position {
@@ -177,6 +187,7 @@ class Position {
   {method} + Position(column: Number, row: Number)
   {method} + add(position: Position)
   {method} + isInsideSquare(position: Position): boolean
+  {method} - getOffsetDirection(offset: Number): Number
   {method} + getIntermediatePositions(position: Position): Position[*]
   {method} + equals(position: Unknown): boolean
   {method} + toString(): String
@@ -201,11 +212,13 @@ abstract class Observer<S> <<abstract>> {
   {field} - listeners: Listener<S>[]
 
   {method} + <<Create>> Observer(initialState: S)
+  {method} + getInitialState(): S
   {method} + getState(): S
-  {method} - setState(state: S)
+  {method} + setState(state: S)
   {method} + getState(): S
   {method} + subscribe(listener: Listener<S>)
   {method} + unsubscribe(listener: Listener<S>)
+  {method} - notifyListeners()
 }
 
 @enduml

@@ -18,6 +18,12 @@ await tap.test('Pieces Initial Available Positions', async (t) => {
     t.equal(game.status, 'PLAY')
     t.equal(game.getCurrentPlayer().color, 'WHITE')
 
+    t.same(
+      board.getAvailablePiecePositions(new Position({ row: 0, column: 0 })),
+      new Map(),
+      'No available positions for free position (with no piece)'
+    )
+
     const egoPiecePosition = board.getEgoPiecePosition('WHITE')
     t.equal(egoPiecePosition.piece.type, 'EGO')
     t.same(

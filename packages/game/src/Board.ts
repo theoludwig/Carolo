@@ -9,10 +9,6 @@ import { Position } from './Position.js'
 export type AvailablePiecePositions = Map<PositionString, PiecePosition>
 
 export class Board extends BoardBase {
-  public constructor() {
-    super()
-  }
-
   private getAvailablePiecePositionsWithoutHubrisAttraction(
     fromPosition: Position
   ): AvailablePiecePositions {
@@ -415,7 +411,7 @@ export class Board extends BoardBase {
     return false
   }
 
-  public isCheckAfterMove(
+  private isCheckAfterMove(
     fromPosition: Position,
     toPosition: Position
   ): boolean {

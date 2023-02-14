@@ -133,6 +133,18 @@ await tap.test('Game Initialization', async (t) => {
     })
   })
 
+  await t.test('Always the White Player starts', async (t) => {
+    const { game } = createGameResult
+    game.play()
+    t.equal(game.getCurrentPlayer().color, 'WHITE')
+    t.equal(game.state.currentPlayerIndex, 0)
+    game.restart()
+    game.setPlayerColor(0, 'BLACK')
+    game.play()
+    t.equal(game.getCurrentPlayer().color, 'WHITE')
+    t.equal(game.state.currentPlayerIndex, 1)
+  })
+
   await t.test('PiecePosition.piece throws if position is free', async (t) => {
     const { board } = createGameResult
     const freePosition = board.getPiecePosition(
@@ -142,5 +154,61 @@ await tap.test('Game Initialization', async (t) => {
     t.throws(() => {
       console.log(freePosition.piece)
     })
+  })
+
+  await t.test(
+    'Game.playMove throws if game is not in PLAY status',
+    async (t) => {
+      const { game } = createGameResult
+      t.equal(game.status, 'LOBBY')
+      t.throws(() => {
+        game.playMove(
+          new Position({ row: 0, column: 0 }),
+          new Position({ row: 0, column: 1 })
+        )
+      }, 'Game Status not in play mode.')
+    }
+  )
+
+  await t.test(
+    'Game.playMove throws if there is no piece at the fromPosition',
+    async (t) => {
+      const { game } = createGameResult
+      game.play()
+      t.equal(game.status, 'PLAY')
+      t.throws(() => {
+        game.playMove(
+          new Position({ row: 0, column: 0 }),
+          new Position({ row: 0, column: 1 })
+        )
+      }, 'No piece at this position.')
+    }
+  )
+
+  await t.test(
+    'Game.playMove throws if piece is not the current player',
+    async (t) => {
+      const { game } = createGameResult
+      game.play()
+      t.equal(game.status, 'PLAY')
+      t.throws(() => {
+        game.playMove(
+          new Position({ row: 1, column: 2 }),
+          new Position({ row: 0, column: 0 })
+        )
+      }, 'Not your turn.')
+    }
+  )
+
+  await t.test('Game.playMove throws if move is not valid', async (t) => {
+    const { game } = createGameResult
+    game.play()
+    t.equal(game.status, 'PLAY')
+    t.throws(() => {
+      game.playMove(
+        new Position({ row: 7, column: 3 }),
+        new Position({ row: 0, column: 1 })
+      )
+    }, 'This move is not allowed.')
   })
 })

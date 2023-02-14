@@ -34,8 +34,16 @@ export abstract class Observer<S> {
     return this._state
   }
 
-  public subscribe(listener: Listener<S>): void {
+  /**
+   * Subscribe to the state changes.
+   * @param listener A function that receives the current state.
+   * @returns A function that can be called to unsubscribe.
+   */
+  public subscribe(listener: Listener<S>): () => void {
     this._listeners.push(listener)
+    return () => {
+      return this.unsubscribe(listener)
+    }
   }
 
   public unsubscribe(listener: Listener<S>): void {

@@ -10,14 +10,21 @@ cache:
 before_script:
   - 'npm ci --cache .npm --prefer-offline'
 
-test:
+lint:
   stage: 'test'
   script:
-    - 'npm run build'
     - 'echo "${CI_COMMIT_MESSAGE}" | npm run lint:commit'
     - 'npm run lint:editorconfig'
     - 'npm run lint:prettier'
     - 'npm run lint'
+  only:
+    - 'develop'
+
+test:
+  stage: 'test'
+  image: 'cypress/base:18.12.1'
+  script:
+    - 'npm run build'
     - 'npm run test'
   only:
     - 'develop'

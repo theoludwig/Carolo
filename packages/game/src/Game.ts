@@ -57,10 +57,6 @@ export class Game extends Observer<GameState> implements GameOptions {
     this._players[1 - index].color = getOppositePieceColor(color)
   }
 
-  public get board(): Board {
-    return this._board
-  }
-
   public play(): void {
     this._board.reset()
     for (const player of this._players) {
@@ -95,7 +91,7 @@ export class Game extends Observer<GameState> implements GameOptions {
 
   public playMove(fromPosition: Position, toPosition: Position): Move {
     if (this.state.status !== 'PLAY') {
-      throw new Error('Game is not in play mode.')
+      throw new Error('Game Status not in play mode.')
     }
     const from = this._board.getPiecePosition(fromPosition)
     if (from.isFree()) {
@@ -103,7 +99,7 @@ export class Game extends Observer<GameState> implements GameOptions {
     }
     const currentPlayer = this.getCurrentPlayer()
     if (from.piece.color !== currentPlayer.color) {
-      throw new Error('This piece is not yours.')
+      throw new Error('Not your turn.')
     }
     if (!this._board.canMove(fromPosition, toPosition)) {
       throw new Error('This move is not allowed.')
