@@ -66,6 +66,14 @@ export const useGame = create<GameStore>()((set) => {
           return {}
         }
         if (fromPosition.equals(state.selectedPosition)) {
+          const from = state.board.getPiecePosition(fromPosition)
+          if (
+            from.isOccupied() &&
+            from.piece.type === 'CAROLO' &&
+            state.gameState.isBouncingOnGoing
+          ) {
+            state.game.skipBouncing()
+          }
           return {
             availablePiecePositions: new Map(),
             selectedPosition: null
