@@ -50,6 +50,9 @@ export const useGame = create<GameStore>()((set) => {
     availablePiecePositions: new Map(),
     skipBouncing: () => {
       return set((state) => {
+        if (state.gameState.status !== 'PLAY') {
+          return {}
+        }
         state.game.skipBouncing()
         return {
           availablePiecePositions: new Map(),
@@ -59,6 +62,9 @@ export const useGame = create<GameStore>()((set) => {
     },
     selectPosition: (fromPosition: Position) => {
       return set((state) => {
+        if (state.gameState.status !== 'PLAY') {
+          return {}
+        }
         const piecePosition = state.board.getPiecePosition(fromPosition)
         if (
           state.selectedPosition != null &&
