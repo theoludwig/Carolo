@@ -6,7 +6,7 @@ import { Link } from '@/components/Link'
 
 export const Header = (): JSX.Element => {
   return (
-    <header className='sticky top-0 z-50 flex w-full items-center justify-center bg-[#171717] p-4'>
+    <header className='sticky top-0 z-50 flex w-full items-center justify-center bg-[#171717] p-1'>
       <div className='container flex flex-wrap items-center justify-between gap-y-4'>
         <NextLink href='/' className='mr-5'>
           <section className='flex items-center'>

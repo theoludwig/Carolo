@@ -2,7 +2,7 @@ import { Feature } from './Feature'
 
 export const Features = (): JSX.Element => {
   return (
-    <section className='mt-8 flex w-full flex-wrap justify-evenly'>
+    <section className='mt-8 flex w-full flex-wrap justify-evenly space-x-4'>
       <Feature
         title='Dynamique'
         icon='/feature-icons/run.png'

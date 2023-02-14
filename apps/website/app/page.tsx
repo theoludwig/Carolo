@@ -38,7 +38,7 @@ const HomePage = (): JSX.Element => {
         </div>
       </section>
       <Features />
-      <section className='my-8 flex flex-wrap justify-around px-6'>
+      <section className='my-8 flex flex-wrap justify-around space-x-4 px-6'>
         <div>
           <Image
             className='max-w-xs md:max-w-md'
