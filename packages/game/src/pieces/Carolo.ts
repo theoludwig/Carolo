@@ -7,6 +7,10 @@ export class Carolo extends Piece {
     return true
   }
 
+  public override canBounce(): boolean {
+    return true
+  }
+
   public getPositionsOffsets(maximumOffset: number): Position[] {
     const positionsOffsets: Position[] = []
     for (let iteration = 1; iteration < maximumOffset; iteration++) {

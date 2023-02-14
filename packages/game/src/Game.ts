@@ -1,4 +1,5 @@
 import type { Board } from './Board.js'
+import type { Move } from './BoardBase.js'
 import { Observer } from './Observer.js'
 import type { PieceColor } from './pieces/Piece.js'
 import { getOppositePieceColor } from './pieces/Piece.js'
@@ -11,6 +12,7 @@ export type GameStatus = (typeof GameStatuses)[number]
 export interface GameState {
   currentPlayerIndex: number
   status: GameStatus
+  isBouncingOnGoing: boolean
 }
 
 export interface GameOptions {
@@ -27,7 +29,7 @@ export class Game extends Observer<GameState> implements GameOptions {
     players: Player[],
     options: GameOptions = {}
   ) {
-    super({ currentPlayerIndex: 0, status: 'LOBBY' })
+    super({ currentPlayerIndex: 0, status: 'LOBBY', isBouncingOnGoing: false })
     if (players.length !== 2) {
       throw new Error('Game must have 2 players.')
     }
@@ -66,6 +68,7 @@ export class Game extends Observer<GameState> implements GameOptions {
     }
     this.setState((state) => {
       state.status = 'PLAY'
+      state.isBouncingOnGoing = false
     })
     if (this._players[1].color === 'WHITE') {
       this.setState((state) => {
@@ -78,23 +81,32 @@ export class Game extends Observer<GameState> implements GameOptions {
     this.setState((state) => {
       state.status = 'LOBBY'
       state.currentPlayerIndex = 0
+      state.isBouncingOnGoing = false
     })
   }
 
-  public playMove(fromPosition: Position, toPosition: Position): void {
+  public skipBouncing(): void {
+    this.setState((state) => {
+      state.isBouncingOnGoing = false
+    })
+    this.nextPlayer()
+    this._board.setLastMoveIsNextPlayerTurn()
+  }
+
+  public playMove(fromPosition: Position, toPosition: Position): Move {
     if (this.state.status !== 'PLAY') {
-      return
+      throw new Error('Game is not in play mode.')
     }
     const from = this._board.getPiecePosition(fromPosition)
     if (from.isFree()) {
-      return
+      throw new Error('No piece at this position.')
     }
     const currentPlayer = this.getCurrentPlayer()
     if (from.piece.color !== currentPlayer.color) {
-      return
+      throw new Error('This piece is not yours.')
     }
     if (!this._board.canMove(fromPosition, toPosition)) {
-      return
+      throw new Error('This move is not allowed.')
     }
     const oppositeColor = getOppositePieceColor(currentPlayer.color)
 
@@ -118,7 +130,13 @@ export class Game extends Observer<GameState> implements GameOptions {
       })
     } else if (move.isNextPlayerTurn) {
       this.nextPlayer()
+    } else {
+      this.setState((state) => {
+        state.isBouncingOnGoing = true
+      })
     }
+
+    return move
   }
 
   public get status(): GameStatus {

@@ -26,6 +26,7 @@ await tap.test('Carolo Check', async (t) => {
       new Position({ column: 4, row: 7 }),
       new Position({ column: 7, row: 7 })
     )
+    game.skipBouncing()
     game.playMove(
       new Position({ column: 2, row: 1 }),
       new Position({ column: 0, row: 0 })
@@ -34,6 +35,7 @@ await tap.test('Carolo Check', async (t) => {
       new Position({ column: 7, row: 7 }),
       new Position({ column: 7, row: 0 })
     )
+    game.skipBouncing()
     game.playMove(
       new Position({ column: 0, row: 0 }),
       new Position({ column: 1, row: 0 })
@@ -58,6 +60,52 @@ await tap.test('Carolo Check', async (t) => {
     t.equal(caroloPiecePosition.isOccupied(), true)
     t.equal(caroloPiecePosition.piece.type, 'CAROLO')
     t.equal(caroloPiecePosition.piece.color, 'WHITE')
+    t.equal(caroloPiecePosition.piece.hasMoved, true)
+  })
+
+  await t.test('Black Carolo check White Ego with Bouncing', async (t) => {
+    const { game, board } = createGameResult
+    game.play()
+    game.playMove(
+      new Position({ column: 2, row: 7 }),
+      new Position({ column: 3, row: 5 })
+    )
+    game.playMove(
+      new Position({ column: 2, row: 0 }),
+      new Position({ column: 3, row: 2 })
+    )
+    game.playMove(
+      new Position({ column: 5, row: 7 }),
+      new Position({ column: 4, row: 5 })
+    )
+    game.playMove(
+      new Position({ column: 3, row: 0 }),
+      new Position({ column: 0, row: 0 })
+    )
+    game.playMove(
+      new Position({ column: 0, row: 0 }),
+      new Position({ column: 0, row: 7 })
+    )
+    game.playMove(
+      new Position({ column: 0, row: 7 }),
+      new Position({ column: 2, row: 7 })
+    )
+    t.equal(game.status, 'BLACK_WON')
+    t.equal(board.isReconquest('WHITE'), false)
+    t.equal(board.isReconquest('BLACK'), false)
+    t.equal(board.isCheck('WHITE'), true)
+    t.equal(board.isCheck('BLACK'), false)
+    const egoPiecePosition = board.getEgoPiecePosition('WHITE')
+    t.equal(egoPiecePosition.isOccupied(), true)
+    t.equal(egoPiecePosition.piece.type, 'EGO')
+    t.equal(egoPiecePosition.piece.color, 'WHITE')
+    t.equal(egoPiecePosition.position.toString(), 'column-3-row-7')
+    const caroloPiecePosition = board.getPiecePosition(
+      new Position({ column: 2, row: 7 })
+    )
+    t.equal(caroloPiecePosition.isOccupied(), true)
+    t.equal(caroloPiecePosition.piece.type, 'CAROLO')
+    t.equal(caroloPiecePosition.piece.color, 'BLACK')
     t.equal(caroloPiecePosition.piece.hasMoved, true)
   })
 })

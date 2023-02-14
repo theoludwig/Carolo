@@ -101,4 +101,13 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
   public getLastMove(): Move | undefined {
     return this.state.moves[this.state.moves.length - 1]
   }
+
+  public setLastMoveIsNextPlayerTurn(): void {
+    this.setState((state) => {
+      const lastMove = state.moves[this.state.moves.length - 1]
+      if (lastMove != null) {
+        lastMove.isNextPlayerTurn = true
+      }
+    })
+  }
 }

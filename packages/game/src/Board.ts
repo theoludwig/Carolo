@@ -149,7 +149,7 @@ export class Board extends BoardBase {
   public getAvailablePiecePositions(
     fromPosition: Position
   ): AvailablePiecePositions {
-    const availablePiecePositions: AvailablePiecePositions = new Map()
+    let availablePiecePositions: AvailablePiecePositions = new Map()
     const from = this.getPiecePosition(fromPosition)
     if (from.isFree()) {
       return availablePiecePositions
@@ -232,7 +232,45 @@ export class Board extends BoardBase {
       }
     }
 
-    return this.getAvailablePiecePositionsWithoutHubrisAttraction(fromPosition)
+    if (
+      lastMove != null &&
+      lastMove.piece.canBounce() &&
+      !lastMove.isNextPlayerTurn &&
+      !from.piece.canBounce()
+    ) {
+      return availablePiecePositions
+    }
+
+    availablePiecePositions =
+      this.getAvailablePiecePositionsWithoutHubrisAttraction(fromPosition)
+
+    if (from.piece.canBounce()) {
+      const precedingMoves: Move[] = []
+      for (let index = this.state.moves.length - 1; index >= 0; index--) {
+        const move = this.state.moves[index]
+        if (move.piece.type === from.piece.type) {
+          precedingMoves.push(move)
+        } else {
+          break
+        }
+      }
+      const initialMove = precedingMoves[precedingMoves.length - 1]
+      const availablePiecePositionsFiltered: AvailablePiecePositions = new Map()
+      for (const [key, piecePosition] of availablePiecePositions) {
+        const isPositionInPrecedingMoves = precedingMoves.some((move) => {
+          return move.toPosition.toString() === key
+        })
+        if (
+          !isPositionInPrecedingMoves &&
+          initialMove?.fromPosition?.toString() !== key
+        ) {
+          availablePiecePositionsFiltered.set(key, piecePosition)
+        }
+      }
+      availablePiecePositions = availablePiecePositionsFiltered
+    }
+
+    return availablePiecePositions
   }
 
   public canMove(fromPosition: Position, toPosition: Position): boolean {
@@ -252,6 +290,76 @@ export class Board extends BoardBase {
     )
   }
 
+  private canBounceBorder(
+    fromPosition: Position,
+    toPosition: Position
+  ): boolean {
+    const piecePosition = this.getPiecePosition(toPosition)
+    const { position } = piecePosition
+    const { column, row } = position
+    const isOnTop = row === 0
+    const isOnBottom = row === BoardBase.SIZE - 1
+    const isOnLeft = column === 0
+    const isOnRight = column === BoardBase.SIZE - 1
+    if (isOnTop && fromPosition.row > toPosition.row) {
+      return true
+    }
+    if (isOnBottom && fromPosition.row < toPosition.row) {
+      return true
+    }
+    if (isOnLeft && fromPosition.column > toPosition.column) {
+      return true
+    }
+    if (isOnRight && fromPosition.column < toPosition.column) {
+      return true
+    }
+    return false
+  }
+
+  private canBounceAymon(
+    fromPosition: Position,
+    toPosition: Position
+  ): boolean {
+    const piecePosition = this.getPiecePosition(toPosition)
+    const topPosition = piecePosition.position.add(
+      new Position({ row: -1, column: 0 })
+    )
+    const bottomPosition = piecePosition.position.add(
+      new Position({ row: 1, column: 0 })
+    )
+    const leftPosition = piecePosition.position.add(
+      new Position({ row: 0, column: -1 })
+    )
+    const rightPosition = piecePosition.position.add(
+      new Position({ row: 0, column: 1 })
+    )
+    if (fromPosition.row > toPosition.row) {
+      return (
+        this.getPiecePosition(topPosition).isOccupied() &&
+        this.getPiecePosition(topPosition).piece.type === 'AYMON'
+      )
+    }
+    if (fromPosition.row < toPosition.row) {
+      return (
+        this.getPiecePosition(bottomPosition).isOccupied() &&
+        this.getPiecePosition(bottomPosition).piece.type === 'AYMON'
+      )
+    }
+    if (fromPosition.column > toPosition.column) {
+      return (
+        this.getPiecePosition(leftPosition).isOccupied() &&
+        this.getPiecePosition(leftPosition).piece.type === 'AYMON'
+      )
+    }
+    if (fromPosition.column < toPosition.column) {
+      return (
+        this.getPiecePosition(rightPosition).isOccupied() &&
+        this.getPiecePosition(rightPosition).piece.type === 'AYMON'
+      )
+    }
+    return false
+  }
+
   public move(fromPosition: Position, toPosition: Position): Move {
     const from = this.getPiecePosition(fromPosition)
     const to = this.getPiecePosition(toPosition)
@@ -264,9 +372,11 @@ export class Board extends BoardBase {
       toPosition,
       capturedPiece,
       piece: to.piece,
-      // TODO: Carolo can move again after bounce (Border or Aymon)
-      // TODO: Carolo automatically stop bouncing after 2 seconds
-      isNextPlayerTurn: true
+      isNextPlayerTurn:
+        !to.piece.canBounce() ||
+        (to.piece.canBounce() &&
+          !this.canBounceBorder(fromPosition, toPosition) &&
+          !this.canBounceAymon(fromPosition, toPosition))
     }
     this.setState((state) => {
       state.moves.push(move)

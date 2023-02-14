@@ -22,6 +22,7 @@ export interface GameStore {
 
   selectedPosition: Position | null
   availablePiecePositions: AvailablePiecePositions
+  skipBouncing: () => void
   selectPosition: (fromPosition: Position) => void
 }
 
@@ -47,6 +48,15 @@ export const useGame = create<GameStore>()((set) => {
 
     selectedPosition: null,
     availablePiecePositions: new Map(),
+    skipBouncing: () => {
+      return set((state) => {
+        state.game.skipBouncing()
+        return {
+          availablePiecePositions: new Map(),
+          selectedPosition: null
+        }
+      })
+    },
     selectPosition: (fromPosition: Position) => {
       return set((state) => {
         const piecePosition = state.board.getPiecePosition(fromPosition)
@@ -54,10 +64,18 @@ export const useGame = create<GameStore>()((set) => {
           state.selectedPosition != null &&
           state.availablePiecePositions.has(fromPosition.toString())
         ) {
-          game.playMove(state.selectedPosition, fromPosition)
+          const move = game.playMove(state.selectedPosition, fromPosition)
+          if (move.isNextPlayerTurn) {
+            return {
+              availablePiecePositions: new Map(),
+              selectedPosition: null
+            }
+          }
           return {
-            availablePiecePositions: new Map(),
-            selectedPosition: null
+            availablePiecePositions: state.board.getAvailablePiecePositions(
+              move.toPosition
+            ),
+            selectedPosition: fromPosition
           }
         }
         if (piecePosition.isFree()) {

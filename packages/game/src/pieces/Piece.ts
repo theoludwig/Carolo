@@ -61,6 +61,10 @@ export abstract class Piece {
     return false
   }
 
+  public canBounce(): boolean {
+    return false
+  }
+
   public abstract getPositionsOffsets(maximumOffset: number): Position[]
 
   public abstract getCapturablePiecesTypes(): PieceType[]
