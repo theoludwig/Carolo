@@ -34,6 +34,7 @@ export const useGame = create<GameStore>()((set) => {
   const game = new Game(board, players, {
     logger: NODE_ENV !== 'production'
   })
+  game.play()
   return {
     board,
     boardState: board.state,
