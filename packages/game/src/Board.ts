@@ -199,18 +199,16 @@ export class Board extends BoardBase {
         }
       }
     }
-
     if (egoIsAttractedToHubris && hubrisPosition != null) {
-      let column = 0
-      if (fromPosition.column < hubrisPosition.column) {
-        column = -1
-      } else {
-        column = 1
-      }
-      const positionAttracted = hubrisPosition.add(
-        new Position({ row: egoPiecePosition.piece.getDirection(), column })
-      )
       if (from.piece.type === 'EGO') {
+        const x1 = hubrisPosition.column
+        const y1 = hubrisPosition.row
+        const x2 = egoPiecePosition.position.column
+        const y2 = egoPiecePosition.position.row
+        const positionAttracted = new Position({
+          column: x1 + (x2 - x1) / Math.abs(x2 - x1),
+          row: y1 + (y2 - y1) / Math.abs(y2 - y1)
+        })
         availablePiecePositions.set(
           positionAttracted.toString(),
           this.getPiecePosition(positionAttracted)
