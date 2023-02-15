@@ -248,7 +248,10 @@ export class Board extends BoardBase {
       const precedingMoves: Move[] = []
       for (let index = this.state.moves.length - 1; index >= 0; index--) {
         const move = this.state.moves[index]
-        if (move.piece.type === from.piece.type) {
+        if (
+          move.piece.type === from.piece.type &&
+          move.piece.color === from.piece.color
+        ) {
           precedingMoves.push(move)
         } else {
           break
@@ -376,7 +379,8 @@ export class Board extends BoardBase {
         !to.piece.canBounce() ||
         (to.piece.canBounce() &&
           !this.canBounceBorder(fromPosition, toPosition) &&
-          !this.canBounceAymon(fromPosition, toPosition))
+          !this.canBounceAymon(fromPosition, toPosition)) ||
+        this.getAvailablePiecePositions(toPosition).size === 0
     }
     this.setState((state) => {
       state.moves.push(move)

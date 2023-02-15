@@ -107,4 +107,63 @@ await tap.test('Carolo Available Positions', async (t) => {
     )
     t.equal(game.state.isBouncingOnGoing, false)
   })
+
+  await t.test(
+    'Automatically stop bouncing when no more moves availables',
+    async (t) => {
+      const { game } = createGameResult
+      game.play()
+      game.playMove(
+        new Position({ column: 5, row: 7 }),
+        new Position({ column: 4, row: 5 })
+      )
+      game.playMove(
+        new Position({ column: 2, row: 0 }),
+        new Position({ column: 3, row: 2 })
+      )
+      game.playMove(
+        new Position({ column: 5, row: 6 }),
+        new Position({ column: 7, row: 5 })
+      )
+      game.playMove(
+        new Position({ column: 3, row: 0 }),
+        new Position({ column: 0, row: 0 })
+      )
+
+      t.equal(game.getCurrentPlayer().color, 'BLACK')
+      game.playMove(
+        new Position({ column: 0, row: 0 }),
+        new Position({ column: 0, row: 7 })
+      )
+      t.equal(game.state.isBouncingOnGoing, true)
+      game.playMove(
+        new Position({ column: 0, row: 7 }),
+        new Position({ column: 1, row: 7 })
+      )
+      t.equal(game.state.isBouncingOnGoing, false)
+
+      t.equal(game.getCurrentPlayer().color, 'WHITE')
+      game.playMove(
+        new Position({ column: 4, row: 7 }),
+        new Position({ column: 7, row: 7 })
+      )
+      t.equal(game.state.isBouncingOnGoing, true)
+      game.playMove(
+        new Position({ column: 7, row: 7 }),
+        new Position({ column: 7, row: 6 })
+      )
+      t.equal(game.state.isBouncingOnGoing, true)
+      game.playMove(
+        new Position({ column: 7, row: 6 }),
+        new Position({ column: 5, row: 6 })
+      )
+      t.equal(game.state.isBouncingOnGoing, true)
+      game.playMove(
+        new Position({ column: 5, row: 6 }),
+        new Position({ column: 5, row: 7 })
+      )
+      t.equal(game.state.isBouncingOnGoing, false)
+      t.equal(game.getCurrentPlayer().color, 'BLACK')
+    }
+  )
 })
