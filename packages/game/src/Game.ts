@@ -57,6 +57,13 @@ export class Game extends Observer<GameState> implements GameOptions {
     this._players[1 - index].color = getOppositePieceColor(color)
   }
 
+  public giveUp(color: PieceColor): void {
+    const oppositeColor = getOppositePieceColor(color)
+    this.setState((state) => {
+      state.status = `${oppositeColor}_WON`
+    })
+  }
+
   public play(): void {
     this._board.reset()
     for (const player of this._players) {

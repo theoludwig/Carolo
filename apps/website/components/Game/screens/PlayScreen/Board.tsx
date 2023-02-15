@@ -52,6 +52,7 @@ export const Board = (): JSX.Element => {
                       className={classNames('h-full w-full', {
                         'square-corners': isCapture
                       })}
+                      priority
                       quality={100}
                       src={`/pieces/${piecePosition.piece.type}_${piecePosition.piece.color}.png`}
                       alt='Piece'
