@@ -77,6 +77,20 @@ export class Position implements PositionOptions {
     return `column-${this.column}-row-${this.row}`
   }
 
+  public isOnSameDiagonal(position: Position): boolean {
+    return (
+      Math.abs(this.column - position.column) ===
+      Math.abs(this.row - position.row)
+    )
+  }
+
+  public isOnlyOneSquareAway(position: Position): boolean {
+    return (
+      Math.abs(this.column - position.column) <= 1 &&
+      Math.abs(this.row - position.row) <= 1
+    )
+  }
+
   public static fromString(positionString: PositionString): Position {
     const [, column, , row] = positionString.split('-')
     return new Position({

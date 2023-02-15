@@ -113,8 +113,8 @@ await tap.test('Ego Available Positions', async (t) => {
 
   t.equal(game.getCurrentPlayer().color, 'WHITE')
   game.playMove(
-    new Position({ column: 1, row: 5 }),
-    new Position({ column: 1, row: 4 })
+    new Position({ column: 2, row: 5 }),
+    new Position({ column: 0, row: 3 })
   )
 
   t.equal(game.getCurrentPlayer().color, 'BLACK')
@@ -128,18 +128,26 @@ await tap.test('Ego Available Positions', async (t) => {
     new Position({ column: 1, row: 2 }),
     new Position({ column: 2, row: 4 })
   )
+  game.playMove(
+    new Position({ column: 1, row: 5 }),
+    new Position({ column: 2, row: 5 })
+  )
+  game.playMove(
+    new Position({ column: 5, row: 1 }),
+    new Position({ column: 7, row: 0 })
+  )
 
   t.equal(game.getCurrentPlayer().color, 'WHITE')
   t.same(
     board
-      .getAvailablePiecePositions(new Position({ column: 1, row: 4 }))
+      .getAvailablePiecePositions(new Position({ column: 2, row: 5 }))
       .keys(),
-    ['column-1-row-5', 'column-2-row-4', 'column-1-row-3', 'column-0-row-4']
+    ['column-3-row-5', 'column-2-row-4', 'column-1-row-5']
   )
   t.equal(
     board.isCaptureMove(
       new Position({ column: 2, row: 4 }),
-      new Position({ column: 1, row: 4 })
+      new Position({ column: 2, row: 5 })
     ),
     true
   )
@@ -148,7 +156,7 @@ await tap.test('Ego Available Positions', async (t) => {
     'BAYARD'
   )
   game.playMove(
-    new Position({ column: 1, row: 4 }),
+    new Position({ column: 2, row: 5 }),
     new Position({ column: 2, row: 4 })
   )
   t.equal(

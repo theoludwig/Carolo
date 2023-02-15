@@ -1,6 +1,7 @@
 import type { Move } from './BoardBase.js'
 import { BoardBase } from './BoardBase.js'
 import type { PiecePosition } from './PiecePosition.js'
+import { HubrisEgoAttraction } from './pieces/HubrisEgoAttraction.js'
 import type { PieceColor } from './pieces/Piece.js'
 import { getOppositePieceColor } from './pieces/Piece.js'
 import type { PositionString } from './Position.js'
@@ -159,78 +160,80 @@ export class Board extends BoardBase {
     }
 
     // Hubris Attraction Power
-    const lastMove = this.getLastMove()
-    if (
-      lastMove != null &&
-      lastMove.piece.type === 'HUBRIS' &&
-      lastMove.piece.color === oppositeColor
-    ) {
-      const positionsOffsets = lastMove.piece.getPositionsOffsets(
-        BoardBase.SIZE
-      )
-      const egoPiecePosition = this.getEgoPiecePosition(from.piece.color)
-      const isEgoCloseToHubris = positionsOffsets.some((positionOffset) => {
-        const toPosition = lastMove.toPosition.add(positionOffset)
-        return toPosition.equals(egoPiecePosition.position)
-      })
-
-      let column = 0
-      if (lastMove.toPosition.column < lastMove.fromPosition.column) {
-        column = 1
-      } else {
-        column = -1
-      }
-      const positionToAdd = new Position({
-        row: from.piece.getDirection(),
-        column
-      })
-      const toPosition = lastMove.toPosition.add(positionToAdd)
-      const to = this.getPiecePosition(toPosition)
-
-      let isPathwayBlocked = false
-      const positionsBetweenEgoAndHubris: Set<PositionString> = new Set()
-      const egoColumn = egoPiecePosition.position.column
-      const egoRow = egoPiecePosition.position.row
-      const toColumn = toPosition.column
-      const toRow = toPosition.row
-      const minColumn = Math.min(egoColumn, toColumn)
-      const maxColumn = Math.max(egoColumn, toColumn)
-      const minRow = Math.min(egoRow, toRow)
-      for (
-        let column = minColumn + 1, row = minRow + 1;
-        column < maxColumn;
-        column++, row++
-      ) {
-        const position = new Position({ row, column })
-        const piecePosition = this.getPiecePosition(position)
-        if (piecePosition.isOccupied()) {
-          isPathwayBlocked = true
-          break
-        } else {
-          positionsBetweenEgoAndHubris.add(position.toString())
-        }
-      }
-      positionsBetweenEgoAndHubris.add(toPosition.toString())
-
-      if (isEgoCloseToHubris && !isPathwayBlocked) {
-        if (from.piece.type === 'EGO') {
-          availablePiecePositions.set(toPosition.toString(), to)
-          return availablePiecePositions
-        }
-        if (from.piece.type === 'HUBRIS') {
-          const hubrisAvailablePiecePositions =
-            this.getAvailablePiecePositionsWithoutHubrisAttraction(fromPosition)
-          for (const [key, piecePosition] of hubrisAvailablePiecePositions) {
-            if (positionsBetweenEgoAndHubris.has(key)) {
-              availablePiecePositions.set(key, piecePosition)
-            }
+    const egoPiecePosition = this.getEgoPiecePosition(from.piece.color)
+    let egoIsAttractedToHubris = false
+    let hubrisPosition: Position | null = null
+    let hubrisOpponentAvailable: AvailablePiecePositions = new Map()
+    for (let row = 0; row < BoardBase.SIZE; row++) {
+      for (let column = 0; column < BoardBase.SIZE; column++) {
+        const piecePosition = this.getPiecePosition(
+          new Position({ row, column })
+        )
+        if (
+          piecePosition.isOccupied() &&
+          piecePosition.piece.type === 'HUBRIS' &&
+          piecePosition.piece.color === oppositeColor
+        ) {
+          const hubris = piecePosition.piece
+          const hubrisEgoAttraction = new HubrisEgoAttraction(hubris.color)
+          piecePosition.piece = hubrisEgoAttraction
+          const available =
+            this.getAvailablePiecePositionsWithoutHubrisAttraction(
+              piecePosition.position
+            )
+          piecePosition.piece = hubris
+          if (
+            egoPiecePosition.position.isOnlyOneSquareAway(
+              piecePosition.position
+            )
+          ) {
+            continue
           }
-          return availablePiecePositions
+
+          if (available.has(egoPiecePosition.position.toString())) {
+            egoIsAttractedToHubris = true
+            hubrisPosition = piecePosition.position
+            hubrisOpponentAvailable = available
+            break
+          }
         }
-        return availablePiecePositions
       }
     }
 
+    if (egoIsAttractedToHubris && hubrisPosition != null) {
+      let column = 0
+      if (fromPosition.column < hubrisPosition.column) {
+        column = -1
+      } else {
+        column = 1
+      }
+      const positionAttracted = hubrisPosition.add(
+        new Position({ row: egoPiecePosition.piece.getDirection(), column })
+      )
+      if (from.piece.type === 'EGO') {
+        availablePiecePositions.set(
+          positionAttracted.toString(),
+          this.getPiecePosition(positionAttracted)
+        )
+        return availablePiecePositions
+      }
+      if (from.piece.type === 'HUBRIS') {
+        const available =
+          this.getAvailablePiecePositionsWithoutHubrisAttraction(fromPosition)
+        for (const [key, value] of available) {
+          const isSameDiagonalAsEgo = value.position.isOnSameDiagonal(
+            egoPiecePosition.position
+          )
+          if (hubrisOpponentAvailable.has(key) && isSameDiagonalAsEgo) {
+            availablePiecePositions.set(key, value)
+          }
+        }
+        return availablePiecePositions
+      }
+      return availablePiecePositions
+    }
+
+    const lastMove = this.getLastMove()
     if (
       lastMove != null &&
       lastMove.piece.canBounce() &&
