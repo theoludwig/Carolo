@@ -17,11 +17,10 @@ export const PieceTypes = [
 export type PieceType = (typeof PieceTypes)[number]
 
 export abstract class Piece {
-  private _hasMoved: boolean
+  private moveCount = 0
   private readonly _color: PieceColor
 
   public constructor(color: PieceColor) {
-    this._hasMoved = false
     this._color = color
   }
 
@@ -33,12 +32,16 @@ export abstract class Piece {
     return Piece.getDirection(this._color)
   }
 
-  public set hasMoved(hasMoved: boolean) {
-    this._hasMoved = hasMoved
+  public move(): void {
+    this.moveCount++
+  }
+
+  public undoMove(): void {
+    this.moveCount = Math.max(0, this.moveCount - 1)
   }
 
   public get hasMoved(): boolean {
-    return this._hasMoved
+    return this.moveCount > 0
   }
 
   public get color(): PieceColor {

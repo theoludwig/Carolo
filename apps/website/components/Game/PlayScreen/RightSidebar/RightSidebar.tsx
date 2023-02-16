@@ -1,6 +1,6 @@
 import { useGame } from '@/stores/game'
-import { EndGame } from '@/components/Game/screens/PlayScreen/RightSidebar/EndGame'
-import { ControlGame } from '@/components/Game/screens/PlayScreen/RightSidebar/ControlGame'
+import { EndGame } from '@/components/Game/PlayScreen/RightSidebar/EndGame'
+import { ControlGame } from '@/components/Game/PlayScreen/RightSidebar/ControlGame'
 
 export const RightSidebar = (): JSX.Element => {
   const { gameState } = useGame()

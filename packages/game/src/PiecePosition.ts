@@ -9,11 +9,9 @@ export interface PiecePositionOptions {
 export class PiecePosition implements PiecePositionOptions {
   private readonly _position: Position
   private _piece: Piece | null
-  private readonly _initialPiece: Piece | null
 
   public constructor(options: PiecePositionOptions) {
     this._piece = options.piece ?? null
-    this._initialPiece = this._piece
     this._position = options.position
   }
 
@@ -30,10 +28,6 @@ export class PiecePosition implements PiecePositionOptions {
 
   public set piece(piece: Piece | null) {
     this._piece = piece
-  }
-
-  public get initialPiece(): Piece | null {
-    return this._initialPiece
   }
 
   public isFree(): boolean {

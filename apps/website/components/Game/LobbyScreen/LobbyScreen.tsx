@@ -2,7 +2,7 @@
 
 import { useGame } from '@/stores/game'
 import { Button } from '@/components/Button'
-import { LobbyPlayer } from '@/components/Game/screens/LobbyScreen/LobbyPlayer'
+import { LobbyPlayer } from '@/components/Game/LobbyScreen/LobbyPlayer'
 
 export const LobbyScreen = (): JSX.Element => {
   const { playersState, game } = useGame()

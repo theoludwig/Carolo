@@ -118,7 +118,6 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
     const to = this.getPiecePosition(toPosition)
     to.piece = from.piece
     from.piece = null
-    to.piece.hasMoved = to.initialPiece !== to.piece
   }
 
   public previousMove(): Move | null {
@@ -128,6 +127,7 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
       if (move.capturedPiece != null) {
         this.getPiecePosition(move.toPosition).piece = move.capturedPiece
       }
+      move.piece.undoMove()
       this.setState((state) => {
         state.currentMoveIndex--
       })

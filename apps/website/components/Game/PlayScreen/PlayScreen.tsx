@@ -1,8 +1,8 @@
 import { useGame } from '@/stores/game'
-import { Board } from '@/components/Game/screens/PlayScreen/Board'
-import { Player } from '@/components/Game/screens/PlayScreen/Player'
-import { RightSidebar } from '@/components/Game/screens/PlayScreen/RightSidebar/RightSidebar'
-import { LeftSidebar } from '@/components/Game/screens/PlayScreen/LeftSidebar/LeftSidebar'
+import { Board } from '@/components/Game/PlayScreen/Board'
+import { Player } from '@/components/Game/PlayScreen/Player'
+import { RightSidebar } from '@/components/Game/PlayScreen/RightSidebar/RightSidebar'
+import { LeftSidebar } from '@/components/Game/PlayScreen/LeftSidebar/LeftSidebar'
 
 export const PlayScreen = (): JSX.Element => {
   const { playersState } = useGame()

@@ -367,6 +367,7 @@ export class Board extends BoardBase {
     const to = this.getPiecePosition(toPosition)
     const capturedPiece = to.isOccupied() ? to.piece : undefined
     this.movePiece(fromPosition, toPosition)
+    to.piece.move()
     const move: Move = {
       fromPosition,
       toPosition,
