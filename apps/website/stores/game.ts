@@ -23,6 +23,7 @@ export interface GameStore {
   selectedPosition: Position | null
   availablePiecePositions: AvailablePiecePositions
   skipBouncing: () => void
+  resetSelectedPosition: () => void
   selectPosition: (fromPosition: Position) => void
 }
 
@@ -55,6 +56,14 @@ export const useGame = create<GameStore>()((set) => {
           return {}
         }
         state.game.skipBouncing()
+        return {
+          availablePiecePositions: new Map(),
+          selectedPosition: null
+        }
+      })
+    },
+    resetSelectedPosition: () => {
+      return set(() => {
         return {
           availablePiecePositions: new Map(),
           selectedPosition: null

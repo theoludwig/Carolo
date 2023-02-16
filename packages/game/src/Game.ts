@@ -20,6 +20,7 @@ export interface GameOptions {
 }
 
 export class Game extends Observer<GameState> implements GameOptions {
+  private finalStatus: GameStatus | null
   private readonly _board: Board
   private readonly _players: Player[]
   public readonly logger: boolean
@@ -38,6 +39,7 @@ export class Game extends Observer<GameState> implements GameOptions {
     this._players = new Array(2)
     this._players[0] = players[0]
     this._players[1] = players[1]
+    this.finalStatus = null
   }
 
   public getCurrentPlayer(): Player {
@@ -46,6 +48,10 @@ export class Game extends Observer<GameState> implements GameOptions {
 
   public getPlayer(index: number): Player {
     return this._players[index]
+  }
+
+  public getPlayerByColor(color: PieceColor): Player {
+    return this._players[color === 'WHITE' ? 0 : 1]
   }
 
   public setPlayerName(index: number, name: string): void {
@@ -61,7 +67,74 @@ export class Game extends Observer<GameState> implements GameOptions {
     const oppositeColor = getOppositePieceColor(color)
     this.setState((state) => {
       state.status = `${oppositeColor}_WON`
+      this.finalStatus = state.status
     })
+  }
+
+  public previousMove(): void {
+    if (this.state.status !== 'PLAY') {
+      this.setState((state) => {
+        state.status = 'PLAY'
+        state.currentPlayerIndex = 1 - state.currentPlayerIndex
+      })
+    }
+    if (this._board.state.currentMoveIndex === -1) {
+      return
+    }
+    const move = this._board.previousMove()
+    if (move != null) {
+      if (move.capturedPiece != null) {
+        this.getPlayerByColor(move.piece.color).removeCapturedPiece(
+          move.capturedPiece
+        )
+      }
+      this.verifyMove(move)
+    }
+  }
+
+  public nextMove(): void {
+    if (this.state.status !== 'PLAY') {
+      return
+    }
+    if (
+      this._board.state.currentMoveIndex ===
+      this._board.state.moves.length - 1
+    ) {
+      return
+    }
+    const move = this._board.nextMove()
+    if (move != null) {
+      if (move.capturedPiece != null) {
+        this.getPlayerByColor(move.piece.color).addCapturedPiece(
+          move.capturedPiece
+        )
+      }
+      this.verifyMove(move)
+    }
+    this.setState((state) => {
+      if (
+        this.finalStatus != null &&
+        this._board.state.currentMoveIndex ===
+          this._board.state.moves.length - 1
+      ) {
+        state.status = this.finalStatus
+      }
+    })
+  }
+
+  public firstMove(): void {
+    while (this._board.state.currentMoveIndex !== -1) {
+      this.previousMove()
+    }
+  }
+
+  public lastMove(): void {
+    while (
+      this._board.state.currentMoveIndex !==
+      this._board.state.moves.length - 1
+    ) {
+      this.nextMove()
+    }
   }
 
   public play(): void {
@@ -99,6 +172,27 @@ export class Game extends Observer<GameState> implements GameOptions {
     this._board.setLastMoveIsNextPlayerTurn()
   }
 
+  private verifyMove(move: Move): void {
+    const currentPlayer = this.getCurrentPlayer()
+    const oppositeColor = getOppositePieceColor(currentPlayer.color)
+    if (
+      this._board.isReconquest(currentPlayer.color) ||
+      this._board.isCheck(oppositeColor)
+    ) {
+      this.setState((state) => {
+        state.isBouncingOnGoing = false
+        state.status = `${currentPlayer.color}_WON`
+        this.finalStatus = state.status
+      })
+    } else if (move.isNextPlayerTurn) {
+      this.nextPlayer()
+    } else {
+      this.setState((state) => {
+        state.isBouncingOnGoing = true
+      })
+    }
+  }
+
   public playMove(fromPosition: Position, toPosition: Position): Move {
     if (this.state.status !== 'PLAY') {
       throw new Error('Game Status not in play mode.')
@@ -114,35 +208,16 @@ export class Game extends Observer<GameState> implements GameOptions {
     if (!this._board.canMove(fromPosition, toPosition)) {
       throw new Error('This move is not allowed.')
     }
-    const oppositeColor = getOppositePieceColor(currentPlayer.color)
-
     if (this.logger) {
       console.log(
         `game.playMove(new Position({ column: ${fromPosition.column}, row: ${fromPosition.row} }), new Position({ column: ${toPosition.column}, row: ${toPosition.row} }))`
       )
     }
-
     const move = this._board.move(fromPosition, toPosition)
     if (move.capturedPiece != null) {
       currentPlayer.addCapturedPiece(move.capturedPiece)
     }
-
-    if (
-      this._board.isReconquest(currentPlayer.color) ||
-      this._board.isCheck(oppositeColor)
-    ) {
-      this.setState((state) => {
-        state.isBouncingOnGoing = false
-        state.status = `${currentPlayer.color}_WON`
-      })
-    } else if (move.isNextPlayerTurn) {
-      this.nextPlayer()
-    } else {
-      this.setState((state) => {
-        state.isBouncingOnGoing = true
-      })
-    }
-
+    this.verifyMove(move)
     return move
   }
 

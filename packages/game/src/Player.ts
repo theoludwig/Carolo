@@ -42,6 +42,14 @@ export class Player extends Observer<PlayerState> {
     })
   }
 
+  public removeCapturedPiece(piece: Piece): void {
+    this.setState((state) => {
+      state.capturedPieces = state.capturedPieces.filter((capturedPiece) => {
+        return capturedPiece !== piece
+      })
+    })
+  }
+
   public removeAllCapturedPiece(): void {
     this.setState((state) => {
       state.capturedPieces = []

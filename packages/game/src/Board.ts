@@ -246,7 +246,7 @@ export class Board extends BoardBase {
 
     if (from.piece.canBounce()) {
       const precedingMoves: Move[] = []
-      for (let index = this.state.moves.length - 1; index >= 0; index--) {
+      for (let index = this.state.currentMoveIndex; index >= 0; index--) {
         const move = this.state.moves[index]
         if (
           move.piece.type === from.piece.type &&
@@ -364,12 +364,9 @@ export class Board extends BoardBase {
   }
 
   public move(fromPosition: Position, toPosition: Position): Move {
-    const from = this.getPiecePosition(fromPosition)
     const to = this.getPiecePosition(toPosition)
     const capturedPiece = to.isOccupied() ? to.piece : undefined
-    to.piece = from.piece
-    from.piece = null
-    to.piece.setHasMoved()
+    this.movePiece(fromPosition, toPosition)
     const move: Move = {
       fromPosition,
       toPosition,
@@ -383,7 +380,8 @@ export class Board extends BoardBase {
         this.getAvailablePiecePositions(toPosition).size === 0
     }
     this.setState((state) => {
-      state.moves.push(move)
+      state.currentMoveIndex += 1
+      state.moves[state.currentMoveIndex] = move
     })
     return move
   }
@@ -406,8 +404,7 @@ export class Board extends BoardBase {
     }
     const fromPiece = from.piece
     const toPiece = to.isOccupied() ? to.piece : null
-    from.piece = null
-    to.piece = fromPiece
+    this.movePiece(fromPosition, toPosition)
     const isReconquest = this.isReconquest(fromPiece.color)
     from.piece = fromPiece
     to.piece = toPiece
@@ -449,8 +446,7 @@ export class Board extends BoardBase {
     }
     const fromPiece = from.piece
     const toPiece = to.isOccupied() ? to.piece : null
-    from.piece = null
-    to.piece = fromPiece
+    this.movePiece(fromPosition, toPosition)
     const isCheck = this.isCheck(fromPiece.color)
     from.piece = fromPiece
     to.piece = toPiece

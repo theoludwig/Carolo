@@ -19,6 +19,7 @@ export interface Move {
 export interface BoardBaseState {
   board: PiecePosition[][]
   moves: Move[]
+  currentMoveIndex: number
 }
 
 export abstract class BoardBase extends Observer<BoardBaseState> {
@@ -29,7 +30,7 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
     for (let row = 0; row < BoardBase.SIZE; row++) {
       board[row] = new Array(BoardBase.SIZE)
     }
-    super({ board, moves: [] })
+    super({ board, moves: [], currentMoveIndex: -1 })
     this.reset()
   }
 
@@ -45,6 +46,7 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
       this.setupPieces(state.board, 'WHITE')
       this.setupPieces(state.board, 'BLACK')
       state.moves = []
+      state.currentMoveIndex = -1
     })
   }
 
@@ -99,15 +101,48 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
   }
 
   public getLastMove(): Move | undefined {
-    return this.state.moves[this.state.moves.length - 1]
+    return this.state.moves[this.state.currentMoveIndex]
   }
 
   public setLastMoveIsNextPlayerTurn(): void {
     this.setState((state) => {
-      const lastMove = state.moves[this.state.moves.length - 1]
+      const lastMove = state.moves[this.state.currentMoveIndex]
       if (lastMove != null) {
         lastMove.isNextPlayerTurn = true
       }
     })
+  }
+
+  protected movePiece(fromPosition: Position, toPosition: Position): void {
+    const from = this.getPiecePosition(fromPosition)
+    const to = this.getPiecePosition(toPosition)
+    to.piece = from.piece
+    from.piece = null
+    to.piece.hasMoved = to.initialPiece !== to.piece
+  }
+
+  public previousMove(): Move | null {
+    const move = this.state.moves[this.state.currentMoveIndex]
+    if (move != null) {
+      this.movePiece(move.toPosition, move.fromPosition)
+      if (move.capturedPiece != null) {
+        this.getPiecePosition(move.toPosition).piece = move.capturedPiece
+      }
+      this.setState((state) => {
+        state.currentMoveIndex--
+      })
+    }
+    return move
+  }
+
+  public nextMove(): Move | null {
+    const move = this.state.moves[this.state.currentMoveIndex + 1]
+    if (move != null) {
+      this.movePiece(move.fromPosition, move.toPosition)
+      this.setState((state) => {
+        state.currentMoveIndex++
+      })
+    }
+    return move
   }
 }

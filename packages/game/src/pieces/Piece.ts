@@ -33,8 +33,8 @@ export abstract class Piece {
     return Piece.getDirection(this._color)
   }
 
-  public setHasMoved(): void {
-    this._hasMoved = true
+  public set hasMoved(hasMoved: boolean) {
+    this._hasMoved = hasMoved
   }
 
   public get hasMoved(): boolean {
