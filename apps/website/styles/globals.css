@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --scrollbar-color: #c5c5c5;
+  --scrollbar-bg-color: transparent;
+}
+
 .square-corners {
   --border-thickness: 4px;
   --border-size: 16px;
@@ -57,4 +62,27 @@
 
   background-repeat: no-repeat;
   background-size: var(--border-size) var(--border-size);
+}
+
+::-webkit-scrollbar {
+  scrollbar-color: var(--scrollbar-color) var(--scrollbar-bg-color);
+  width: 3px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-color);
+  border-radius: 20px;
+  border: 3px solid var(--scrollbar-bg-color);
+}
+
+/* Firefox Support */
+.scrollbar-firefox-support {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-color) var(--scrollbar-bg-color);
+  z-index: 0;
 }

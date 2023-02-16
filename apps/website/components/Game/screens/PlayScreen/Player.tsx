@@ -26,6 +26,7 @@ export const Player = (props: PlayerProps): JSX.Element => {
           className={classNames('h-12 w-12 rounded-full', {
             'ring-2 ring-green-500': isPlayerTurn
           })}
+          priority
           quality={100}
           src={UserDefault}
           alt='Player Picture'
@@ -36,9 +37,10 @@ export const Player = (props: PlayerProps): JSX.Element => {
         {playerState.capturedPieces.map((piece, index) => {
           return (
             <Image
+              quality={100}
+              priority
               key={index}
               className='h-10 w-10'
-              quality={100}
               src={`/pieces/${piece.type}_${piece.color}.png`}
               alt='Piece'
               width={64}

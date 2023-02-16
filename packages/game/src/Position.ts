@@ -98,4 +98,10 @@ export class Position implements PositionOptions {
       row: parseInt(row, 10)
     })
   }
+
+  public toHumanCoordinates(size: number): string {
+    const column = String.fromCharCode(this.column + 65)
+    const row = size - this.row
+    return `${column}${row}`
+  }
 }

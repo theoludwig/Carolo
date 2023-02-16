@@ -10,9 +10,18 @@ const HomePage = (): JSX.Element => {
   return (
     <>
       <section className='mt-6 flex flex-col items-center justify-center space-y-4 md:w-full md:flex-row md:space-x-12 md:space-y-0'>
-        <SocialMediaLink socialMedia='Reddit' href='/' />
-        <SocialMediaLink socialMedia='Discord' href='/' />
-        <SocialMediaLink socialMedia='Twitter' href='/' />
+        <SocialMediaLink
+          socialMedia='Reddit'
+          href='https://www.reddit.com/r/Carolo'
+        />
+        <SocialMediaLink
+          socialMedia='Discord'
+          href='https://discord.gg/NuXRxATMMa'
+        />
+        <SocialMediaLink
+          socialMedia='Twitter'
+          href='https://twitter.com/RimbaudAF'
+        />
       </section>
       <section className='mt-12 flex flex-col items-center px-10 sm:flex-row'>
         <div className='w-full sm:w-6/12'>

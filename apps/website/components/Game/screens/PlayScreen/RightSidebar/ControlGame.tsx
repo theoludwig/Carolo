@@ -10,7 +10,7 @@ export const ControlGame = (): JSX.Element => {
     <>
       <div className='flex flex-col items-center'>
         <button
-          className='rounded-md bg-[#8417DA] p-4 hover:bg-[#6514a6]'
+          className='rounded-md bg-[#8417DA] p-2 hover:bg-[#6514a6]'
           onClick={() => {
             const currentPlayer = game.getPlayer(gameState.currentPlayerIndex)
             game.giveUp(currentPlayer.color)
