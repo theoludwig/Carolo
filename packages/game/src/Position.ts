@@ -99,9 +99,17 @@ export class Position implements PositionOptions {
     })
   }
 
+  public static columnToHumanCoordinates(column: number): string {
+    return String.fromCharCode(column + 65)
+  }
+
+  public static rowToHumanCoordinates(row: number, size: number): string {
+    return `${size - row}`
+  }
+
   public toHumanCoordinates(size: number): string {
-    const column = String.fromCharCode(this.column + 65)
-    const row = size - this.row
+    const column = Position.columnToHumanCoordinates(this.column)
+    const row = Position.rowToHumanCoordinates(this.row, size)
     return `${column}${row}`
   }
 }

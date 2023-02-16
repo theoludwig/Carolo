@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import classNames from 'clsx'
+import { BoardBase, Position } from '@carolo/game'
 
 import { useGame } from '@/stores/game'
 
@@ -9,9 +10,12 @@ export const Board = (): JSX.Element => {
   const {
     selectPosition,
     selectedPosition,
+    board,
     boardState,
     availablePiecePositions
   } = useGame()
+
+  const lastMove = boardState.moves[boardState.currentMoveIndex]
 
   return (
     <section id='board' className='flex flex-col items-center'>
@@ -26,17 +30,45 @@ export const Board = (): JSX.Element => {
                 selectedPosition?.equals(piecePosition.position) ?? false
               const isCapture = isAvailable && piecePosition.isOccupied()
 
+              const egoIsThreatened =
+                piecePosition.isOccupied() &&
+                piecePosition.piece.type === 'EGO' &&
+                (board.isCheck(piecePosition.piece.color) ||
+                  board.powerOfHubrisAttraction(piecePosition.piece.color)
+                    .egoIsAttractedToHubris)
+
+              const pieceSelectedIsAymon =
+                selectedPosition != null &&
+                board.getPiecePosition(selectedPosition)?.piece?.type ===
+                  'AYMON'
+
+              const isLastRow = rowIndex === BoardBase.SIZE - 1
+              const isLastColumn = columnIndex === BoardBase.SIZE - 1
+
+              let backgroundColorClasses = isEven
+                ? 'bg-[#EFEFEF]'
+                : 'bg-[#8578B3]'
+
+              if (egoIsThreatened) {
+                backgroundColorClasses = 'bg-[#D05050]'
+              } else if (lastMove != null) {
+                if (lastMove.fromPosition.equals(piecePosition.position)) {
+                  backgroundColorClasses = 'bg-[#6AA954]'
+                }
+                if (lastMove.toPosition.equals(piecePosition.position)) {
+                  backgroundColorClasses = 'bg-[#8CC188]'
+                }
+              } else if (isSelected) {
+                backgroundColorClasses = 'bg-[#F6A458]'
+              }
+
               return (
                 <div
                   id={`board-${positionString}`}
                   key={columnIndex}
                   className={classNames(
-                    'flex h-16 w-16 cursor-pointer items-center justify-center p-[1px] hover:bg-opacity-80',
-                    {
-                      'bg-[#8578B3]': !isEven && !isSelected,
-                      'bg-[#EFEFEF]': isEven && !isSelected,
-                      'bg-[#F6A458]': isSelected
-                    }
+                    'relative flex h-16 w-16 cursor-pointer items-center justify-center p-[1px] hover:bg-opacity-80',
+                    backgroundColorClasses
                   )}
                   onClick={() => {
                     selectPosition(piecePosition.position)
@@ -60,11 +92,38 @@ export const Board = (): JSX.Element => {
                       height={64}
                     />
                   ) : null}
+                  {isLastRow ? (
+                    <span
+                      className={classNames(
+                        'absolute bottom-0 left-1 text-xs font-bold',
+                        {
+                          'text-[#8578B3]': isEven,
+                          'text-[#EFEFEF]': !isEven
+                        }
+                      )}
+                    >
+                      {Position.columnToHumanCoordinates(columnIndex)}
+                    </span>
+                  ) : null}
+                  {isLastColumn ? (
+                    <span
+                      className={classNames(
+                        'absolute right-1 top-1 text-xs font-bold',
+                        {
+                          'text-[#8578B3]': isEven,
+                          'text-[#EFEFEF]': !isEven
+                        }
+                      )}
+                    >
+                      {Position.rowToHumanCoordinates(rowIndex, BoardBase.SIZE)}
+                    </span>
+                  ) : null}
                   {isAvailable && piecePosition.isFree() ? (
                     <div
                       className={classNames('h-3 w-3 rounded-sm', {
                         'bg-[#939393]': isEven,
-                        'bg-[#D3D3D3]': !isEven
+                        'bg-[#D3D3D3]': !isEven,
+                        'h-2 w-2': pieceSelectedIsAymon
                       })}
                     ></div>
                   ) : null}

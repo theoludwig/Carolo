@@ -9,6 +9,13 @@ import { Position } from './Position.js'
 
 export type AvailablePiecePositions = Map<PositionString, PiecePosition>
 
+export interface HubrisAttractionResult {
+  egoPiecePosition: PiecePosition
+  egoIsAttractedToHubris: boolean
+  hubrisPosition: Position | null
+  hubrisOpponentAvailable: AvailablePiecePositions
+}
+
 export class Board extends BoardBase {
   private getAvailablePiecePositionsWithoutHubrisAttraction(
     fromPosition: Position
@@ -141,26 +148,9 @@ export class Board extends BoardBase {
     return availablePiecePositions
   }
 
-  /**
-   * Get all available positions for a piece.
-   * @param fromPosition
-   * @returns Map of available positions (key: `column-${column}-row-${row}`, value: PiecePosition).
-   */
-  public getAvailablePiecePositions(
-    fromPosition: Position
-  ): AvailablePiecePositions {
-    let availablePiecePositions: AvailablePiecePositions = new Map()
-    const from = this.getPiecePosition(fromPosition)
-    if (from.isFree()) {
-      return availablePiecePositions
-    }
-    const oppositeColor = getOppositePieceColor(from.piece.color)
-    if (this.isCheck(from.piece.color) || this.isReconquest(oppositeColor)) {
-      return availablePiecePositions
-    }
-
-    // Hubris Attraction Power
-    const egoPiecePosition = this.getEgoPiecePosition(from.piece.color)
+  public powerOfHubrisAttraction(color: PieceColor): HubrisAttractionResult {
+    const oppositeColor = getOppositePieceColor(color)
+    const egoPiecePosition = this.getEgoPiecePosition(color)
     let egoIsAttractedToHubris = false
     let hubrisPosition: Position | null = null
     let hubrisOpponentAvailable: AvailablePiecePositions = new Map()
@@ -199,6 +189,38 @@ export class Board extends BoardBase {
         }
       }
     }
+    return {
+      egoPiecePosition,
+      egoIsAttractedToHubris,
+      hubrisPosition,
+      hubrisOpponentAvailable
+    }
+  }
+
+  /**
+   * Get all available positions for a piece.
+   * @param fromPosition
+   * @returns Map of available positions (key: `column-${column}-row-${row}`, value: PiecePosition).
+   */
+  public getAvailablePiecePositions(
+    fromPosition: Position
+  ): AvailablePiecePositions {
+    let availablePiecePositions: AvailablePiecePositions = new Map()
+    const from = this.getPiecePosition(fromPosition)
+    if (from.isFree()) {
+      return availablePiecePositions
+    }
+    const oppositeColor = getOppositePieceColor(from.piece.color)
+    if (this.isCheck(from.piece.color) || this.isReconquest(oppositeColor)) {
+      return availablePiecePositions
+    }
+
+    const {
+      egoPiecePosition,
+      egoIsAttractedToHubris,
+      hubrisPosition,
+      hubrisOpponentAvailable
+    } = this.powerOfHubrisAttraction(from.piece.color)
     if (egoIsAttractedToHubris && hubrisPosition != null) {
       if (from.piece.type === 'EGO') {
         const x1 = hubrisPosition.column
