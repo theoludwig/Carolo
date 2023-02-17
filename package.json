@@ -15,7 +15,6 @@
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",
     "lint": "turbo run lint",
-    "lint:commit": "commitlint",
     "lint:editorconfig": "editorconfig-checker",
     "lint:prettier": "prettier \".\" --check --ignore-path \".gitignore\"",
     "lint:markdown": "markdownlint-cli2",
@@ -23,13 +22,11 @@
   },
   "devDependencies": {
     "@carolo/eslint-config-custom": "*",
-    "@commitlint/cli": "17.4.2",
-    "@commitlint/config-conventional": "17.4.2",
     "editorconfig-checker": "5.0.1",
     "markdownlint-cli2": "0.6.0",
     "prettier": "2.8.4",
-    "prettier-plugin-tailwindcss": "0.2.2",
+    "prettier-plugin-tailwindcss": "0.2.3",
     "turbo": "1.7.4",
-    "vercel": "28.15.3"
+    "vercel": "28.16.2"
   }
 }

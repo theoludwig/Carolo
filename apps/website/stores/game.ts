@@ -8,7 +8,7 @@ import type {
 } from '@carolo/game'
 import { Game, Board, Player } from '@carolo/game'
 
-import { NODE_ENV } from '@/lib/configuration'
+import { NODE_ENV } from '@/lib/configurations'
 
 export interface GameStore {
   board: Board

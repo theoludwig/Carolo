@@ -1,0 +1,24 @@
+{
+  "name": "carolo",
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "workspace",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "settings": {
+      "remote.autoForwardPorts": true
+    },
+    "extensions": [
+      "editorconfig.editorconfig",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "davidanson.vscode-markdownlint",
+      "bradlc.vscode-tailwindcss",
+      "prisma.prisma",
+      "mikestead.dotenv",
+      "ms-azuretools.vscode-docker"
+    ]
+  },
+  "forwardPorts": [3000, 8080, 1080, 5555, 5432],
+  "postAttachCommand": ["npm", "install"],
+  "remoteUser": "node"
+}

@@ -1,0 +1,17 @@
+{
+  "extends": "@carolo/tsconfig/base.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext"],
+    "moduleResolution": "Node",
+    "outDir": "./build",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "#src/*": ["./src/*"]
+    },
+    "checkJs": false
+  },
+  "exclude": ["node_modules", "build"]
+}

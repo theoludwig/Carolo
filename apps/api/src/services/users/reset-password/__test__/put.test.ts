@@ -1,0 +1,68 @@
+import tap from 'tap'
+import sinon from 'sinon'
+import ms from 'ms'
+import { userExample } from '@carolo/models'
+
+import { application } from '#src/application.js'
+import prisma from '#src/tools/database/prisma.js'
+
+await tap.test('PUT /users/reset-password', async (t) => {
+  t.afterEach(() => {
+    sinon.restore()
+  })
+
+  await t.test('succeeds', async (t) => {
+    const temporaryToken = 'random-token'
+    sinon.stub(prisma, 'user').value({
+      findFirst: async () => {
+        return {
+          ...userExample,
+          temporaryToken,
+          temporaryExpirationToken: new Date(Date.now() + ms('1 hour'))
+        }
+      },
+      update: async () => {
+        return userExample
+      }
+    })
+    sinon.stub(prisma, 'refreshToken').value({
+      deleteMany: async () => {
+        return { count: 1 }
+      }
+    })
+    const response = await application.inject({
+      method: 'PUT',
+      url: '/users/reset-password',
+      payload: {
+        password: 'new password',
+        temporaryToken: userExample.temporaryToken
+      }
+    })
+    t.equal(response.statusCode, 200)
+  })
+
+  await t.test('fails with expired temporaryToken', async (t) => {
+    const temporaryToken = 'random-token'
+    sinon.stub(prisma, 'user').value({
+      findFirst: async () => {
+        return {
+          ...userExample,
+          temporaryToken,
+          temporaryExpirationToken: new Date(Date.now() - ms('1 hour'))
+        }
+      },
+      update: async () => {
+        return userExample
+      }
+    })
+    const response = await application.inject({
+      method: 'PUT',
+      url: '/users/reset-password',
+      payload: {
+        password: 'new password',
+        temporaryToken: userExample.temporaryToken
+      }
+    })
+    t.equal(response.statusCode, 400)
+  })
+})

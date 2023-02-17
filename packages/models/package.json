@@ -1,0 +1,32 @@
+{
+  "name": "@carolo/models",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "rimraf ./build && swc ./src --out-dir ./build && tsc",
+    "dev:build": "swc ./src --out-dir ./build --watch",
+    "dev:tsc": "tsc --watch --preserveWatchOutput",
+    "dev": "concurrently --names \"swc,tsc\" \"npm run dev:build\" \"npm run dev:tsc\"",
+    "lint": "eslint ./src"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "0.25.23"
+  },
+  "devDependencies": {
+    "@carolo/eslint-config-custom": "*",
+    "@carolo/tsconfig": "*",
+    "@swc/cli": "0.1.62",
+    "@swc/core": "1.3.35",
+    "@types/node": "18.13.0",
+    "concurrently": "7.6.0",
+    "eslint": "8.34.0",
+    "rimraf": "4.1.2",
+    "typescript": "4.9.5"
+  }
+}

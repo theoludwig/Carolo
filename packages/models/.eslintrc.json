@@ -1,0 +1,10 @@
+{
+  "root": true,
+  "extends": ["@carolo/eslint-config-custom"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "import/extensions": ["error", "always"]
+  }
+}
