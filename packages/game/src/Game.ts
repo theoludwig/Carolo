@@ -159,6 +159,7 @@ export class Game extends Observer<GameState> implements GameOptions {
       state.currentPlayerIndex = 0
       state.isBouncingOnGoing = false
     })
+    this.finalStatus = null
   }
 
   public skipBouncing(): void {

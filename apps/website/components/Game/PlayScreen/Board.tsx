@@ -120,10 +120,11 @@ export const Board = (): JSX.Element => {
                   ) : null}
                   {isAvailable && piecePosition.isFree() ? (
                     <div
-                      className={classNames('h-3 w-3 rounded-sm', {
+                      className={classNames('rounded-sm', {
                         'bg-[#939393]': isEven,
                         'bg-[#D3D3D3]': !isEven,
-                        'h-2 w-2': pieceSelectedIsAymon
+                        'h-2 w-2': pieceSelectedIsAymon,
+                        'h-3 w-3': !pieceSelectedIsAymon
                       })}
                     ></div>
                   ) : null}
