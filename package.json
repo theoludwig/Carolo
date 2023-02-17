@@ -18,7 +18,7 @@
     "lint:editorconfig": "editorconfig-checker",
     "lint:prettier": "prettier \".\" --check --ignore-path \".gitignore\"",
     "lint:markdown": "markdownlint-cli2",
-    "deploy": "vercel"
+    "vercel": "vercel"
   },
   "devDependencies": {
     "@carolo/eslint-config-custom": "*",

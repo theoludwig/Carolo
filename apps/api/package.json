@@ -7,14 +7,14 @@
     "#src/*": "./build/*"
   },
   "scripts": {
-    "build": "rimraf ./build && swc ./src --out-dir ./build && tsc",
+    "build": "npm run prisma:generate && rimraf ./build && swc ./src --out-dir ./build && tsc",
     "start": "node build/index.js",
     "dev:build": "swc ./src --out-dir ./build --watch",
     "dev": "concurrently --kill-others --names \"TypeScript,Node,Maildev,Prisma Studio\" \"npm run dev:build\" \"cross-env NODE_ENV=development nodemon build/index.js\" \"npm run maildev\" \"npm run prisma:studio\"",
     "maildev": "maildev",
     "generate:jwt-secret": "node ./build/scripts/generate-jwt-secret.js",
     "lint:eslint": "eslint ./src",
-    "lint": "npm run lint:eslint",
+    "lint": "npm run prisma:validate && npm run lint:eslint",
     "test": "cross-env NODE_ENV=test c8 tap",
     "prisma:validate": "prisma validate",
     "prisma:generate": "prisma generate",

@@ -1,12 +1,18 @@
 # Carolo
 
+## About
+
+Board game online similar to Chess but with different rules.
+
+[Carolo](https://carolo.org).
+
 ## Getting Started
 
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) >= 18.0.0
 - [npm](https://www.npmjs.com/) >= 8.0.0
-- [PostgreSQL](https://www.postgresql.org/)
+- [PostgreSQL](https://www.postgresql.org/) >= 14.0.0
 
 ### Installation
 
@@ -25,11 +31,7 @@ cp apps/api/.env.example apps/api/.env
 cp apps/website/.env.example apps/website/.env
 ```
 
-### Local Development environment
-
-Recommended to use [VSCode: Remote development in Containers](https://code.visualstudio.com/docs/remote/containers-tutorial) to skip the setup of the database.
-
-#### Setup Database
+### Database Setup
 
 ```sh
 # Create a new user and database
@@ -39,7 +41,13 @@ create user carolo_user with encrypted password 'password';
 ALTER USER carolo_user WITH SUPERUSER;
 ```
 
-Replace `DATABASE_URL` inside `apps/api/.env` with `postgresql://carolo_user:password@localhost:5432/carolo_database`
+Replace `DATABASE_URL` inside `apps/api/.env` with `postgresql://carolo_user:password@localhost:5432/carolo_database`.
+
+### Local Development environment
+
+Recommended to use [VSCode: Remote development in Containers](https://code.visualstudio.com/docs/remote/containers-tutorial).
+
+#### Database Development migration
 
 ```sh
 # Run Prisma migrations
@@ -72,4 +80,26 @@ npm run test
 
 # Test only one workspace (e.g: `apps/api`)
 npm run test --workspace=apps/api
+```
+
+### Production environment (with [Docker](https://www.docker.com/))
+
+#### Database Production migration
+
+```sh
+npm run prisma:migrate:deploy --workspace=apps/api
+```
+
+#### `apps/api`
+
+```sh
+docker build --tag="carolo-api" ./ --file="./apps/api/Dockerfile"
+docker run --network="host" --env-file="./apps/api/.env" --init --interactive --rm "carolo-api"
+```
+
+#### `apps/website`
+
+```sh
+docker build --tag="carolo-website" ./ --file="./apps/website/Dockerfile"
+docker run --network="host" --env-file="./apps/website/.env" --init --interactive --rm "carolo-website"
 ```

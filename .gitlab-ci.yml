@@ -9,6 +9,8 @@ cache:
 
 before_script:
   - 'npm ci --cache .npm --prefer-offline'
+  - 'cp apps/api/.env.example apps/api/.env'
+  - 'cp apps/website/.env.example apps/website/.env'
 
 lint:
   stage: 'test'
