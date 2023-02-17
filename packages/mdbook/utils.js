@@ -12,7 +12,7 @@ export const error = (message) => {
 }
 
 export const BINARY_NAME = 'mdbook'
-const VERSION = '0.4.25'
+const VERSION = '0.4.27'
 const REPOSITORY_URL = 'https://github.com/rust-lang/mdBook'
 
 const supportedPlatforms = [
