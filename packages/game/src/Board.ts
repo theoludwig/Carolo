@@ -206,6 +206,10 @@ export class Board extends BoardBase {
     fromPosition: Position
   ): AvailablePiecePositions {
     let availablePiecePositions: AvailablePiecePositions = new Map()
+    if (this.state.currentMoveIndex < this.state.moves.length - 1) {
+      return availablePiecePositions
+    }
+
     const from = this.getPiecePosition(fromPosition)
     if (from.isFree()) {
       return availablePiecePositions
