@@ -51,14 +51,18 @@ export const Board = (): JSX.Element => {
 
               if (egoIsThreatened) {
                 backgroundColorClasses = 'bg-[#D05050]'
-              } else if (lastMove != null) {
+              }
+
+              if (lastMove != null) {
                 if (lastMove.fromPosition.equals(piecePosition.position)) {
                   backgroundColorClasses = 'bg-[#6AA954]'
                 }
                 if (lastMove.toPosition.equals(piecePosition.position)) {
                   backgroundColorClasses = 'bg-[#8CC188]'
                 }
-              } else if (isSelected) {
+              }
+
+              if (isSelected) {
                 backgroundColorClasses = 'bg-[#F6A458]'
               }
 

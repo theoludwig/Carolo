@@ -13,6 +13,7 @@ export interface GameState {
   currentPlayerIndex: number
   status: GameStatus
   isBouncingOnGoing: boolean
+  finalStatus: GameStatus
 }
 
 export interface GameOptions {
@@ -20,7 +21,6 @@ export interface GameOptions {
 }
 
 export class Game extends Observer<GameState> implements GameOptions {
-  private finalStatus: GameStatus | null
   private readonly _board: Board
   private readonly _players: Player[]
   public readonly logger: boolean
@@ -30,7 +30,12 @@ export class Game extends Observer<GameState> implements GameOptions {
     players: Player[],
     options: GameOptions = {}
   ) {
-    super({ currentPlayerIndex: 0, status: 'LOBBY', isBouncingOnGoing: false })
+    super({
+      currentPlayerIndex: 0,
+      status: 'LOBBY',
+      isBouncingOnGoing: false,
+      finalStatus: 'PLAY'
+    })
     if (players.length !== 2) {
       throw new Error('Game must have 2 players.')
     }
@@ -39,7 +44,6 @@ export class Game extends Observer<GameState> implements GameOptions {
     this._players = new Array(2)
     this._players[0] = players[0]
     this._players[1] = players[1]
-    this.finalStatus = null
   }
 
   public getCurrentPlayer(): Player {
@@ -64,10 +68,13 @@ export class Game extends Observer<GameState> implements GameOptions {
   }
 
   public giveUp(color: PieceColor): void {
+    if (this.state.finalStatus !== 'PLAY') {
+      return
+    }
     const oppositeColor = getOppositePieceColor(color)
     this.setState((state) => {
       state.status = `${oppositeColor}_WON`
-      this.finalStatus = state.status
+      state.finalStatus = state.status
     })
   }
 
@@ -100,6 +107,11 @@ export class Game extends Observer<GameState> implements GameOptions {
       this._board.state.currentMoveIndex ===
       this._board.state.moves.length - 1
     ) {
+      if (this.state.finalStatus !== 'PLAY') {
+        this.setState((state) => {
+          state.status = state.finalStatus
+        })
+      }
       return
     }
     const move = this._board.nextMove()
@@ -113,11 +125,11 @@ export class Game extends Observer<GameState> implements GameOptions {
     }
     this.setState((state) => {
       if (
-        this.finalStatus != null &&
+        state.finalStatus != null &&
         this._board.state.currentMoveIndex ===
           this._board.state.moves.length - 1
       ) {
-        state.status = this.finalStatus
+        state.status = state.finalStatus
       }
     })
   }
@@ -158,8 +170,8 @@ export class Game extends Observer<GameState> implements GameOptions {
       state.status = 'LOBBY'
       state.currentPlayerIndex = 0
       state.isBouncingOnGoing = false
+      state.finalStatus = 'PLAY'
     })
-    this.finalStatus = null
   }
 
   public skipBouncing(): void {
@@ -183,7 +195,7 @@ export class Game extends Observer<GameState> implements GameOptions {
       this.setState((state) => {
         state.isBouncingOnGoing = false
         state.status = `${currentPlayer.color}_WON`
-        this.finalStatus = state.status
+        state.finalStatus = state.status
       })
     } else if (move.isNextPlayerTurn) {
       this.nextPlayer()

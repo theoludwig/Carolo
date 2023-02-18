@@ -32,9 +32,8 @@ export const useGame = create<GameStore>()((set) => {
   const player1 = new Player('Joueur 1', 'WHITE')
   const player2 = new Player('Joueur 2', 'BLACK')
   const players = [player1, player2]
-  const game = new Game(board, players, {
-    logger: NODE_ENV !== 'production'
-  })
+  const logger = NODE_ENV !== 'production'
+  const game = new Game(board, players, { logger })
   game.play()
   return {
     board,
@@ -94,18 +93,28 @@ export const useGame = create<GameStore>()((set) => {
           state.selectedPosition != null &&
           state.availablePiecePositions.has(fromPosition.toString())
         ) {
-          const move = game.playMove(state.selectedPosition, fromPosition)
-          if (move.isNextPlayerTurn) {
+          try {
+            const move = game.playMove(state.selectedPosition, fromPosition)
+            if (move.isNextPlayerTurn) {
+              return {
+                availablePiecePositions: new Map(),
+                selectedPosition: null
+              }
+            }
+            return {
+              availablePiecePositions: state.board.getAvailablePiecePositions(
+                move.toPosition
+              ),
+              selectedPosition: fromPosition
+            }
+          } catch (error) {
+            if (logger) {
+              console.error(error)
+            }
             return {
               availablePiecePositions: new Map(),
               selectedPosition: null
             }
-          }
-          return {
-            availablePiecePositions: state.board.getAvailablePiecePositions(
-              move.toPosition
-            ),
-            selectedPosition: fromPosition
           }
         }
         if (piecePosition.isFree()) {

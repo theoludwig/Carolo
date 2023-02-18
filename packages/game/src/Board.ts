@@ -404,6 +404,7 @@ export class Board extends BoardBase {
         (to.piece.canBounce() &&
           !this.canBounceBorder(fromPosition, toPosition) &&
           !this.canBounceAymon(fromPosition, toPosition)) ||
+        (to.piece.canBounce() && capturedPiece != null) ||
         this.getAvailablePiecePositions(toPosition).size === 0
     }
     this.setState((state) => {

@@ -5,7 +5,7 @@ import { useGame } from '@/stores/game'
 import { Button } from '@/components/Button'
 
 export const EndGame = (): JSX.Element => {
-  const { game, board, gameState } = useGame()
+  const { game, board, gameState, resetSelectedPosition } = useGame()
 
   const winnerColor = useMemo(() => {
     if (gameState.status === 'WHITE_WON') {
@@ -53,7 +53,7 @@ export const EndGame = (): JSX.Element => {
     if (reason === 'GiveUp') {
       return 'Abandon'
     }
-    return 'Partie nulle'
+    return 'Pas de vainqueur'
   }, [reason])
 
   return (
@@ -68,6 +68,7 @@ export const EndGame = (): JSX.Element => {
         onClick={() => {
           game.restart()
           game.play()
+          resetSelectedPosition()
         }}
       >
         Recommencer

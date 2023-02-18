@@ -12,7 +12,7 @@ export const PlayScreen = (): JSX.Element => {
   const bottomPlayerIndex = player1.color === 'WHITE' ? 0 : 1
 
   return (
-    <div className='flex w-full justify-center'>
+    <div className='my-2 flex w-full justify-center'>
       <LeftSidebar />
       <div className='space-y-4'>
         <Player

@@ -4,7 +4,7 @@ import { useGame } from '@/stores/game'
 import GiveUp from '@/public/icons/give-up.svg'
 
 export const ControlGame = (): JSX.Element => {
-  const { game, gameState } = useGame()
+  const { game, gameState, resetSelectedPosition } = useGame()
 
   return (
     <>
@@ -14,6 +14,7 @@ export const ControlGame = (): JSX.Element => {
           onClick={() => {
             const currentPlayer = game.getPlayer(gameState.currentPlayerIndex)
             game.giveUp(currentPlayer.color)
+            resetSelectedPosition()
           }}
         >
           <Image quality={100} src={GiveUp} alt='Give Up' />
