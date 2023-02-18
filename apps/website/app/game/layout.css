@@ -1,7 +1,0 @@
-body {
-  @apply flex h-screen flex-col pt-0;
-}
-
-main {
-  @apply items-center justify-center;
-}

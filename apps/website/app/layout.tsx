@@ -9,9 +9,11 @@ const RootLayout = (props: RootLayoutProps): JSX.Element => {
   return (
     <html lang='fr' className='dark' style={{ colorScheme: 'dark' }}>
       <head />
-      <body className='font-inter bg-[#312E2B]'>
+      <body className='font-inter flex h-screen flex-col bg-[#312E2B] pt-0'>
         <Header />
-        <main className='flex flex-1 flex-col'>{children}</main>
+        <main className='flex flex-1 flex-col items-center justify-center'>
+          {children}
+        </main>
       </body>
     </html>
   )

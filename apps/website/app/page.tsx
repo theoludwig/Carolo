@@ -43,7 +43,7 @@ const HomePage = (): JSX.Element => {
           </div>
         </div>
         <div className='mt-8 w-full sm:mt-0 sm:w-8/12 md:w-6/12'>
-          <Image src={Home} quality={100} alt='Carolo Home' />
+          <Image src={Home} priority quality={100} alt='Carolo Home' />
         </div>
       </section>
       <Features />
