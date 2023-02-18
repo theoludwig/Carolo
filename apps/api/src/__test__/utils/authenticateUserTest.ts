@@ -48,7 +48,12 @@ export const authenticateUserTest = async (): Promise<{
   return {
     accessToken,
     refreshToken,
-    user: userExample,
+    user: {
+      ...userExample,
+      temporaryExpirationToken: new Date(userExample.temporaryExpirationToken),
+      createdAt: new Date(userExample.createdAt),
+      updatedAt: new Date(userExample.updatedAt)
+    },
     userStubValue,
     userSettingStubValue,
     refreshTokenStubValue

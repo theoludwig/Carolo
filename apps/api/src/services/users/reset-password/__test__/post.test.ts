@@ -15,7 +15,14 @@ await tap.test('POST /users/reset-password', async (t) => {
   await t.test('succeeds', async (t) => {
     sinon.stub(prisma, 'user').value({
       findUnique: async () => {
-        return userExample
+        return {
+          ...userExample,
+          temporaryExpirationToken: new Date(
+            userExample.temporaryExpirationToken
+          ),
+          createdAt: new Date(userExample.createdAt),
+          updatedAt: new Date(userExample.updatedAt)
+        }
       },
       update: async () => {
         return {
@@ -73,7 +80,14 @@ await tap.test('POST /users/reset-password', async (t) => {
   await t.test("fails if userSettings doesn't exist", async (t) => {
     sinon.stub(prisma, 'user').value({
       findUnique: async () => {
-        return userExample
+        return {
+          ...userExample,
+          temporaryExpirationToken: new Date(
+            userExample.temporaryExpirationToken
+          ),
+          createdAt: new Date(userExample.createdAt),
+          updatedAt: new Date(userExample.updatedAt)
+        }
       }
     })
     sinon.stub(prisma, 'userSetting').value({
