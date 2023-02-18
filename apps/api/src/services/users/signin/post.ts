@@ -2,13 +2,16 @@ import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
 import type { FastifyPluginAsync, FastifySchema } from 'fastify'
 import bcrypt from 'bcryptjs'
-import { fastifyErrors, userSchema } from '@carolo/models'
+import {
+  fastifyErrors,
+  tokensJWTSchemaObject,
+  userSchema
+} from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
 import {
   generateAccessToken,
   generateRefreshToken,
-  jwtSchema,
   expiresIn
 } from '#src/tools/utils/jwtToken.js'
 
@@ -24,7 +27,7 @@ const postSigninSchema: FastifySchema = {
   tags: ['users'] as string[],
   body: bodyPostSigninSchema,
   response: {
-    200: Type.Object(jwtSchema),
+    200: tokensJWTSchemaObject,
     400: fastifyErrors[400],
     500: fastifyErrors[500]
   }

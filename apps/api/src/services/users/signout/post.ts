@@ -2,15 +2,14 @@ import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
 import type { FastifyPluginAsync, FastifySchema } from 'fastify'
 import jwt from 'jsonwebtoken'
-import { fastifyErrors } from '@carolo/models'
+import { fastifyErrors, tokensJWTSchema } from '@carolo/models'
 import type { UserRefreshJWT } from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
 import { JWT_REFRESH_SECRET } from '#src/tools/configurations.js'
-import { jwtSchema } from '#src/tools/utils/jwtToken.js'
 
 const bodyPostSignoutSchema = Type.Object({
-  refreshToken: jwtSchema.refreshToken
+  refreshToken: tokensJWTSchema.refreshToken
 })
 
 type BodyPostSignoutSchemaType = Static<typeof bodyPostSignoutSchema>

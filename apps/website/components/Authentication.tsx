@@ -1,9 +1,11 @@
 'use client'
 
 import { useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import { Form, useForm } from 'react-component-form'
 import type { HandleUseFormCallback } from 'react-component-form'
 import axios from 'axios'
+import type { TokensJWT } from '@carolo/models'
 import { userSchema } from '@carolo/models'
 
 import { Button } from '@/components/Button'
@@ -11,6 +13,7 @@ import { Input } from '@/components/Input'
 import { Link } from '@/components/Link'
 import { FormState } from '@/components/FormState'
 import { useFormTranslation } from '@/hooks/useFormTranslation'
+import { Authentication as AuthenticationClass } from '@/lib/Authentication'
 import { api } from '@/lib/configurations'
 
 export interface AuthenticationProps {
@@ -19,6 +22,8 @@ export interface AuthenticationProps {
 
 export const Authentication = (props: AuthenticationProps): JSX.Element => {
   const { mode } = props
+
+  const router = useRouter()
 
   const schema = useMemo(() => {
     return {
@@ -69,9 +74,23 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
       }
     }
 
-    return {
-      type: 'error',
-      value: 'Erreur interne du serveur.'
+    try {
+      const { data } = await api.post<TokensJWT>('/users/signin', formData)
+      const authentication = new AuthenticationClass(data)
+      authentication.signin()
+      router.refresh()
+      return null
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
+        return {
+          type: 'error',
+          value: 'Adresse courriel ou Mot de passe invalide.'
+        }
+      }
+      return {
+        type: 'error',
+        value: 'Erreur interne du serveur.'
+      }
     }
   }
 

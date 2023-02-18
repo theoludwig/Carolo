@@ -2,19 +2,15 @@ import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
 import type { FastifyPluginAsync, FastifySchema } from 'fastify'
 import jwt from 'jsonwebtoken'
-import { fastifyErrors } from '@carolo/models'
+import { fastifyErrors, tokensJWTSchema } from '@carolo/models'
 import type { UserRefreshJWT } from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
-import {
-  generateAccessToken,
-  jwtSchema,
-  expiresIn
-} from '#src/tools/utils/jwtToken.js'
+import { generateAccessToken, expiresIn } from '#src/tools/utils/jwtToken.js'
 import { JWT_REFRESH_SECRET } from '#src/tools/configurations.js'
 
 const bodyPostRefreshTokenSchema = Type.Object({
-  refreshToken: jwtSchema.refreshToken
+  refreshToken: tokensJWTSchema.refreshToken
 })
 
 type BodyPostRefreshTokenSchemaType = Static<typeof bodyPostRefreshTokenSchema>
@@ -25,9 +21,9 @@ const postRefreshTokenSchema: FastifySchema = {
   body: bodyPostRefreshTokenSchema,
   response: {
     200: Type.Object({
-      accessToken: jwtSchema.accessToken,
-      expiresIn: jwtSchema.expiresIn,
-      type: jwtSchema.type
+      accessToken: tokensJWTSchema.accessToken,
+      expiresIn: tokensJWTSchema.expiresIn,
+      type: tokensJWTSchema.type
     }),
     400: fastifyErrors[400],
     403: fastifyErrors[403],

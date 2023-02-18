@@ -20,13 +20,18 @@ export const userSchema = {
   name: Type.String({ minLength: 1, maxLength: 30 }),
   email: Type.String({ minLength: 1, maxLength: 254, format: 'email' }),
   password: Type.String({ minLength: 1 }),
-  logo: Type.String({ minLength: 1, format: 'uri-reference' }),
+  logo: Type.Union([
+    Type.String({ minLength: 1, format: 'uri-reference' }),
+    Type.Null()
+  ]),
   isConfirmed: Type.Boolean({ default: false }),
   temporaryToken: Type.String(),
   temporaryExpirationToken: Type.String({ format: 'date-time' }),
   createdAt: date.createdAt,
   updatedAt: date.updatedAt
 }
+
+export const userObjectSchema = Type.Object(userSchema)
 
 export const userPublicWithoutSettingsSchema = {
   id,
@@ -37,11 +42,16 @@ export const userPublicWithoutSettingsSchema = {
   createdAt: date.createdAt,
   updatedAt: date.updatedAt
 }
+export const userPublicWithoutSettingsObjectSchema = Type.Object(
+  userPublicWithoutSettingsSchema
+)
 
 export const userPublicSchema = {
   ...userPublicWithoutSettingsSchema,
   settings: Type.Object(userSettingsSchema)
 }
+
+export const userPublicObjectSchema = Type.Object(userPublicSchema)
 
 export const userCurrentSchema = Type.Object({
   user: Type.Object({
@@ -60,7 +70,14 @@ export const bodyUserSchema = Type.Object({
 
 export type BodyUserSchemaType = Static<typeof bodyUserSchema>
 
-export const userExample = {
+export type User = Static<typeof userObjectSchema>
+export type UserPublic = Static<typeof userPublicObjectSchema>
+export type UserPublicWithoutSettings = Static<
+  typeof userPublicWithoutSettingsObjectSchema
+>
+export type UserCurrent = Static<typeof userCurrentSchema>
+
+export const userExample: User = {
   id: 1,
   name: 'John Doe',
   email: 'contact@johndoe.com',
@@ -68,7 +85,7 @@ export const userExample = {
   logo: null,
   isConfirmed: true,
   temporaryToken: 'temporaryUUIDtoken',
-  temporaryExpirationToken: new Date(),
-  createdAt: new Date(),
-  updatedAt: new Date()
+  temporaryExpirationToken: new Date().toISOString(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString()
 }
