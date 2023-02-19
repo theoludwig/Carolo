@@ -20,3 +20,5 @@ export const ROOT_URL = new URL('../', SRC_URL)
 export const EMAIL_URL = new URL('./email/', ROOT_URL)
 export const EMAIL_TEMPLATE_URL = new URL('./email-template.ejs', EMAIL_URL)
 export const EMAIL_LOCALES_URL = new URL('./locales/', EMAIL_URL)
+
+export const GRAVATAR_URL = new URL('https://www.gravatar.com/avatar/')

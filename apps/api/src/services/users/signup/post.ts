@@ -1,7 +1,8 @@
-import { randomUUID } from 'node:crypto'
+import { randomUUID, createHash } from 'node:crypto'
 
 import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
+import axios from 'axios'
 import bcrypt from 'bcryptjs'
 import type { FastifyPluginAsync, FastifySchema } from 'fastify'
 import { fastifyErrors, bodyUserSchema, userPublicSchema } from '@carolo/models'
@@ -9,7 +10,7 @@ import type { BodyUserSchemaType } from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
 import { sendEmail } from '#src/tools/email/sendEmail.js'
-import { API_URL } from '#src/tools/configurations.js'
+import { API_URL, GRAVATAR_URL } from '#src/tools/configurations.js'
 
 const queryPostSignupSchema = Type.Object({
   redirectURI: Type.Optional(Type.String({ format: 'uri-reference' }))
@@ -53,10 +54,23 @@ export const postSignupUser: FastifyPluginAsync = async (fastify) => {
       }
       const hashedPassword = await bcrypt.hash(password, 12)
       const temporaryToken = randomUUID()
+
+      let logo: string | null = null
+      const emailGravatarHash = createHash('md5').update(email).digest('hex')
+      const emailGravatarURL = new URL(emailGravatarHash, GRAVATAR_URL)
+      emailGravatarURL.searchParams.set('s', '256')
+      emailGravatarURL.searchParams.set('d', '404')
+      try {
+        await axios.get(emailGravatarURL.toString())
+        emailGravatarURL.searchParams.set('d', 'mp')
+        logo = emailGravatarURL.toString()
+      } catch {}
+
       const user = await prisma.user.create({
         data: {
           name,
           email,
+          logo,
           password: hashedPassword,
           temporaryToken
         }
