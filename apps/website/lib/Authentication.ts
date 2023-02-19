@@ -1,8 +1,9 @@
 import type { AxiosInstance } from 'axios'
 import axios from 'axios'
-import type { TokensJWT } from '@carolo/models'
+import type { TokensJWT, UserCurrent } from '@carolo/models'
 
 import { API_URL, api } from '@/lib/configurations'
+import { useAuthentication } from '@/stores/authentication'
 import { cookies } from '@/lib/cookies'
 
 export const fetchRefreshToken = async (
@@ -12,6 +13,12 @@ export const fetchRefreshToken = async (
     refreshToken
   })
   return { ...data, refreshToken }
+}
+
+export interface SigninResult {
+  tokens: TokensJWT | null
+  user: UserCurrent['user'] | null
+  authentication: Authentication | null
 }
 
 export class Authentication {
@@ -77,6 +84,11 @@ export class Authentication {
 
   public signout(): void {
     cookies.remove('refreshToken')
+    useAuthentication.setState({
+      authenticated: false,
+      authentication: null,
+      user: null
+    })
   }
 
   public async signoutServerSide(): Promise<void> {
@@ -95,7 +107,26 @@ export class Authentication {
     this.signout()
   }
 
-  public signin(): void {
-    cookies.set('refreshToken', this.tokens.refreshToken)
+  public static async signin(refreshToken: string): Promise<SigninResult> {
+    cookies.set('refreshToken', refreshToken)
+    let tokens: TokensJWT | null = null
+    let authentication: Authentication | null = null
+    let user: UserCurrent['user'] | null = null
+    try {
+      tokens = await fetchRefreshToken(refreshToken)
+      authentication = new Authentication(tokens)
+      const { data } = await authentication.api.get<UserCurrent>(
+        '/users/current'
+      )
+      user = data.user
+      useAuthentication.setState({ authenticated: true, authentication, user })
+    } catch {
+      useAuthentication.setState({
+        authenticated: false,
+        authentication: null,
+        user: null
+      })
+    }
+    return { tokens, authentication, user }
   }
 }

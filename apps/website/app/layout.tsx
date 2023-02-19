@@ -1,11 +1,19 @@
 import { cookies } from 'next/headers'
 import type { TokensJWT, UserCurrent } from '@carolo/models'
 
-import '@/styles/styles'
-import { Header } from '@/components/Header'
-import { Authentication, fetchRefreshToken } from '@/lib/Authentication'
-import { useAuthentication } from '@/stores/authentication'
+import { Header } from '@/components/Header/Header'
+import { Authentication } from '@/lib/Authentication'
 import { AuthenticationStoreInitializer } from '@/stores/AuthenticationStoreInitializer'
+
+import '@fontsource/inter/200.css'
+import '@fontsource/inter/400.css'
+import '@fontsource/inter/600.css'
+import '@fontsource/inter/700.css'
+
+import '@fontsource/goldman/400.css'
+import '@fontsource/goldman/700.css'
+
+import './globals.css'
 
 export type RootLayoutProps = React.PropsWithChildren
 
@@ -17,17 +25,10 @@ const RootLayout = async (props: RootLayoutProps): Promise<JSX.Element> => {
 
   let tokens: TokensJWT | null = null
   let user: UserCurrent['user'] | null = null
-
   if (refreshToken != null) {
-    try {
-      tokens = await fetchRefreshToken(refreshToken.value)
-      const authentication = new Authentication(tokens)
-      const { data } = await authentication.api.get<UserCurrent>(
-        '/users/current'
-      )
-      user = data.user
-      useAuthentication.setState({ authentication, user })
-    } catch {}
+    const result = await Authentication.signin(refreshToken.value)
+    tokens = result.tokens
+    user = result.user
   }
 
   return (

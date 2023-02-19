@@ -1,18 +1,11 @@
-'use client'
-
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import NextLink from 'next/link'
 
 import Icon from '@/public/icon.svg'
-import { HeaderLink } from '@/components/HeaderLink'
-import { Button } from '@/components/Button'
-import { useAuthentication } from '@/stores/authentication'
+import { HeaderLink } from '@/components/Header/HeaderLink'
+import { HeaderAuthentication } from '@/components/Header/HeaderAuthentication'
 
 export const Header = (): JSX.Element => {
-  const { user, authentication } = useAuthentication()
-  const router = useRouter()
-
   return (
     <header className='sticky top-0 z-50 flex w-full items-center justify-center bg-[#171717] py-1 px-4'>
       <div className='flex w-full flex-wrap items-center justify-between gap-y-4'>
@@ -47,35 +40,7 @@ export const Header = (): JSX.Element => {
           </ul>
         </nav>
 
-        <div className='flex flex-col space-y-2'>
-          {user != null && authentication != null ? (
-            <p
-              onClick={() => {
-                authentication.signout()
-                router.refresh()
-              }}
-            >
-              {user.name}
-            </p>
-          ) : (
-            <>
-              <Button
-                variant='primary'
-                className='rounded-xl !py-[2px] !px-6 !text-base'
-                href='/authentication/signin'
-              >
-                Connexion
-              </Button>
-              <Button
-                variant='tertiary'
-                className='rounded-xl !py-[2px] !px-6 !text-base'
-                href='/authentication/signup'
-              >
-                Inscription
-              </Button>
-            </>
-          )}
-        </div>
+        <HeaderAuthentication />
       </div>
     </header>
   )

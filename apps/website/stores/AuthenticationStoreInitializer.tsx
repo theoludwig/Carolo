@@ -19,7 +19,15 @@ export const AuthenticationStoreInitializer = (
   const initialized = useRef(false)
   if (!initialized.current) {
     const authentication = tokens != null ? new Authentication(tokens) : null
-    useAuthentication.setState({ authentication, user })
+    if (authentication != null && user != null) {
+      useAuthentication.setState({ authenticated: true, authentication, user })
+    } else {
+      useAuthentication.setState({
+        authenticated: false,
+        authentication: null,
+        user: null
+      })
+    }
     initialized.current = true
   }
 

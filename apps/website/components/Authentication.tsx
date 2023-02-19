@@ -27,7 +27,7 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
 
   const schema = useMemo(() => {
     return {
-      ...(mode === 'signup' && { name: userSchema.name }),
+      ...(mode === 'signup' ? { name: userSchema.name } : {}),
       email: userSchema.email,
       password: userSchema.password
     }
@@ -76,9 +76,8 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
 
     try {
       const { data } = await api.post<TokensJWT>('/users/signin', formData)
-      const authentication = new AuthenticationClass(data)
-      authentication.signin()
-      router.refresh()
+      await AuthenticationClass.signin(data.refreshToken)
+      router.replace('/')
       return null
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
