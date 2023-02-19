@@ -1,3 +1,5 @@
+'use client'
+
 import { useGame } from '@/stores/game'
 import { Board } from '@/components/Game/PlayScreen/Board'
 import { Player } from '@/components/Game/PlayScreen/Player'

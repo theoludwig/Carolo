@@ -17,6 +17,8 @@ import './globals.css'
 
 export type RootLayoutProps = React.PropsWithChildren
 
+export const dynamic = 'force-dynamic'
+
 const RootLayout = async (props: RootLayoutProps): Promise<JSX.Element> => {
   const { children } = props
 

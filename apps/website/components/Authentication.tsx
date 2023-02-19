@@ -77,6 +77,7 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
     try {
       const { data } = await api.post<TokensJWT>('/users/signin', formData)
       await AuthenticationClass.signin(data.refreshToken)
+      router.refresh()
       router.replace('/')
       return null
     } catch (error) {
@@ -128,7 +129,7 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
           />
 
           <div className='mt-4 flex flex-col items-center'>
-            <Button type='submit' variant='secondary'>
+            <Button type='submit' variant='purple'>
               {mode === 'signup' ? 'Inscription' : 'Connexion'}
             </Button>
           </div>
@@ -156,7 +157,7 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
                 ? '/authentication/signin'
                 : '/authentication/signup'
             }
-            variant='secondary'
+            variant='purple'
           >
             {mode === 'signup' ? 'Connexion' : 'Inscription'}
           </Button>

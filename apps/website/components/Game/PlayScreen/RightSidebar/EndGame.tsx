@@ -64,7 +64,7 @@ export const EndGame = (): JSX.Element => {
       </h2>
       <Button
         className='mt-2'
-        variant='secondary'
+        variant='purple'
         onClick={() => {
           game.restart()
           game.play()

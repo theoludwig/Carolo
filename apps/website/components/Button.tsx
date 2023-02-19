@@ -7,7 +7,7 @@ type LinkElementProps = LinkProps
 type ButtonElementProps = React.ComponentPropsWithoutRef<'button'>
 export type ButtonLinkProps = LinkElementProps | ButtonElementProps
 export type ButtonProps = ButtonLinkProps & {
-  variant?: 'primary' | 'secondary' | 'tertiary'
+  variant?: 'white' | 'purple' | 'dark' | 'red'
 }
 
 const isLink = (props: ButtonProps): props is LinkElementProps => {
@@ -15,20 +15,26 @@ const isLink = (props: ButtonProps): props is LinkElementProps => {
 }
 
 export const Button = (props: ButtonProps): JSX.Element => {
-  const { variant = 'primary' } = props
+  const { variant = 'white' } = props
 
-  const mainClasses = 'rounded py-3 font-bold'
-  const primaryClasses = 'text-xl px-20 bg-white text-black hover:bg-gray-300'
-  const secondaryClasses =
+  const mainClasses = 'rounded py-3 font-bold text-center'
+
+  const whiteClasses = 'text-xl px-20 bg-white text-black hover:bg-gray-300'
+
+  const purpleClasses =
     'text-md font-bold px-4 bg-[#8417DA] text-white hover:bg-[#6514a6]'
 
-  const tertiaryClasses =
+  const darkClasses =
     'text-md bg-[#272522] font-bold px-4 text-white hover:opacity-80'
 
+  const redClasses =
+    'text-md bg-[#C82323] font-bold px-4 text-white hover:opacity-80'
+
   const className = classNames(mainClasses, {
-    [primaryClasses]: variant === 'primary',
-    [secondaryClasses]: variant === 'secondary',
-    [tertiaryClasses]: variant === 'tertiary'
+    [whiteClasses]: variant === 'white',
+    [purpleClasses]: variant === 'purple',
+    [darkClasses]: variant === 'dark',
+    [redClasses]: variant === 'red'
   })
 
   if (isLink(props)) {
