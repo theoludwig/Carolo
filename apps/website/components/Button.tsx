@@ -1,4 +1,5 @@
 import NextLink from 'next/link'
+import Image from 'next/image'
 import classNames from 'clsx'
 
 import type { LinkProps } from '@/components/Link'
@@ -8,6 +9,7 @@ type ButtonElementProps = React.ComponentPropsWithoutRef<'button'>
 export type ButtonLinkProps = LinkElementProps | ButtonElementProps
 export type ButtonProps = ButtonLinkProps & {
   variant?: 'white' | 'purple' | 'dark' | 'red'
+  icon?: string
 }
 
 const isLink = (props: ButtonProps): props is LinkElementProps => {
@@ -15,9 +17,9 @@ const isLink = (props: ButtonProps): props is LinkElementProps => {
 }
 
 export const Button = (props: ButtonProps): JSX.Element => {
-  const { variant = 'white' } = props
+  const { variant = 'white', icon } = props
 
-  const mainClasses = 'rounded py-3 font-bold text-center'
+  const mainClasses = 'rounded py-3 font-bold text-center flex items-center'
 
   const whiteClasses = 'text-xl px-20 bg-white text-black hover:bg-gray-300'
 
@@ -34,7 +36,8 @@ export const Button = (props: ButtonProps): JSX.Element => {
     [whiteClasses]: variant === 'white',
     [purpleClasses]: variant === 'purple',
     [darkClasses]: variant === 'dark',
-    [redClasses]: variant === 'red'
+    [redClasses]: variant === 'red',
+    'justify-center': icon == null
   })
 
   if (isLink(props)) {
@@ -44,6 +47,15 @@ export const Button = (props: ButtonProps): JSX.Element => {
         className={classNames(className, 'inline-block', givenClassName)}
         {...rest}
       >
+        {icon != null ? (
+          <Image
+            className='my-1 mx-2'
+            src={icon}
+            width={20}
+            height={20}
+            alt='Icon'
+          />
+        ) : null}
         {children}
       </NextLink>
     )
@@ -52,6 +64,15 @@ export const Button = (props: ButtonProps): JSX.Element => {
   const { children, className: givenClassName, ...rest } = props
   return (
     <button className={classNames(className, givenClassName)} {...rest}>
+      {icon != null ? (
+        <Image
+          className='my-1 mx-2'
+          src={icon}
+          width={20}
+          height={20}
+          alt='Icon'
+        />
+      ) : null}
       {children}
     </button>
   )

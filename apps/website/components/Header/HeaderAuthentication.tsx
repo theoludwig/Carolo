@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import classNames from 'clsx'
 
 import { Button } from '@/components/Button'
 import { useAuthentication } from '@/stores/authentication'
@@ -41,7 +42,12 @@ export const HeaderAuthentication = (): JSX.Element => {
 
   return (
     <div
-      className='relative flex min-w-[150px] flex-col items-center rounded-md bg-[#272522] px-2 py-1'
+      className={classNames(
+        'relative flex flex-col items-center rounded-md bg-[#272522] px-2 py-1',
+        {
+          'min-w-[170px]': isOpen
+        }
+      )}
       ref={popupClickRef}
     >
       <div
@@ -66,6 +72,7 @@ export const HeaderAuthentication = (): JSX.Element => {
         <div className='absolute top-[100%] right-0 flex w-full flex-col space-y-2 rounded-md bg-[#272522] p-3'>
           <Button
             href='/users/settings'
+            icon='/icons/settings.png'
             className='!py-[2px] !px-0 !text-base'
             variant='white'
             onClick={() => {
@@ -76,6 +83,7 @@ export const HeaderAuthentication = (): JSX.Element => {
           </Button>
           <Button
             href={`/users/${user.id}`}
+            icon='/icons/profile.png'
             className='!py-[2px] !px-0 !text-base'
             variant='purple'
             onClick={() => {
@@ -85,13 +93,13 @@ export const HeaderAuthentication = (): JSX.Element => {
             Profil
           </Button>
           <Button
+            icon='/icons/signout.png'
             className='!py-[2px] !px-0 !text-base'
             variant='red'
             onClick={async () => {
               setIsOpen(false)
               await authentication.signoutServerSide()
-              router.refresh()
-              router.replace('/')
+              router.replace('/api/hard-refresh')
             }}
           >
             Déconnexion

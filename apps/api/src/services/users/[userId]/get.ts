@@ -1,7 +1,11 @@
 import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
 import type { FastifyPluginAsync, FastifySchema } from 'fastify'
-import { fastifyErrors, userPublicSchema } from '@carolo/models'
+import {
+  fastifyErrors,
+  userPublicSchema,
+  userPublicSchemaObject
+} from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
 
@@ -16,9 +20,7 @@ const getServiceSchema: FastifySchema = {
   tags: ['users'] as string[],
   params: parametersGetUserSchema,
   response: {
-    200: Type.Object({
-      user: Type.Object(userPublicSchema)
-    }),
+    200: userPublicSchemaObject,
     400: fastifyErrors[400],
     404: fastifyErrors[404],
     500: fastifyErrors[500]

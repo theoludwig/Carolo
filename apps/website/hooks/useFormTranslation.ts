@@ -2,7 +2,7 @@ import type { Error } from 'react-component-form'
 
 const knownErrorKeywords = ['minLength', 'maxLength', 'format']
 
-const messages = {
+export const errorsMessages = {
   required: 'Oups, ce champ est obligatoire 🙈.',
   minLength: 'Le champ doit contenir au moins {expected} caractères.',
   maxLength: 'Le champ doit contenir au plus {expected} caractères.',
@@ -17,17 +17,20 @@ const getErrorTranslationKey = (error: Error): string => {
       typeof error.data === 'string' &&
       error.data.length === 0
     ) {
-      return messages.required
+      return errorsMessages.required
     }
     if (error.keyword === 'format') {
       if (error.params['format'] === 'email') {
-        return messages['invalid-email']
+        return errorsMessages['invalid-email']
       }
-      return messages.invalid
+      return errorsMessages.invalid
     }
-    return messages[error.keyword as keyof typeof messages] ?? messages.invalid
+    return (
+      errorsMessages[error.keyword as keyof typeof errorsMessages] ??
+      errorsMessages.invalid
+    )
   }
-  return messages.invalid
+  return errorsMessages.invalid
 }
 
 export type GetErrorTranslation = (

@@ -46,7 +46,9 @@ export const userPublicSchema = {
   settings: Type.Object(userSettingsSchema)
 }
 
-export const userPublicSchemaObject = Type.Object(userPublicSchema)
+export const userPublicSchemaObject = Type.Object({
+  user: Type.Object(userPublicSchema)
+})
 
 export const userCurrentSchemaObject = Type.Object({
   user: Type.Object({
@@ -83,7 +85,7 @@ export const userCurrentExample: UserCurrent = {
   }
 }
 
-export const userPublicExample: UserPublic = {
+export const userPublicExample: UserPublic['user'] = {
   ...userExample,
   settings: userSettingsExample
 }

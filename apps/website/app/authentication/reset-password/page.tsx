@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Form, useForm } from 'react-component-form'
 import type { HandleUseFormCallback } from 'react-component-form'
 import axios from 'axios'
@@ -12,41 +13,34 @@ import { FormState } from '@/components/FormState'
 import { errorsMessages, useFormTranslation } from '@/hooks/useFormTranslation'
 import { api } from '@/lib/configurations'
 
-const ForgotPasswordPage = (): JSX.Element => {
+const ResetPasswordPage = (): JSX.Element => {
+  const router = useRouter()
+
+  const searchParams = useSearchParams()
+  const temporaryToken = searchParams.get('temporaryToken')
+
   const schema = useMemo(() => {
     return {
-      email: userSchema.email
+      password: userSchema.password
     }
   }, [])
 
   const { handleUseForm, errors, fetchState, message } = useForm(schema)
   const { getFirstErrorTranslation } = useFormTranslation()
 
-  const onSubmit: HandleUseFormCallback<typeof schema> = async (
-    formData,
-    formElement
-  ) => {
+  const onSubmit: HandleUseFormCallback<typeof schema> = async (formData) => {
     try {
-      const searchParams = new URLSearchParams()
-      searchParams.set(
-        'redirectURI',
-        `${window.location.origin}/authentication/reset-password`
-      )
-      await api.post(
-        `/users/reset-password?${searchParams.toString()}`,
-        formData
-      )
-      formElement.reset()
-      return {
-        type: 'success',
-        value:
-          'Demande de réinitialisation du mot de passe envoyé, veuillez vérifier vos emails!'
-      }
+      await api.put('/users/reset-password', {
+        ...formData,
+        temporaryToken
+      })
+      router.push('/authentication/signin')
+      return null
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
         return {
           type: 'error',
-          value: errorsMessages['invalid-email']
+          value: errorsMessages.invalid
         }
       }
       return {
@@ -60,10 +54,10 @@ const ForgotPasswordPage = (): JSX.Element => {
     <div className='flex w-8/12 max-w-sm flex-col items-center justify-center sm:w-5/12'>
       <Form className='w-full' noValidate onSubmit={handleUseForm(onSubmit)}>
         <Input
-          type='email'
-          name='email'
-          label='Adresse courriel'
-          error={getFirstErrorTranslation(errors.email)}
+          type='password'
+          name='password'
+          label='Nouveau mot de passe'
+          error={getFirstErrorTranslation(errors.password)}
         />
 
         <div className='mt-4'>
@@ -81,4 +75,4 @@ const ForgotPasswordPage = (): JSX.Element => {
   )
 }
 
-export default ForgotPasswordPage
+export default ResetPasswordPage

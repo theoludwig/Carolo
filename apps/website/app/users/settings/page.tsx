@@ -1,15 +1,16 @@
 import { redirect } from 'next/navigation'
 
 import { useAuthentication } from '@/stores/authentication'
+import { UserSettings } from '@/components/UserSettings'
 
 const UsersSettingsPage = (): JSX.Element => {
-  const { authenticated, user } = useAuthentication.getState()
+  const { authenticated } = useAuthentication.getState()
 
   if (!authenticated) {
     return redirect('/')
   }
 
-  return <p>{user.name}</p>
+  return <UserSettings />
 }
 
 export default UsersSettingsPage

@@ -8,14 +8,31 @@ interface AuthenticatedStore {
   authentication: Authentication
 }
 
-export type AuthenticationStore =
+type AuthenticationUnion =
   | (AuthenticatedStore & { authenticated: true })
   | ({ [K in keyof AuthenticatedStore]: null } & { authenticated: false })
 
-export const useAuthentication = create<AuthenticationStore>()(() => {
+export type AuthenticationStore = AuthenticationUnion & {
+  updateUser: (user: Partial<UserCurrent['user']>) => void
+}
+
+export const useAuthentication = create<AuthenticationStore>()((set) => {
   return {
     authenticated: false,
     user: null,
-    authentication: null
+    authentication: null,
+    updateUser: (user) => {
+      return set((state) => {
+        if (!state.authenticated) {
+          return {}
+        }
+        return {
+          user: {
+            ...state.user,
+            ...user
+          }
+        }
+      })
+    }
   }
 })
