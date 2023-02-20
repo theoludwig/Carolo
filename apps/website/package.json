@@ -37,6 +37,7 @@
     "cypress": "12.6.0",
     "eslint": "8.34.0",
     "eslint-config-next": "13.1.6",
+    "mockttp": "3.6.3",
     "postcss": "8.4.21",
     "start-server-and-test": "1.15.4",
     "tailwindcss": "3.2.7",

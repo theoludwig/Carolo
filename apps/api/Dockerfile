@@ -1,6 +1,6 @@
 FROM node:18.14.1 AS builder
 WORKDIR /usr/src/app
-RUN npm install --global turbo@1.7.4
+RUN npm install --global turbo@1.8.1
 COPY ./ ./
 RUN turbo prune --scope=@carolo/api --docker
 
