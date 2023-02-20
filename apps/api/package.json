@@ -33,7 +33,6 @@
     "@fastify/swagger-ui": "1.4.0",
     "@prisma/client": "4.10.1",
     "@sinclair/typebox": "0.25.23",
-    "@thream/socketio-jwt": "3.0.2",
     "axios": "1.3.3",
     "bcryptjs": "2.4.3",
     "dotenv": "16.0.3",

@@ -3,7 +3,11 @@ import { randomUUID } from 'node:crypto'
 import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
 import type { FastifyPluginAsync, FastifySchema } from 'fastify'
-import { fastifyErrors, userCurrentSchema, userSchema } from '@carolo/models'
+import {
+  fastifyErrors,
+  userCurrentSchemaObject,
+  userSchema
+} from '@carolo/models'
 import type { Language } from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
@@ -35,7 +39,7 @@ const putServiceSchema: FastifySchema = {
   body: bodyPutServiceSchema,
   querystring: queryPutCurrentUserSchema,
   response: {
-    200: userCurrentSchema,
+    200: userCurrentSchemaObject,
     400: fastifyErrors[400],
     401: fastifyErrors[401],
     403: fastifyErrors[403],

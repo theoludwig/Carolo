@@ -3,7 +3,7 @@ import { Type } from '@sinclair/typebox'
 
 import type { AuthenticationStrategy } from './OAuth.js'
 import { strategiesTypebox } from './OAuth.js'
-import { userSettingsSchema } from './UserSettings.js'
+import { userSettingsExample, userSettingsSchema } from './UserSettings.js'
 import { date, id } from './utils.js'
 
 export interface UserJWT {
@@ -25,57 +25,41 @@ export const userSchema = {
     Type.Null()
   ]),
   isConfirmed: Type.Boolean({ default: false }),
-  temporaryToken: Type.String(),
-  temporaryExpirationToken: Type.String({ format: 'date-time' }),
+  temporaryToken: Type.Union([Type.String(), Type.Null()]),
+  temporaryExpirationToken: Type.Union([
+    Type.String({ format: 'date-time' }),
+    Type.Null()
+  ]),
   createdAt: date.createdAt,
   updatedAt: date.updatedAt
 }
 
-export const userObjectSchema = Type.Object(userSchema)
-
-export const userPublicWithoutSettingsSchema = {
-  id,
-  name: userSchema.name,
-  email: userSchema.email,
-  logo: Type.Union([userSchema.logo, Type.Null()]),
-  isConfirmed: userSchema.isConfirmed,
-  createdAt: date.createdAt,
-  updatedAt: date.updatedAt
-}
-export const userPublicWithoutSettingsObjectSchema = Type.Object(
-  userPublicWithoutSettingsSchema
-)
+export const userSchemaObject = Type.Object(userSchema)
 
 export const userPublicSchema = {
-  ...userPublicWithoutSettingsSchema,
+  id,
+  name: userSchema.name,
+  logo: userSchema.logo,
+  isConfirmed: userSchema.isConfirmed,
+  createdAt: date.createdAt,
+  updatedAt: date.updatedAt,
   settings: Type.Object(userSettingsSchema)
 }
 
-export const userPublicObjectSchema = Type.Object(userPublicSchema)
+export const userPublicSchemaObject = Type.Object(userPublicSchema)
 
-export const userCurrentSchema = Type.Object({
+export const userCurrentSchemaObject = Type.Object({
   user: Type.Object({
     ...userPublicSchema,
+    email: userSchema.email,
     currentStrategy: Type.Union([...strategiesTypebox]),
     strategies: Type.Array(Type.Union([...strategiesTypebox]))
   })
 })
 
-export const bodyUserSchema = Type.Object({
-  email: userSchema.email,
-  name: userSchema.name,
-  password: userSchema.password,
-  language: userSettingsSchema.language
-})
-
-export type BodyUserSchemaType = Static<typeof bodyUserSchema>
-
-export type User = Static<typeof userObjectSchema>
-export type UserPublic = Static<typeof userPublicObjectSchema>
-export type UserPublicWithoutSettings = Static<
-  typeof userPublicWithoutSettingsObjectSchema
->
-export type UserCurrent = Static<typeof userCurrentSchema>
+export type User = Static<typeof userSchemaObject>
+export type UserPublic = Static<typeof userPublicSchemaObject>
+export type UserCurrent = Static<typeof userCurrentSchemaObject>
 
 export const userExample: User = {
   id: 1,
@@ -88,4 +72,18 @@ export const userExample: User = {
   temporaryExpirationToken: new Date().toISOString(),
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString()
+}
+
+export const userCurrentExample: UserCurrent = {
+  user: {
+    ...userExample,
+    settings: userSettingsExample,
+    currentStrategy: 'Local',
+    strategies: ['Local']
+  }
+}
+
+export const userPublicExample: UserPublic = {
+  ...userExample,
+  settings: userSettingsExample
 }

@@ -39,7 +39,7 @@ const postResetPasswordSchema: FastifySchema = {
 } as const
 
 export const postResetPasswordUser: FastifyPluginAsync = async (fastify) => {
-  await fastify.route<{
+  fastify.route<{
     Body: BodyPostResetPasswordSchemaType
     Querystring: QueryPostResetPasswordSchemaType
   }>({

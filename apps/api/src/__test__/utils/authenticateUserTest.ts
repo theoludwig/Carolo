@@ -1,4 +1,4 @@
-import type { User } from '@prisma/client'
+import type { RefreshToken, User, UserSetting } from '@prisma/client'
 import sinon from 'sinon'
 import type { UserJWT } from '@carolo/models'
 import {
@@ -21,19 +21,36 @@ export const authenticateUserTest = async (): Promise<{
   userSettingStubValue: any
   refreshTokenStubValue: any
 }> => {
+  const user = {
+    ...userExample,
+    temporaryExpirationToken:
+      userExample.temporaryExpirationToken != null
+        ? new Date(userExample.temporaryExpirationToken)
+        : null,
+    createdAt: new Date(userExample.createdAt),
+    updatedAt: new Date(userExample.updatedAt)
+  }
   const userStubValue = {
-    findUnique: async () => {
-      return userExample
+    findUnique: async (): Promise<User> => {
+      return user
     }
   }
   const userSettingStubValue = {
-    findFirst: async () => {
-      return userSettingsExample
+    findFirst: async (): Promise<UserSetting> => {
+      return {
+        ...userSettingsExample,
+        createdAt: new Date(userSettingsExample.createdAt),
+        updatedAt: new Date(userSettingsExample.updatedAt)
+      }
     }
   }
   const refreshTokenStubValue = {
-    create: async () => {
-      return refreshTokenExample
+    create: async (): Promise<RefreshToken> => {
+      return {
+        ...refreshTokenExample,
+        createdAt: new Date(refreshTokenExample.createdAt),
+        updatedAt: new Date(refreshTokenExample.updatedAt)
+      }
     }
   }
   sinon.stub(prisma, 'user').value(userStubValue)
@@ -48,12 +65,7 @@ export const authenticateUserTest = async (): Promise<{
   return {
     accessToken,
     refreshToken,
-    user: {
-      ...userExample,
-      temporaryExpirationToken: new Date(userExample.temporaryExpirationToken),
-      createdAt: new Date(userExample.createdAt),
-      updatedAt: new Date(userExample.updatedAt)
-    },
+    user,
     userStubValue,
     userSettingStubValue,
     refreshTokenStubValue

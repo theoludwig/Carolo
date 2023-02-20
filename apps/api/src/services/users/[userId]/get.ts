@@ -26,7 +26,7 @@ const getServiceSchema: FastifySchema = {
 } as const
 
 export const getUserById: FastifyPluginAsync = async (fastify) => {
-  await fastify.route<{
+  fastify.route<{
     Params: ParametersGetUser
   }>({
     method: 'GET',

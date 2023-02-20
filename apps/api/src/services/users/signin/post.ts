@@ -34,7 +34,7 @@ const postSigninSchema: FastifySchema = {
 } as const
 
 export const postSigninUser: FastifyPluginAsync = async (fastify) => {
-  await fastify.route<{
+  fastify.route<{
     Body: BodyPostSigninSchemaType
   }>({
     method: 'POST',

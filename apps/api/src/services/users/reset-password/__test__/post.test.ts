@@ -17,9 +17,7 @@ await tap.test('POST /users/reset-password', async (t) => {
       findUnique: async () => {
         return {
           ...userExample,
-          temporaryExpirationToken: new Date(
-            userExample.temporaryExpirationToken
-          ),
+          temporaryExpirationToken: new Date(),
           createdAt: new Date(userExample.createdAt),
           updatedAt: new Date(userExample.updatedAt)
         }
@@ -82,9 +80,7 @@ await tap.test('POST /users/reset-password', async (t) => {
       findUnique: async () => {
         return {
           ...userExample,
-          temporaryExpirationToken: new Date(
-            userExample.temporaryExpirationToken
-          ),
+          temporaryExpirationToken: new Date(),
           createdAt: new Date(userExample.createdAt),
           updatedAt: new Date(userExample.updatedAt)
         }

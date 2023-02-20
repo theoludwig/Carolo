@@ -24,12 +24,20 @@ await tap.test('POST /users/signup', async (t) => {
         return null
       },
       create: async () => {
-        return userExample
+        return {
+          ...userExample,
+          createdAt: new Date(userExample.createdAt),
+          updatedAt: new Date(userExample.updatedAt)
+        }
       }
     })
     sinon.stub(prisma, 'userSetting').value({
       create: async () => {
-        return userSettingsExample
+        return {
+          ...userSettingsExample,
+          createdAt: new Date(userSettingsExample.createdAt),
+          updatedAt: new Date(userSettingsExample.updatedAt)
+        }
       }
     })
     sinon.stub(emailTransporter, 'sendMail').value(() => {})

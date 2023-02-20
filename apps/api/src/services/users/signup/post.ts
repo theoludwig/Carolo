@@ -1,40 +1,33 @@
 import { randomUUID, createHash } from 'node:crypto'
 
-import type { Static } from '@sinclair/typebox'
-import { Type } from '@sinclair/typebox'
 import axios from 'axios'
 import bcrypt from 'bcryptjs'
 import type { FastifyPluginAsync, FastifySchema } from 'fastify'
-import { fastifyErrors, bodyUserSchema, userPublicSchema } from '@carolo/models'
-import type { BodyUserSchemaType } from '@carolo/models'
+import type { Services } from '@carolo/models'
+import { fastifyErrors, servicesSchema } from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
 import { sendEmail } from '#src/tools/email/sendEmail.js'
 import { API_URL, GRAVATAR_URL } from '#src/tools/configurations.js'
 
-const queryPostSignupSchema = Type.Object({
-  redirectURI: Type.Optional(Type.String({ format: 'uri-reference' }))
-})
-
-type QueryPostSignupSchemaType = Static<typeof queryPostSignupSchema>
-
 const postSignupSchema: FastifySchema = {
   description:
     'Allows a new user to signup, if success he would need to confirm his email.',
   tags: ['users'] as string[],
-  body: bodyUserSchema,
-  querystring: queryPostSignupSchema,
+  body: servicesSchema['/users/signup'].post.body,
+  querystring: servicesSchema['/users/signup'].post.querystring,
   response: {
-    201: Type.Object({ user: Type.Object(userPublicSchema) }),
+    201: servicesSchema['/users/signup'].post.response,
     400: fastifyErrors[400],
     500: fastifyErrors[500]
   }
 } as const
 
 export const postSignupUser: FastifyPluginAsync = async (fastify) => {
-  await fastify.route<{
-    Body: BodyUserSchemaType
-    Querystring: QueryPostSignupSchemaType
+  fastify.route<{
+    Body: Services['/users/signup']['post']['body']
+    Querystring: Services['/users/signup']['post']['querystring']
+    Reply: Services['/users/signup']['post']['response']
   }>({
     method: 'POST',
     url: '/users/signup',
@@ -96,7 +89,16 @@ export const postSignupUser: FastifyPluginAsync = async (fastify) => {
       return {
         user: {
           ...user,
-          settings: { ...userSettings }
+          createdAt: user.createdAt.toISOString(),
+          updatedAt: user.updatedAt.toISOString(),
+          currentStrategy: 'Local',
+          strategies: ['Local'],
+          settings: {
+            ...userSettings,
+            language,
+            createdAt: userSettings.createdAt.toISOString(),
+            updatedAt: userSettings.updatedAt.toISOString()
+          }
         }
       }
     }

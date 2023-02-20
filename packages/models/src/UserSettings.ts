@@ -13,12 +13,16 @@ export const userSettingsSchema = {
   userId: id
 }
 
+export const userSettingsSchemaObject = Type.Object(userSettingsSchema)
+
 export type Language = Static<typeof userSettingsSchema.language>
 
-export const userSettingsExample = {
+export type UserSettings = Static<typeof userSettingsSchemaObject>
+
+export const userSettingsExample: UserSettings = {
   id: 1,
   language: 'fr',
   userId: 1,
-  createdAt: new Date(),
-  updatedAt: new Date()
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString()
 }

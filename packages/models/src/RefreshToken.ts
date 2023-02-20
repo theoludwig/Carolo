@@ -26,10 +26,14 @@ export const refreshTokensSchema = {
   userId: id
 }
 
-export const refreshTokenExample = {
+export const refreshTokenSchemaObject = Type.Object(refreshTokensSchema)
+
+export type RefreshToken = Static<typeof refreshTokenSchemaObject>
+
+export const refreshTokenExample: RefreshToken = {
   id: 1,
   userId: userExample.id,
   token: 'sometokenUUID',
-  createdAt: new Date(),
-  updatedAt: new Date()
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString()
 }
