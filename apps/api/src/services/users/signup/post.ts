@@ -33,7 +33,7 @@ export const postSignupUser: FastifyPluginAsync = async (fastify) => {
     url: '/users/signup',
     schema: postSignupSchema,
     handler: async (request, reply) => {
-      const { name, email, password, language } = request.body
+      const { name, email, password, locale } = request.body
       const { redirectURI } = request.query
       const userValidation = await prisma.user.findFirst({
         where: {
@@ -71,7 +71,7 @@ export const postSignupUser: FastifyPluginAsync = async (fastify) => {
       const userSettings = await prisma.userSetting.create({
         data: {
           userId: user.id,
-          language
+          locale
         }
       })
       const url = new URL('/users/confirm-email', API_URL)
@@ -83,7 +83,7 @@ export const postSignupUser: FastifyPluginAsync = async (fastify) => {
         type: 'confirm-email',
         email,
         url: url.toString(),
-        language
+        locale
       })
       reply.statusCode = 201
       return {
@@ -95,7 +95,7 @@ export const postSignupUser: FastifyPluginAsync = async (fastify) => {
           strategies: ['Local'],
           settings: {
             ...userSettings,
-            language,
+            locale,
             createdAt: userSettings.createdAt.toISOString(),
             updatedAt: userSettings.updatedAt.toISOString()
           }

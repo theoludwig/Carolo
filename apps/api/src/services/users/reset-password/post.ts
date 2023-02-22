@@ -4,7 +4,7 @@ import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
 import type { FastifyPluginAsync, FastifySchema } from 'fastify'
 import ms from 'ms'
-import type { Language } from '@carolo/models'
+import type { Locale } from '@carolo/models'
 import { fastifyErrors, userSchema } from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
@@ -92,7 +92,7 @@ export const postResetPasswordUser: FastifyPluginAsync = async (fastify) => {
         type: 'reset-password',
         email,
         url: url.toString(),
-        language: userSettings.language as Language
+        locale: userSettings.locale as Locale
       })
       reply.statusCode = 200
       return 'Password-reset request successful, please check your emails!'

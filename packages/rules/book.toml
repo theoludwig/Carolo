@@ -1,5 +1,5 @@
 [book]
-language = "fr"
+language = "fr-FR"
 multilingual = false
 src = "src"
 title = "Carolo"

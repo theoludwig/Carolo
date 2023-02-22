@@ -11,9 +11,9 @@ await tap.test('PUT /users/current/settings', async (t) => {
     sinon.restore()
   })
 
-  await t.test('succeeds and edit the language', async (t) => {
+  await t.test('succeeds and edit the locale', async (t) => {
     const newSettings = {
-      language: 'fr'
+      locale: 'fr-FR'
     }
     const { accessToken, userSettingStubValue } = await authenticateUserTest()
     sinon.stub(prisma, 'userSetting').value({
@@ -38,12 +38,12 @@ await tap.test('PUT /users/current/settings', async (t) => {
     })
     const responseJson = response.json()
     t.equal(response.statusCode, 200)
-    t.equal(responseJson.settings.language, newSettings.language)
+    t.equal(responseJson.settings.locale, newSettings.locale)
   })
 
-  await t.test('fails with invalid language', async (t) => {
+  await t.test('fails with invalid locale', async (t) => {
     const newSettings = {
-      language: 'somerandomlanguage'
+      locale: 'somerandomlocale'
     }
     const { accessToken, userSettingStubValue } = await authenticateUserTest()
     sinon.stub(prisma, 'userSetting').value({

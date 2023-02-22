@@ -11,7 +11,7 @@ export const usersServiceSchema = {
         email: userSchema.email,
         name: userSchema.name,
         password: userSchema.password,
-        language: userSettingsSchema.language
+        locale: userSettingsSchema.locale
       }),
       querystring: Type.Object({
         redirectURI: Type.Optional(Type.String({ format: 'uri-reference' }))

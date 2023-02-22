@@ -14,7 +14,7 @@ model User {
   password                 String         @db.Text
   logo                     String?        @db.Text
   isConfirmed              Boolean        @default(false)
-  temporaryToken           String?
+  temporaryToken           String?        @unique @db.Text
   temporaryExpirationToken DateTime?
   createdAt                DateTime       @default(now())
   updatedAt                DateTime       @default(now()) @updatedAt
@@ -24,7 +24,7 @@ model User {
 
 model UserSetting {
   id        Int      @id @default(autoincrement())
-  language  String   @default("fr") @db.VarChar(10)
+  locale    String   @default("fr-FR") @db.VarChar(5)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
   userId    Int      @unique
@@ -33,7 +33,7 @@ model UserSetting {
 
 model RefreshToken {
   id        Int      @id @default(autoincrement())
-  token     String   @db.Text
+  token     String   @unique @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
   userId    Int

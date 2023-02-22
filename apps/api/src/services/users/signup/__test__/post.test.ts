@@ -10,7 +10,7 @@ const payload = {
   name: userExample.name,
   email: userExample.email,
   password: userExample.password,
-  language: userSettingsExample.language
+  locale: userSettingsExample.locale
 }
 
 await tap.test('POST /users/signup', async (t) => {

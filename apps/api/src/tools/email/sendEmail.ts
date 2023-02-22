@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import { URL, fileURLToPath } from 'node:url'
 
 import ejs from 'ejs'
-import type { Language } from '@carolo/models'
+import type { Locale } from '@carolo/models'
 
 import {
   EMAIL_LOCALES_URL,
@@ -28,16 +28,16 @@ interface SendEmailOptions {
   email: string
   type: EmailType
   url: string
-  language?: Language
+  locale?: Locale
 }
 
 const getEmailTranslation = async (
-  language: Language,
+  locale: Locale,
   type: EmailType
 ): Promise<EmailTranslation> => {
   const filename = `${type}.json`
   let emailTranslationURL = new URL(
-    `./${language}/${filename}`,
+    `./${locale}/${filename}`,
     EMAIL_LOCALES_URL
   )
   if (!fs.existsSync(emailTranslationURL)) {
@@ -50,8 +50,8 @@ const getEmailTranslation = async (
 }
 
 export const sendEmail = async (options: SendEmailOptions): Promise<void> => {
-  const { email, type, url, language = 'fr' } = options
-  const emailTranslation = await getEmailTranslation(language, type)
+  const { email, type, url, locale = 'fr-FR' } = options
+  const emailTranslation = await getEmailTranslation(locale, type)
   const emailHTML = await ejs.renderFile(fileURLToPath(EMAIL_TEMPLATE_URL), {
     text: { ...emailTranslation.renderOptions, url }
   })

@@ -49,7 +49,7 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
         )
         await api.post(`/users/signup?${searchParams.toString()}`, {
           ...formData,
-          language: 'fr'
+          locale: 'fr-FR'
         })
         formElement.reset()
         return {

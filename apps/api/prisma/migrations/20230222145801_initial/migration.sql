@@ -16,7 +16,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "UserSetting" (
   "id" SERIAL NOT NULL,
-  "language" VARCHAR(10) NOT NULL DEFAULT 'fr',
+  "locale" VARCHAR(5) NOT NULL DEFAULT 'fr-FR',
   "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "userId" INTEGER NOT NULL,
@@ -40,7 +40,13 @@ CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_temporaryToken_key" ON "User"("temporaryToken");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "UserSetting_userId_key" ON "UserSetting"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "RefreshToken_token_key" ON "RefreshToken"("token");
 
 -- AddForeignKey
 ALTER TABLE

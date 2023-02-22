@@ -13,7 +13,7 @@ const Head = (): JSX.Element => {
       {/* Meta Tag */}
       <meta name='viewport' content='width=device-width, initial-scale=1.0' />
       <meta name='description' content={description} />
-      <meta name='Language' content='fr' />
+      <meta name='Language' content='fr-FR' />
 
       {/* Open Graph Metadata */}
       <meta property='og:title' content={title} />

@@ -7,7 +7,7 @@ import prisma from '#src/tools/database/prisma.js'
 import authenticateUser from '#src/tools/plugins/authenticateUser.js'
 
 const bodyPutServiceSchema = Type.Object({
-  language: Type.Optional(userSettingsSchema.language)
+  locale: Type.Optional(userSettingsSchema.locale)
 })
 
 type BodyPutServiceSchemaType = Static<typeof bodyPutServiceSchema>
@@ -45,7 +45,7 @@ export const putCurrentUserSettings: FastifyPluginAsync = async (fastify) => {
       if (request.user == null) {
         throw fastify.httpErrors.forbidden()
       }
-      const { language } = request.body
+      const { locale } = request.body
       const settings = await prisma.userSetting.findFirst({
         where: { userId: request.user.current.id }
       })
@@ -55,7 +55,7 @@ export const putCurrentUserSettings: FastifyPluginAsync = async (fastify) => {
       const newSettings = await prisma.userSetting.update({
         where: { id: request.user.current.id },
         data: {
-          language: language ?? settings.language
+          locale: locale ?? settings.locale
         }
       })
       reply.statusCode = 200

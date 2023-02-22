@@ -34,7 +34,7 @@ const RootLayout = async (props: RootLayoutProps): Promise<JSX.Element> => {
   }
 
   return (
-    <html lang='fr' className='dark' style={{ colorScheme: 'dark' }}>
+    <html lang='fr-FR' className='dark' style={{ colorScheme: 'dark' }}>
       <head />
       <body className='font-inter flex h-screen flex-col bg-[#312E2B] pt-0'>
         <AuthenticationStoreInitializer tokens={tokens} user={user} />

@@ -8,7 +8,7 @@ import {
   userCurrentSchemaObject,
   userSchema
 } from '@carolo/models'
-import type { Language } from '@carolo/models'
+import type { Locale } from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
 import authenticateUser from '#src/tools/plugins/authenticateUser.js'
@@ -100,7 +100,7 @@ export const putCurrentUser: FastifyPluginAsync = async (fastify) => {
           type: 'confirm-email',
           email,
           url: url.toString(),
-          language: settings.language as Language
+          locale: settings.locale as Locale
         })
         await prisma.user.update({
           where: { id: request.user.current.id },
