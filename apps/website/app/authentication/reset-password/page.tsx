@@ -17,7 +17,7 @@ const ResetPasswordPage = (): JSX.Element => {
   const router = useRouter()
 
   const searchParams = useSearchParams()
-  const temporaryToken = searchParams.get('temporaryToken')
+  const temporaryToken = searchParams?.get('temporaryToken')
 
   const schema = useMemo(() => {
     return {

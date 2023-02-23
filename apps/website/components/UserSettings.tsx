@@ -103,8 +103,8 @@ export const UserSettings = (): JSX.Element => {
               src={logo ?? '/data/user-default.png'}
               alt='Profil Picture'
               draggable='false'
-              height={125}
               width={125}
+              height={125}
             />
           </div>
         </a>

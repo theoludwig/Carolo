@@ -8,18 +8,21 @@ generator client {
 }
 
 model User {
-  id                       Int            @id @default(autoincrement())
-  name                     String         @unique @db.VarChar(30)
-  email                    String         @unique @db.VarChar(254)
-  password                 String         @db.Text
-  logo                     String?        @db.Text
-  isConfirmed              Boolean        @default(false)
-  temporaryToken           String?        @unique @db.Text
+  id                       Int       @id @default(autoincrement())
+  name                     String    @unique @db.VarChar(30)
+  email                    String    @unique @db.VarChar(254)
+  password                 String    @db.Text
+  logo                     String?   @db.Text
+  isConfirmed              Boolean   @default(false)
+  temporaryToken           String?   @unique @db.Text
   temporaryExpirationToken DateTime?
-  createdAt                DateTime       @default(now())
-  updatedAt                DateTime       @default(now()) @updatedAt
-  settings                 UserSetting?
-  refreshTokens            RefreshToken[]
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @default(now()) @updatedAt
+
+  settings         UserSetting?
+  refreshTokens    RefreshToken[]
+  gamesPlayerWhite Game[]         @relation("PlayerWhite")
+  gamesPlayerBlack Game[]         @relation("PlayerBlack")
 }
 
 model UserSetting {
@@ -27,8 +30,9 @@ model UserSetting {
   locale    String   @default("fr-FR") @db.VarChar(5)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-  userId    Int      @unique
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userId Int   @unique
+  user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model RefreshToken {
@@ -36,6 +40,34 @@ model RefreshToken {
   token     String   @unique @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-  userId    Int
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userId Int
+  user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Game {
+  id        String   @id @default(uuid())
+  status    String   @default("LOBBY") @db.VarChar(30)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  playerWhite   User @relation(fields: [playerWhiteId], references: [id], name: "PlayerWhite")
+  playerWhiteId Int
+
+  playerBlack   User @relation(fields: [playerBlackId], references: [id], name: "PlayerBlack")
+  playerBlackId Int
+
+  GameAction GameAction[]
+}
+
+model GameAction {
+  id           Int      @id @default(autoincrement())
+  type         String   @default("MOVE") @db.VarChar(30)
+  fromPosition String?  @db.VarChar(14)
+  toPosition   String?  @db.VarChar(14)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+
+  gameId String
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
 }

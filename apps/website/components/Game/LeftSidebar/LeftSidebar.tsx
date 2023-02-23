@@ -1,5 +1,5 @@
-import { MovesHistory } from '@/components/Game/PlayScreen/LeftSidebar/MovesHistory'
-import { MovesNavigation } from '@/components/Game/PlayScreen/LeftSidebar/MovesNavigation'
+import { MovesHistory } from '@/components/Game/LeftSidebar/MovesHistory'
+import { MovesNavigation } from '@/components/Game/LeftSidebar/MovesNavigation'
 
 export const LeftSidebar = (): JSX.Element => {
   return (

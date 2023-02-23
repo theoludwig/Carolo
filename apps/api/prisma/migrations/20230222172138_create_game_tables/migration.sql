@@ -1,0 +1,40 @@
+-- CreateTable
+CREATE TABLE "Game" (
+  "id" TEXT NOT NULL,
+  "status" VARCHAR(30) NOT NULL DEFAULT 'LOBBY',
+  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "playerWhiteId" INTEGER NOT NULL,
+  "playerBlackId" INTEGER NOT NULL,
+  CONSTRAINT "Game_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "GameAction" (
+  "id" SERIAL NOT NULL,
+  "type" VARCHAR(30) NOT NULL DEFAULT 'MOVE',
+  "fromPosition" VARCHAR(14),
+  "toPosition" VARCHAR(14),
+  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "gameId" TEXT NOT NULL,
+  CONSTRAINT "GameAction_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE
+  "Game"
+ADD
+  CONSTRAINT "Game_playerWhiteId_fkey" FOREIGN KEY ("playerWhiteId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE
+  "Game"
+ADD
+  CONSTRAINT "Game_playerBlackId_fkey" FOREIGN KEY ("playerBlackId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE
+  "GameAction"
+ADD
+  CONSTRAINT "GameAction_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES "Game"("id") ON DELETE CASCADE ON UPDATE CASCADE;

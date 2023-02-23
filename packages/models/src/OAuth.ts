@@ -1,6 +1,7 @@
 import { Type } from '@sinclair/typebox'
 
 import { date, id } from './utils.js'
+import { userSchema } from './User.js'
 
 export const providers = [] as const
 export const strategies = [...providers, 'Local'] as const
@@ -21,5 +22,5 @@ export const oauthSchema = {
   provider: Type.Union([...providersTypebox]),
   createdAt: date.createdAt,
   updatedAt: date.updatedAt,
-  userId: id
+  userId: userSchema.id
 }

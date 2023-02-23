@@ -47,7 +47,7 @@ await application.register(fastifySwagger, {
       description: packageJSON.description,
       version: packageJSON.version
     },
-    tags: [{ name: 'users' }],
+    tags: [{ name: 'users' }, { name: 'games' }],
     components: {
       securitySchemes: {
         bearerAuth: {

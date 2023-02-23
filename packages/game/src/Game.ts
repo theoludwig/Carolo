@@ -16,20 +16,11 @@ export interface GameState {
   finalStatus: GameStatus
 }
 
-export interface GameOptions {
-  logger?: boolean
-}
-
-export class Game extends Observer<GameState> implements GameOptions {
+export class Game extends Observer<GameState> {
   private readonly _board: Board
   private readonly _players: Player[]
-  public readonly logger: boolean
 
-  public constructor(
-    board: Board,
-    players: Player[],
-    options: GameOptions = {}
-  ) {
+  public constructor(board: Board, players: Player[]) {
     super({
       currentPlayerIndex: 0,
       status: 'LOBBY',
@@ -39,7 +30,6 @@ export class Game extends Observer<GameState> implements GameOptions {
     if (players.length !== 2) {
       throw new Error('Game must have 2 players.')
     }
-    this.logger = options.logger ?? false
     this._board = board
     this._players = new Array(2)
     this._players[0] = players[0]
@@ -58,16 +48,12 @@ export class Game extends Observer<GameState> implements GameOptions {
     return this._players[color === 'WHITE' ? 0 : 1]
   }
 
-  public setPlayerName(index: number, name: string): void {
-    this._players[index].name = name
-  }
-
   public setPlayerColor(index: number, color: PieceColor): void {
     this._players[index].color = color
     this._players[1 - index].color = getOppositePieceColor(color)
   }
 
-  public giveUp(color: PieceColor): void {
+  public resign(color: PieceColor): void {
     if (this.state.finalStatus !== 'PLAY') {
       return
     }
@@ -220,11 +206,6 @@ export class Game extends Observer<GameState> implements GameOptions {
     }
     if (!this._board.canMove(fromPosition, toPosition)) {
       throw new Error('This move is not allowed.')
-    }
-    if (this.logger) {
-      console.log(
-        `game.playMove(new Position({ column: ${fromPosition.column}, row: ${fromPosition.row} }), new Position({ column: ${toPosition.column}, row: ${toPosition.row} }))`
-      )
     }
     const move = this._board.move(fromPosition, toPosition)
     if (move.capturedPiece != null) {

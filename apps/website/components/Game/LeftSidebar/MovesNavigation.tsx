@@ -1,5 +1,5 @@
 import { useGame } from '@/stores/game'
-import { MoveNavigationButton } from '@/components/Game/PlayScreen/LeftSidebar/MoveNavigationButton'
+import { MoveNavigationButton } from '@/components/Game/LeftSidebar/MoveNavigationButton'
 
 export const MovesNavigation = (): JSX.Element => {
   const { game, resetSelectedPosition } = useGame()

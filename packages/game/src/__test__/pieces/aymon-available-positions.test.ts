@@ -1,11 +1,11 @@
 import tap from 'tap'
 
 import { createGame } from '../utils.js'
-import type { CreateGameResult } from '../utils.js'
+import type { GameMachine } from '../utils.js'
 import { Aymon, Position } from '../../index.js'
 
 await tap.test('Aymon Available Positions', async (t) => {
-  const createGameResult: CreateGameResult = createGame()
+  const createGameResult: GameMachine = createGame()
   const { game, board } = createGameResult
   t.equal(game.status, 'LOBBY')
   game.play()

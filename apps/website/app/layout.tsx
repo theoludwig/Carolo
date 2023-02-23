@@ -2,6 +2,7 @@ import { cookies } from 'next/headers'
 import type { TokensJWT, UserCurrent } from '@carolo/models'
 
 import { Header } from '@/components/Header/Header'
+import type { SigninResult } from '@/lib/Authentication'
 import { Authentication } from '@/lib/Authentication'
 import { AuthenticationStoreInitializer } from '@/stores/AuthenticationStoreInitializer'
 
@@ -19,6 +20,42 @@ export type RootLayoutProps = React.PropsWithChildren
 
 export const dynamic = 'force-dynamic'
 
+const title = 'Carolo'
+const description =
+  "Le Carolo est un jeu de plateau stratégique, fait par la communauté, pour la communauté, qui allie autant l'aspect tactique que romantique !"
+const image = 'https://carolo.org/home.png'
+const url = 'https://carolo.org'
+
+export const metadata = {
+  title,
+  description,
+  colorScheme: 'dark',
+  openGraph: {
+    title,
+    description,
+    url,
+    siteName: title,
+    images: [
+      {
+        url: image,
+        width: 794,
+        height: 446
+      }
+    ],
+    locale: 'fr-FR',
+    type: 'website'
+  },
+  icons: {
+    icon: '/pieces/CAROLO_WHITE.png'
+  },
+  twitter: {
+    card: 'summary',
+    title,
+    description,
+    images: [image]
+  }
+}
+
 const RootLayout = async (props: RootLayoutProps): Promise<JSX.Element> => {
   const { children } = props
 
@@ -27,11 +64,10 @@ const RootLayout = async (props: RootLayoutProps): Promise<JSX.Element> => {
 
   let tokens: TokensJWT | null = null
   let user: UserCurrent['user'] | null = null
-  if (refreshToken != null) {
-    const result = await Authentication.signin(refreshToken.value)
-    tokens = result.tokens
-    user = result.user
-  }
+  let result: SigninResult | null = null
+  result = await Authentication.signin(refreshToken?.value)
+  tokens = result?.tokens ?? null
+  user = result?.user ?? null
 
   return (
     <html lang='fr-FR' className='dark' style={{ colorScheme: 'dark' }}>

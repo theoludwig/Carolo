@@ -3,7 +3,6 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import classNames from 'clsx'
 
 import { Button } from '@/components/Button'
 import { useAuthentication } from '@/stores/authentication'
@@ -42,12 +41,7 @@ export const HeaderAuthentication = (): JSX.Element => {
 
   return (
     <div
-      className={classNames(
-        'relative flex flex-col items-center rounded-md bg-[#272522] px-2 py-1',
-        {
-          'min-w-[170px]': isOpen
-        }
-      )}
+      className='relative flex min-w-[160px] flex-col items-center rounded-md bg-[#272522] px-2 py-1'
       ref={popupClickRef}
     >
       <div
@@ -73,7 +67,7 @@ export const HeaderAuthentication = (): JSX.Element => {
           <Button
             href='/users/settings'
             icon='/icons/settings.png'
-            className='!py-[2px] !px-0 !text-base'
+            className='!py-[2px] !px-0 !text-sm'
             variant='white'
             onClick={() => {
               setIsOpen(false)
@@ -84,7 +78,7 @@ export const HeaderAuthentication = (): JSX.Element => {
           <Button
             href={`/users/${user.id}`}
             icon='/icons/profile.png'
-            className='!py-[2px] !px-0 !text-base'
+            className='!py-[2px] !px-0 !text-sm'
             variant='purple'
             onClick={() => {
               setIsOpen(false)
@@ -94,7 +88,7 @@ export const HeaderAuthentication = (): JSX.Element => {
           </Button>
           <Button
             icon='/icons/signout.png'
-            className='!py-[2px] !px-0 !text-base'
+            className='!py-[2px] !px-0 !text-sm'
             variant='red'
             onClick={async () => {
               setIsOpen(false)

@@ -1,12 +1,12 @@
 import tap from 'tap'
 
 import { createGame } from './utils.js'
-import type { CreateGameResult } from './utils.js'
+import type { GameMachine } from './utils.js'
 import type { PieceColor } from '../index.js'
 import { Position, Board, Game, Player } from '../index.js'
 
 await tap.test('Game Initialization', async (t) => {
-  let createGameResult: CreateGameResult
+  let createGameResult: GameMachine
 
   t.beforeEach(async () => {
     createGameResult = createGame()
@@ -16,7 +16,7 @@ await tap.test('Game Initialization', async (t) => {
     "Lobby Initialization throws if there aren't 2 players",
     async (t) => {
       const board = new Board()
-      const player1 = new Player('Player 1', 'WHITE')
+      const player1 = new Player('WHITE')
       const players = [player1]
       t.throws(() => {
         new Game(board, players)
@@ -27,10 +27,6 @@ await tap.test('Game Initialization', async (t) => {
   await t.test('Lobby Initialization', async (t) => {
     const { game } = createGameResult
     t.equal(game.status, 'LOBBY')
-    game.setPlayerName(0, 'Bobby')
-    game.setPlayerName(1, 'Alice')
-    t.equal(game.getPlayer(0).name, 'Bobby')
-    t.equal(game.getPlayer(1).name, 'Alice')
 
     t.equal(game.getPlayer(0).color, 'WHITE')
     t.equal(game.getPlayer(1).color, 'BLACK')
@@ -151,9 +147,11 @@ await tap.test('Game Initialization', async (t) => {
       new Position({ row: 0, column: 0 })
     )
     t.equal(freePosition.isFree(), true)
+    let piece = null
     t.throws(() => {
-      console.log(freePosition.piece)
+      piece = freePosition.piece
     })
+    t.equal(piece, null)
   })
 
   await t.test(

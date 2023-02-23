@@ -2,24 +2,13 @@ import { Observer } from './Observer.js'
 import type { Piece, PieceColor } from './pieces/Piece'
 
 export interface PlayerState {
-  name: string
   color: PieceColor
   capturedPieces: Piece[]
 }
 
 export class Player extends Observer<PlayerState> {
-  public constructor(name: string, color: PieceColor) {
-    super({ name, color, capturedPieces: [] })
-  }
-
-  public get name(): string {
-    return this.state.name
-  }
-
-  public set name(name: string) {
-    this.setState((state) => {
-      state.name = name
-    })
+  public constructor(color: PieceColor) {
+    super({ color, capturedPieces: [] })
   }
 
   public get color(): PieceColor {

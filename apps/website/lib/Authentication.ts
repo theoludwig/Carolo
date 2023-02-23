@@ -107,7 +107,17 @@ export class Authentication {
     this.signout()
   }
 
-  public static async signin(refreshToken: string): Promise<SigninResult> {
+  public static async signin(
+    refreshToken?: string
+  ): Promise<SigninResult | null> {
+    if (refreshToken == null) {
+      useAuthentication.setState({
+        authenticated: false,
+        authentication: null,
+        user: null
+      })
+      return null
+    }
     cookies.set('refreshToken', refreshToken)
     let tokens: TokensJWT | null = null
     let authentication: Authentication | null = null

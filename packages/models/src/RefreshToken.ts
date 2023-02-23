@@ -1,8 +1,9 @@
 import { Type } from '@sinclair/typebox'
 import type { Static } from '@sinclair/typebox'
 
-import { userExample } from './User.js'
+import { userSchema } from './User.js'
 import { date, id } from './utils.js'
+import { userExample } from './authentication.js'
 
 export const tokensJWTSchema = {
   accessToken: Type.String(),
@@ -23,7 +24,7 @@ export const refreshTokensSchema = {
   token: Type.String({ format: 'uuid' }),
   createdAt: date.createdAt,
   updatedAt: date.updatedAt,
-  userId: id
+  userId: userSchema.id
 }
 
 export const refreshTokenSchemaObject = Type.Object(refreshTokensSchema)
@@ -32,8 +33,8 @@ export type RefreshToken = Static<typeof refreshTokenSchemaObject>
 
 export const refreshTokenExample: RefreshToken = {
   id: 1,
-  userId: userExample.id,
   token: 'sometokenUUID',
+  userId: userExample.id,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString()
 }

@@ -1,11 +1,11 @@
 import tap from 'tap'
 
 import { createGame } from './utils.js'
-import type { CreateGameResult } from './utils.js'
+import type { GameMachine } from './utils.js'
 import { Position } from '../index.js'
 
 await tap.test('Pieces Initial Available Positions', async (t) => {
-  let createGameResult: CreateGameResult
+  let createGameResult: GameMachine
 
   t.beforeEach(async () => {
     createGameResult = createGame()

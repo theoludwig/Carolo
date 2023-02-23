@@ -1,8 +1,9 @@
 import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
 
-import { userCurrentSchemaObject, userSchema } from '../User.js'
-import { userSettingsSchema } from '../UserSettings.js'
+import { userCurrentSchemaObject } from '../authentication.js'
+import { userSchema } from '../User.js'
+import { userSettingsSchema } from '../UserSetting.js'
 
 export const usersServiceSchema = {
   '/users/signup': {

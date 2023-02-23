@@ -1,10 +1,10 @@
 import Image from 'next/image'
 
 import { useGame } from '@/stores/game'
-import GiveUp from '@/public/icons/give-up.svg'
+import Resign from '@/public/icons/resign.svg'
 
 export const ControlGame = (): JSX.Element => {
-  const { game, gameState, resetSelectedPosition } = useGame()
+  const { playAction } = useGame()
 
   return (
     <>
@@ -12,12 +12,12 @@ export const ControlGame = (): JSX.Element => {
         <button
           className='rounded-md bg-[#8417DA] p-2 hover:bg-[#6514a6]'
           onClick={() => {
-            const currentPlayer = game.getPlayer(gameState.currentPlayerIndex)
-            game.giveUp(currentPlayer.color)
-            resetSelectedPosition()
+            playAction({
+              type: 'RESIGN'
+            })
           }}
         >
-          <Image quality={100} src={GiveUp} alt='Give Up' />
+          <Image quality={100} src={Resign} alt='Resign' />
         </button>
         <h3 className='mt-2'>Abandonner</h3>
       </div>

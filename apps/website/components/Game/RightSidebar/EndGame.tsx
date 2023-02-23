@@ -5,7 +5,7 @@ import { useGame } from '@/stores/game'
 import { Button } from '@/components/Button'
 
 export const EndGame = (): JSX.Element => {
-  const { game, board, gameState, resetSelectedPosition } = useGame()
+  const { game, board, gameState, resetSelectedPosition, options } = useGame()
 
   const winnerColor = useMemo(() => {
     if (gameState.status === 'WHITE_WON') {
@@ -40,7 +40,7 @@ export const EndGame = (): JSX.Element => {
     if (isCheck) {
       return 'Check'
     }
-    return 'GiveUp'
+    return 'Resign'
   }, [winnerColor, board])
 
   const reasonDisplay = useMemo(() => {
@@ -50,7 +50,7 @@ export const EndGame = (): JSX.Element => {
     if (reason === 'Check') {
       return 'Mat'
     }
-    if (reason === 'GiveUp') {
+    if (reason === 'Resign') {
       return 'Abandon'
     }
     return 'Pas de vainqueur'
@@ -62,17 +62,24 @@ export const EndGame = (): JSX.Element => {
         {reasonDisplay}{' '}
         {winnerColorDisplay != null ? `• Victoire ${winnerColorDisplay}` : null}
       </h2>
-      <Button
-        className='mt-2'
-        variant='purple'
-        onClick={() => {
-          game.restart()
-          game.play()
-          resetSelectedPosition()
-        }}
-      >
-        Recommencer
-      </Button>
+      <div className='mt-2'>
+        {options.gameId == null ? (
+          <Button
+            variant='purple'
+            onClick={() => {
+              game.restart()
+              game.play()
+              resetSelectedPosition()
+            }}
+          >
+            Recommencer
+          </Button>
+        ) : (
+          <Button variant='purple' href='/game'>
+            Rejouer
+          </Button>
+        )}
+      </div>
     </>
   )
 }

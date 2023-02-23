@@ -11,7 +11,7 @@ await tap.test('PUT /users/current', async (t) => {
   })
 
   await t.test('succeeds with valid accessToken and valid name', async (t) => {
-    const newName = 'John Doe'
+    const newName = 'John DOE'
     const { accessToken, user, userStubValue } = await authenticateUserTest()
     sinon.stub(prisma, 'user').value({
       ...userStubValue,
@@ -41,7 +41,7 @@ await tap.test('PUT /users/current', async (t) => {
   })
 
   await t.test('fails with name already used', async (t) => {
-    const newName = 'John Doe'
+    const newName = 'John DOE'
     const { accessToken, user, userStubValue } = await authenticateUserTest()
     sinon.stub(prisma, 'user').value({
       ...userStubValue,
