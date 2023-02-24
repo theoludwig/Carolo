@@ -4,7 +4,9 @@ import { useGame } from '@/stores/game'
 import Resign from '@/public/icons/resign.svg'
 
 export const ControlGame = (): JSX.Element => {
-  const { playAction } = useGame()
+  const playAction = useGame((state) => {
+    return state.playAction
+  })
 
   return (
     <>

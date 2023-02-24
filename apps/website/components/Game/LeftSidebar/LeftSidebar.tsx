@@ -1,3 +1,5 @@
+'use client'
+
 import { MovesHistory } from '@/components/Game/LeftSidebar/MovesHistory'
 import { MovesNavigation } from '@/components/Game/LeftSidebar/MovesNavigation'
 

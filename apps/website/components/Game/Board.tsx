@@ -7,13 +7,21 @@ import { BoardBase, Position } from '@carolo/game'
 import { useGame } from '@/stores/game'
 
 export const Board = (): JSX.Element => {
-  const {
-    selectPosition,
-    selectedPosition,
-    board,
-    boardState,
-    availablePiecePositions
-  } = useGame()
+  const selectPosition = useGame((state) => {
+    return state.selectPosition
+  })
+  const selectedPosition = useGame((state) => {
+    return state.selectedPosition
+  })
+  const board = useGame((state) => {
+    return state.board
+  })
+  const boardState = useGame((state) => {
+    return state.boardState
+  })
+  const availablePiecePositions = useGame((state) => {
+    return state.availablePiecePositions
+  })
 
   const lastMove = boardState.moves[boardState.currentMoveIndex]
 

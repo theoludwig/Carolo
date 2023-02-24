@@ -3,7 +3,7 @@ const path = require('node:path')
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  reactStrictMode: true,
+  reactStrictMode: false,
   experimental: {
     appDir: true,
     outputFileTracingRoot: path.join(__dirname, '../../')

@@ -5,7 +5,9 @@ import { BoardBase } from '@carolo/game'
 import { useGame } from '@/stores/game'
 
 export const MovesHistory = (): JSX.Element => {
-  const { boardState } = useGame()
+  const boardState = useGame((state) => {
+    return state.boardState
+  })
 
   return (
     <div className='scrollbar-firefox-support flex h-80 w-52 flex-col overflow-y-auto rounded-lg bg-[#272522]'>

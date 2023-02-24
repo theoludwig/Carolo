@@ -35,12 +35,20 @@ export const gamesServiceSchema = {
       response: gameActionSchemaObject
     }
   },
-  '/games/:gameId/lobby': {
+  '/games/:gameId': {
     get: {
       parameters: Type.Object({
         gameId: gameSchema.id
       }),
-      response: Type.Array(gameUserSchemaObject)
+      response: Type.Object({
+        id: gameSchema.id,
+        status: gameSchema.status,
+        playerWhiteId: gameSchema.playerWhiteId,
+        playerBlackId: gameSchema.playerBlackId,
+        playerWhite: Type.Union([gameUserSchemaObject, Type.Null()]),
+        playerBlack: Type.Union([gameUserSchemaObject, Type.Null()]),
+        actions: Type.Array(gameActionBasicSchemaObject)
+      })
     }
   }
 } as const
@@ -77,13 +85,13 @@ export interface GamesServices {
       >
     }
   }
-  '/games/:gameId/lobby': {
+  '/games/:gameId': {
     get: {
       parameters: Static<
-        (typeof gamesServiceSchema)['/games/:gameId/lobby']['get']['parameters']
+        (typeof gamesServiceSchema)['/games/:gameId']['get']['parameters']
       >
       response: Static<
-        (typeof gamesServiceSchema)['/games/:gameId/lobby']['get']['response']
+        (typeof gamesServiceSchema)['/games/:gameId']['get']['response']
       >
     }
   }

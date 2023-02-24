@@ -1,10 +1,8 @@
 import { redirect } from 'next/navigation'
-import type { GameUser, Services } from '@carolo/models'
-import type { PieceColor } from '@carolo/game'
+import type { Services } from '@carolo/models'
 
 import { Game } from '@/components/Game/Game'
 import type { GameStoreOptions } from '@/stores/game'
-import { GameStoreInitializer } from '@/stores/GameStoreInitializer'
 import { useAuthentication } from '@/stores/authentication'
 import { api } from '@/lib/configurations'
 
@@ -20,51 +18,57 @@ const GameMultiplayerPage = async (
   const { gameId } = props.params
   const { authenticated, user, authentication } = useAuthentication.getState()
 
-  const gameUsers: GameUser[] = []
+  const options: GameStoreOptions = {
+    gameId,
+    users: [],
+    playWithColors: [],
+    status: 'LOBBY',
+    actions: []
+  }
+
   try {
     const { data } = await api.get<
-      Services['/games/:gameId/lobby']['get']['response']
-    >(`/games/${gameId}/lobby`)
-    gameUsers.push(...data)
+      Services['/games/:gameId']['get']['response']
+    >(`/games/${gameId}`)
+
+    if (data.playerWhite != null) {
+      options.users.push(data.playerWhite)
+    }
+
+    if (data.playerBlack != null) {
+      options.users.push(data.playerBlack)
+    }
+
+    options.status = data.status
+    options.actions = data.actions
   } catch {
     return redirect('/game')
   }
 
-  if (gameUsers.length === 1 && authenticated) {
-    const [gameUser] = gameUsers
+  if (options.users.length === 1 && authenticated) {
+    const [gameUser] = options.users
     if (gameUser.id !== user.id) {
       try {
         const { data } = await authentication.api.post<
           Services['/games/:gameId/join']['post']['response']
         >(`/games/${gameId}/join`, {})
-        gameUsers.push(data)
+        options.users.push(data)
       } catch {
         return redirect('/game')
       }
     }
   }
 
-  const playWithColors: PieceColor[] = []
   if (authenticated) {
-    for (const gameUser of gameUsers) {
+    for (const gameUser of options.users) {
       if (gameUser.id === user.id) {
-        playWithColors.push(gameUser.color)
+        options.playWithColors.push(gameUser.color)
         break
       }
     }
   }
 
-  const options: GameStoreOptions = {
-    playWithColors,
-    gameId
-  }
-
-  return (
-    <>
-      <GameStoreInitializer options={options} users={gameUsers} />
-      <Game />
-    </>
-  )
+  return <Game options={options} />
 }
 
 export default GameMultiplayerPage

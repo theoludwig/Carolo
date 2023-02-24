@@ -2,7 +2,12 @@ import { useGame } from '@/stores/game'
 import { MoveNavigationButton } from '@/components/Game/LeftSidebar/MoveNavigationButton'
 
 export const MovesNavigation = (): JSX.Element => {
-  const { game, resetSelectedPosition } = useGame()
+  const game = useGame((state) => {
+    return state.game
+  })
+  const resetSelectedPosition = useGame((state) => {
+    return state.resetSelectedPosition
+  })
 
   return (
     <nav className='mt-4 flex w-52 justify-between'>

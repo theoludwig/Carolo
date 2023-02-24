@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import { useMemo } from 'react'
 import classNames from 'clsx'
@@ -12,7 +14,12 @@ export interface PlayerProps {
 
 export const Player = (props: PlayerProps): JSX.Element => {
   const { playerState, playerIndex } = props
-  const { gameState, users } = useGame()
+  const gameState = useGame((state) => {
+    return state.gameState
+  })
+  const users = useGame((state) => {
+    return state.users
+  })
 
   const isPlayerTurn = useMemo(() => {
     return gameState.currentPlayerIndex === playerIndex

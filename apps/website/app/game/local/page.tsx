@@ -2,10 +2,9 @@ import type { GameUser } from '@carolo/models'
 
 import { Game } from '@/components/Game/Game'
 import type { GameStoreOptions } from '@/stores/game'
-import { GameStoreInitializer } from '@/stores/GameStoreInitializer'
 
 const GameLocalPage = (): JSX.Element => {
-  const gameUsers: GameUser[] = [
+  const users: GameUser[] = [
     {
       id: 1,
       name: 'Joueur 1',
@@ -19,17 +18,14 @@ const GameLocalPage = (): JSX.Element => {
       logo: null
     }
   ]
-
   const options: GameStoreOptions = {
-    playWithColors: ['WHITE', 'BLACK']
+    users,
+    playWithColors: ['WHITE', 'BLACK'],
+    status: 'PLAY',
+    actions: []
   }
 
-  return (
-    <>
-      <GameStoreInitializer options={options} users={gameUsers} />
-      <Game />
-    </>
-  )
+  return <Game options={options} />
 }
 
 export default GameLocalPage

@@ -45,6 +45,12 @@ export const postActionsGames: FastifyPluginAsync = async (fastify) => {
       }
       const { gameId } = request.params
       const action = request.body
+      if (
+        action.type === 'MOVE' &&
+        (action.fromPosition == null || action.toPosition == null)
+      ) {
+        throw fastify.httpErrors.badRequest('Invalid move.')
+      }
       const games = GameRepository.getInstance()
       const gameMachine = games.getGameMachine(gameId)
       if (gameMachine == null) {
@@ -54,19 +60,9 @@ export const postActionsGames: FastifyPluginAsync = async (fastify) => {
       if (player == null) {
         throw fastify.httpErrors.badRequest('You are not in this game.')
       }
-      const isLobby = gameMachine.game.state.status === 'LOBBY'
-      if (isLobby) {
-        gameMachine.game.play()
-      }
       const currentPlayer = gameMachine.game.getCurrentPlayer()
       if (currentPlayer.color !== player.color) {
         throw fastify.httpErrors.badRequest('It is not your turn.')
-      }
-      if (
-        action.type === 'MOVE' &&
-        (action.fromPosition == null || action.toPosition == null)
-      ) {
-        throw fastify.httpErrors.badRequest('Invalid move.')
       }
 
       if (action.type === 'MOVE') {
@@ -99,7 +95,7 @@ export const postActionsGames: FastifyPluginAsync = async (fastify) => {
           id: gameId
         }
       })
-      if (isLobby || game == null) {
+      if (game == null) {
         const playerBlack = games.getPlayerByColor(gameId, 'BLACK')
         const playerWhite = games.getPlayerByColor(gameId, 'WHITE')
         if (playerBlack == null || playerWhite == null) {

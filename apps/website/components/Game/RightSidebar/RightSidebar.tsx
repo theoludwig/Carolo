@@ -1,9 +1,13 @@
+'use client'
+
 import { useGame } from '@/stores/game'
 import { EndGame } from '@/components/Game/RightSidebar/EndGame'
 import { ControlGame } from '@/components/Game/RightSidebar/ControlGame'
 
 export const RightSidebar = (): JSX.Element => {
-  const { gameState } = useGame()
+  const gameState = useGame((state) => {
+    return state.gameState
+  })
 
   return (
     <div className='flex w-4/12 items-center justify-center text-center'>
