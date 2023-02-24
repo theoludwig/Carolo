@@ -35,23 +35,31 @@ export const ControlGame = (): JSX.Element => {
   return (
     <>
       <div className='flex flex-col items-center'>
-        <button
-          className='rounded-md bg-[#8417DA] p-2 hover:bg-[#6514a6]'
-          onClick={() => {
-            const currentPlayer = game.getPlayer(gameState.currentPlayerIndex)
-            let color = currentPlayer.color
-            if (authenticated && gameId != null && gameUser != null) {
-              color = gameUser.color
-            }
-            playAction({
-              type: 'RESIGN',
-              color
-            })
-          }}
-        >
-          <Image quality={100} src={Resign} alt='Resign' />
-        </button>
-        <h3 className='mt-2'>Abandonner</h3>
+        {gameId == null || gameUser != null ? (
+          <>
+            <button
+              className='rounded-md bg-[#8417DA] p-2 hover:bg-[#6514a6]'
+              onClick={() => {
+                const currentPlayer = game.getPlayer(
+                  gameState.currentPlayerIndex
+                )
+                let color = currentPlayer.color
+                if (authenticated && gameId != null && gameUser != null) {
+                  color = gameUser.color
+                }
+                playAction({
+                  type: 'RESIGN',
+                  color
+                })
+              }}
+            >
+              <Image quality={100} src={Resign} alt='Resign' />
+            </button>
+            <h3 className='mt-2'>Abandonner</h3>
+          </>
+        ) : (
+          <p>Partie en cours</p>
+        )}
       </div>
     </>
   )

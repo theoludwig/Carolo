@@ -41,7 +41,9 @@ export const postGames: FastifyPluginAsync = async (fastify) => {
       const games = GameRepository.getInstance()
       const player = games.getPlayer(request.user.current.id)
       if (player != null) {
-        throw fastify.httpErrors.badRequest('You are already in a game.')
+        throw fastify.httpErrors.badRequest(
+          `You are already in a game. gameId: ${player.gameId}`
+        )
       }
       const gameId = games.createGame(request.user.current.id, color)
       reply.statusCode = 201

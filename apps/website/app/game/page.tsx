@@ -76,7 +76,8 @@ const GamePage = (): JSX.Element => {
                 >('/games', body)
                 setFetchState('success')
                 router.push(`/game/${data.gameId}`)
-              } catch {
+              } catch (error) {
+                console.error(error)
                 setFetchState('error')
                 setMessage('Erreur interne du serveur.')
               }

@@ -69,7 +69,7 @@ export const EndGame = (): JSX.Element => {
       </h2>
       <div className='mt-2'>
         <Button variant='purple' href='/game'>
-          Rejouer
+          Nouvelle partie
         </Button>
       </div>
     </>

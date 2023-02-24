@@ -13,12 +13,25 @@ await tap.test('GET /users/[userId]', async (t) => {
   await t.test('succeeds', async (t) => {
     sinon.stub(prisma, 'user').value({
       findUnique: async () => {
-        return userExample
+        return {
+          ...userExample,
+          createdAt: new Date(userExample.createdAt),
+          updatedAt: new Date(userExample.updatedAt)
+        }
       }
     })
     sinon.stub(prisma, 'userSetting').value({
       findFirst: async () => {
-        return userSettingsExample
+        return {
+          ...userSettingsExample,
+          createdAt: new Date(userSettingsExample.createdAt),
+          updatedAt: new Date(userSettingsExample.updatedAt)
+        }
+      }
+    })
+    sinon.stub(prisma, 'game').value({
+      count: async () => {
+        return 0
       }
     })
     const response = await application.inject({
