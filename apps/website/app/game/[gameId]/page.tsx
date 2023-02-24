@@ -3,7 +3,6 @@ import type { Services } from '@carolo/models'
 
 import { Game } from '@/components/Game/Game'
 import type { GameStoreOptions } from '@/stores/game'
-import { useAuthentication } from '@/stores/authentication'
 import { api } from '@/lib/configurations'
 
 export interface GameMultiplayerPageProps {
@@ -16,7 +15,6 @@ const GameMultiplayerPage = async (
   props: GameMultiplayerPageProps
 ): Promise<JSX.Element> => {
   const { gameId } = props.params
-  const { authenticated, user, authentication } = useAuthentication.getState()
 
   const options: GameStoreOptions = {
     gameId,
@@ -43,29 +41,6 @@ const GameMultiplayerPage = async (
     options.actions = data.actions
   } catch {
     return redirect('/game')
-  }
-
-  if (options.users.length === 1 && authenticated) {
-    const [gameUser] = options.users
-    if (gameUser.id !== user.id) {
-      try {
-        const { data } = await authentication.api.post<
-          Services['/games/:gameId/join']['post']['response']
-        >(`/games/${gameId}/join`, {})
-        options.users.push(data)
-      } catch {
-        return redirect('/game')
-      }
-    }
-  }
-
-  if (authenticated) {
-    for (const gameUser of options.users) {
-      if (gameUser.id === user.id) {
-        options.playWithColors.push(gameUser.color)
-        break
-      }
-    }
   }
 
   return <Game options={options} />

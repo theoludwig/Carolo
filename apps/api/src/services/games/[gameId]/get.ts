@@ -71,11 +71,6 @@ export const getGameById: FastifyPluginAsync = async (fastify) => {
       if (game != null) {
         status = game.status as GameStatus
       }
-      if (status === 'LOBBY' && players.length === 2) {
-        gameMachine.game.restart()
-        gameMachine.game.play()
-        status = 'PLAY'
-      }
 
       const actions = (
         await prisma.gameAction.findMany({

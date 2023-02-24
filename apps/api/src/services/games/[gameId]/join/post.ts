@@ -56,6 +56,12 @@ export const postJoinGames: FastifyPluginAsync = async (fastify) => {
       if (player == null) {
         throw fastify.httpErrors.internalServerError()
       }
+
+      if (gameMachine.game.state.status === 'LOBBY') {
+        gameMachine.game.restart()
+        gameMachine.game.play()
+      }
+
       const gameUser = {
         id: player.id,
         name: request.user.current.name,

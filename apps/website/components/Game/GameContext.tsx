@@ -6,6 +6,7 @@ import { io } from 'socket.io-client'
 import type { Socket } from 'socket.io-client'
 import type { GameAction, GameUser } from '@carolo/models'
 
+import { useAuthentication } from '@/stores/authentication'
 import type { GameStore, GameStoreOptions } from '@/stores/game'
 import { createGameStore } from '@/stores/game'
 import { API_URL } from '@/lib/configurations'
@@ -22,6 +23,7 @@ export const GameContextProvider = (
   const { children, options } = props
 
   const storeRef = useRef<StoreApi<GameStore>>(createGameStore(options))
+  const { authenticated, user } = useAuthentication()
 
   useEffect(() => {
     let socket: Socket | null = null
@@ -41,8 +43,19 @@ export const GameContextProvider = (
       socket.on('game:joinPlayer', (gameUser: GameUser) => {
         console.log('socket.game:joinPlayer: ', gameUser)
         gameStore.setState((state) => {
+          const users = [...state.users, gameUser]
+          const playWithColors = [...state.playWithColors]
+          if (authenticated) {
+            const gameUser = users.find((gameUser) => {
+              return gameUser.id === user.id
+            })
+            if (gameUser != null) {
+              playWithColors.push(gameUser.color)
+            }
+          }
           return {
-            users: [...state.users, gameUser]
+            users,
+            playWithColors
           }
         })
         gameStoreState.game.restart()
@@ -58,7 +71,13 @@ export const GameContextProvider = (
         }
       })
     }
-  }, [options.gameId, options.playWithColors])
+
+    return () => {
+      if (socket != null) {
+        socket.disconnect()
+      }
+    }
+  }, [authenticated, options.gameId, options.playWithColors, user])
 
   return (
     <GameContext.Provider value={storeRef.current}>
