@@ -29,7 +29,9 @@ export const userPublicSchema = {
 }
 
 export const userPublicSchemaObject = Type.Object({
-  user: Type.Object(userPublicSchema)
+  user: Type.Object(userPublicSchema),
+  numberOfVictory: Type.Integer(),
+  numberOfDefeat: Type.Integer()
 })
 
 export const userCurrentSchemaObject = Type.Object({

@@ -1,11 +1,22 @@
 import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
 
-import { userCurrentSchemaObject } from '../authentication.js'
+import {
+  userCurrentSchemaObject,
+  userPublicSchemaObject
+} from '../authentication.js'
 import { userSchema } from '../User.js'
 import { userSettingsSchema } from '../UserSetting.js'
 
 export const usersServiceSchema = {
+  '/users/:userId': {
+    get: {
+      parameters: Type.Object({
+        userId: userSchema.id
+      }),
+      response: userPublicSchemaObject
+    }
+  },
   '/users/signup': {
     post: {
       body: Type.Object({
@@ -23,6 +34,16 @@ export const usersServiceSchema = {
 } as const
 
 export interface UsersServices {
+  '/users/:userId': {
+    get: {
+      parameters: Static<
+        (typeof usersServiceSchema)['/users/:userId']['get']['parameters']
+      >
+      response: Static<
+        (typeof usersServiceSchema)['/users/:userId']['get']['response']
+      >
+    }
+  }
   '/users/signup': {
     post: {
       body: Static<(typeof usersServiceSchema)['/users/signup']['post']['body']>

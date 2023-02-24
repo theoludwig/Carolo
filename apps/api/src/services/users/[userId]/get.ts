@@ -1,26 +1,15 @@
-import type { Static } from '@sinclair/typebox'
-import { Type } from '@sinclair/typebox'
 import type { FastifyPluginAsync, FastifySchema } from 'fastify'
-import {
-  fastifyErrors,
-  userPublicSchema,
-  userPublicSchemaObject
-} from '@carolo/models'
+import type { Locale, Services } from '@carolo/models'
+import { fastifyErrors, servicesSchema } from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
-
-const parametersGetUserSchema = Type.Object({
-  userId: userPublicSchema.id
-})
-
-type ParametersGetUser = Static<typeof parametersGetUserSchema>
 
 const getServiceSchema: FastifySchema = {
   description: 'GET the public user informations with its id.',
   tags: ['users'] as string[],
-  params: parametersGetUserSchema,
+  params: servicesSchema['/users/:userId'].get.parameters,
   response: {
-    200: userPublicSchemaObject,
+    200: servicesSchema['/users/:userId'].get.response,
     400: fastifyErrors[400],
     404: fastifyErrors[404],
     500: fastifyErrors[500]
@@ -29,7 +18,8 @@ const getServiceSchema: FastifySchema = {
 
 export const getUserById: FastifyPluginAsync = async (fastify) => {
   fastify.route<{
-    Params: ParametersGetUser
+    Params: Services['/users/:userId']['get']['parameters']
+    Reply: Services['/users/:userId']['get']['response']
   }>({
     method: 'GET',
     url: '/users/:userId',
@@ -59,12 +49,58 @@ export const getUserById: FastifyPluginAsync = async (fastify) => {
       if (user == null) {
         throw fastify.httpErrors.notFound('User not found')
       }
+
+      const numberOfVictory = await prisma.game.count({
+        where: {
+          status: {
+            in: ['WHITE_WON', 'BLACK_WON']
+          },
+          OR: [
+            {
+              status: 'WHITE_WON',
+              playerWhiteId: userId
+            },
+            {
+              status: 'BLACK_WON',
+              playerBlackId: userId
+            }
+          ]
+        }
+      })
+
+      const numberOfDefeat = await prisma.game.count({
+        where: {
+          status: {
+            in: ['WHITE_WON', 'BLACK_WON']
+          },
+          OR: [
+            {
+              status: 'WHITE_WON',
+              playerBlackId: userId
+            },
+            {
+              status: 'BLACK_WON',
+              playerWhiteId: userId
+            }
+          ]
+        }
+      })
+
       reply.statusCode = 200
       return {
         user: {
           ...user,
-          settings
-        }
+          createdAt: user.createdAt.toISOString(),
+          updatedAt: user.updatedAt.toISOString(),
+          settings: {
+            ...settings,
+            locale: settings.locale as Locale,
+            createdAt: settings.createdAt.toISOString(),
+            updatedAt: settings.updatedAt.toISOString()
+          }
+        },
+        numberOfDefeat,
+        numberOfVictory
       }
     }
   })
