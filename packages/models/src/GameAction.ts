@@ -1,7 +1,7 @@
 import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
 
-import { gameExample, gameSchema } from './Game.js'
+import { gameExample, gameSchema, pieceColors } from './Game.js'
 import { date, id } from './utils.js'
 
 export type ActionType = Static<typeof gameActionSchema.type>
@@ -23,6 +23,7 @@ export const gameActionSchema = {
     Type.String({ minLength: 14, maxLength: 14, examples: ['column-0-row-0'] }),
     Type.Null()
   ]),
+  color: Type.Union([...pieceColors, Type.Null()]),
   createdAt: date.createdAt,
   updatedAt: date.updatedAt,
   gameId: gameSchema.id
@@ -33,7 +34,8 @@ export const gameActionSchemaObject = Type.Object(gameActionSchema)
 const gameActionBasicSchema = {
   type: gameActionSchema.type,
   fromPosition: Type.Optional(gameActionSchema.fromPosition),
-  toPosition: Type.Optional(gameActionSchema.toPosition)
+  toPosition: Type.Optional(gameActionSchema.toPosition),
+  color: Type.Optional(gameActionSchema.color)
 }
 
 export const gameActionBasicSchemaObject = Type.Object(gameActionBasicSchema)
@@ -47,6 +49,7 @@ export const gameActionsExamples: GameAction[] = [
     type: 'MOVE',
     fromPosition: 'column-5-row-7',
     toPosition: 'column-4-row-5',
+    color: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     gameId: gameExample.id
@@ -56,6 +59,7 @@ export const gameActionsExamples: GameAction[] = [
     type: 'MOVE',
     fromPosition: 'column-5-row-0',
     toPosition: 'column-4-row-2',
+    color: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     gameId: gameExample.id
@@ -65,6 +69,7 @@ export const gameActionsExamples: GameAction[] = [
     type: 'MOVE',
     fromPosition: 'column-4-row-7',
     toPosition: 'column-7-row-7',
+    color: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     gameId: gameExample.id
@@ -74,6 +79,7 @@ export const gameActionsExamples: GameAction[] = [
     type: 'MOVE',
     fromPosition: 'column-7-row-7',
     toPosition: 'column-7-row-0',
+    color: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     gameId: gameExample.id
@@ -83,6 +89,7 @@ export const gameActionsExamples: GameAction[] = [
     type: 'MOVE',
     fromPosition: 'column-7-row-0',
     toPosition: 'column-5-row-0',
+    color: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     gameId: gameExample.id

@@ -89,9 +89,8 @@ export const createGameStore = (
       if (action.type === 'SKIP_BOUNCING') {
         game.skipBouncing()
       }
-      if (action.type === 'RESIGN') {
-        const currentPlayer = game.getCurrentPlayer()
-        game.resign(currentPlayer.color)
+      if (action.type === 'RESIGN' && action.color != null) {
+        game.resign(action.color)
       }
       return null
     }
@@ -153,19 +152,27 @@ export const createGameStore = (
       },
       playGlobalAction,
       playAction: (action) => {
-        const store = get()
         let move: Move | null = null
-        if (store.canPlay()) {
-          move = playGlobalAction(action)
-          const { authenticated, authentication } = useAuthentication.getState()
-          if (store.gameId != null && authenticated) {
-            authentication.api
-              .post(`/games/${store.gameId}/actions`, action)
-              .catch((error) => {
-                console.error(error)
-              })
-          }
+        const store = get()
+        const { authenticated, authentication } = useAuthentication.getState()
+
+        if (
+          !store.canPlay() &&
+          (action.type === 'MOVE' || action.type === 'SKIP_BOUNCING')
+        ) {
+          return null
         }
+
+        move = playGlobalAction(action)
+
+        if (store.gameId != null && authenticated) {
+          authentication.api
+            .post(`/games/${store.gameId}/actions`, action)
+            .catch((error) => {
+              console.error(error)
+            })
+        }
+
         return move
       },
       resetSelectedPosition: () => {

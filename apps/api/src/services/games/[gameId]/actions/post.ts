@@ -51,6 +51,10 @@ export const postActionsGames: FastifyPluginAsync = async (fastify) => {
       ) {
         throw fastify.httpErrors.badRequest('Invalid move.')
       }
+      if (action.type === 'RESIGN' && action.color == null) {
+        throw fastify.httpErrors.badRequest('Invalid resign.')
+      }
+
       const games = GameRepository.getInstance()
       const gameMachine = games.getGameMachine(gameId)
       if (gameMachine == null) {
@@ -60,8 +64,27 @@ export const postActionsGames: FastifyPluginAsync = async (fastify) => {
       if (player == null) {
         throw fastify.httpErrors.badRequest('You are not in this game.')
       }
+
+      if (action.type === 'RESIGN' && action.color !== player.color) {
+        throw fastify.httpErrors.badRequest(
+          'You cannot resign for the other player.'
+        )
+      }
+
+      if (
+        gameMachine.game.state.status === 'LOBBY' &&
+        action.type === 'RESIGN'
+      ) {
+        games.deleteGame(gameId)
+        throw fastify.httpErrors.badRequest('Game is not in play.')
+      }
+
+      if (gameMachine.game.state.status !== 'PLAY') {
+        throw fastify.httpErrors.badRequest('Game is not in play.')
+      }
+
       const currentPlayer = gameMachine.game.getCurrentPlayer()
-      if (currentPlayer.color !== player.color) {
+      if (action.type !== 'RESIGN' && currentPlayer.color !== player.color) {
         throw fastify.httpErrors.badRequest('It is not your turn.')
       }
 
@@ -86,8 +109,8 @@ export const postActionsGames: FastifyPluginAsync = async (fastify) => {
         gameMachine.game.skipBouncing()
       }
 
-      if (action.type === 'RESIGN') {
-        gameMachine.game.resign(currentPlayer.color)
+      if (action.type === 'RESIGN' && action.color === player.color) {
+        gameMachine.game.resign(action.color)
       }
 
       let game = await prisma.game.findUnique({
@@ -104,7 +127,7 @@ export const postActionsGames: FastifyPluginAsync = async (fastify) => {
         game = await prisma.game.create({
           data: {
             id: gameId,
-            status: 'PLAY',
+            status: gameMachine.game.state.status,
             playerBlackId: playerBlack.id,
             playerWhiteId: playerWhite.id
           }
@@ -116,7 +139,8 @@ export const postActionsGames: FastifyPluginAsync = async (fastify) => {
           gameId: game.id,
           type: action.type,
           fromPosition: action.fromPosition,
-          toPosition: action.toPosition
+          toPosition: action.toPosition,
+          color: action.color
         }
       })
 
@@ -137,6 +161,7 @@ export const postActionsGames: FastifyPluginAsync = async (fastify) => {
       return {
         ...gameAction,
         type: action.type,
+        color: action.color ?? null,
         createdAt: gameAction.createdAt.toISOString(),
         updatedAt: gameAction.updatedAt.toISOString()
       }
