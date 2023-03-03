@@ -44,7 +44,6 @@ npm-debug.log*
 # misc
 .DS_Store
 *.pem
-.vercel
 .turbo
 apps/website/public/rules
 bin/

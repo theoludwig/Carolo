@@ -17,17 +17,15 @@
     "lint": "turbo run lint",
     "lint:editorconfig": "editorconfig-checker",
     "lint:prettier": "prettier \".\" --check --ignore-path \".gitignore\"",
-    "lint:markdown": "markdownlint-cli2",
-    "vercel": "vercel"
+    "lint:markdown": "markdownlint-cli2"
   },
   "devDependencies": {
     "@carolo/eslint-config-custom": "*",
     "editorconfig-checker": "5.0.1",
     "markdownlint-cli2": "0.6.0",
     "prettier": "2.8.4",
-    "prettier-plugin-tailwindcss": "0.2.3",
-    "turbo": "1.8.2",
-    "typescript": "4.9.5",
-    "vercel": "28.16.5"
+    "prettier-plugin-tailwindcss": "0.2.4",
+    "turbo": "1.8.3",
+    "typescript": "4.9.5"
   }
 }

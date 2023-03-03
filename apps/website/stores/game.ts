@@ -79,10 +79,21 @@ export const createGameStore = (
         const toPosition = Position.fromString(
           action.toPosition as PositionString
         )
+
+        const lastMove = board.getLastMove()
+        if (
+          lastMove != null &&
+          lastMove.fromPosition.equals(fromPosition) &&
+          lastMove.toPosition.equals(toPosition)
+        ) {
+          return null
+        }
+
         try {
           const move = game.playMove(fromPosition, toPosition)
           return move
-        } catch {
+        } catch (error) {
+          console.error(error)
           return null
         }
       }
@@ -236,7 +247,8 @@ export const createGameStore = (
                 ),
                 selectedPosition: fromPosition
               }
-            } catch {
+            } catch (error) {
+              console.error(error)
               return {
                 availablePiecePositions: new Map(),
                 selectedPosition: null

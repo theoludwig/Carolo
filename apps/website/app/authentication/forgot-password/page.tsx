@@ -51,7 +51,7 @@ const ForgotPasswordPage = (): JSX.Element => {
       }
       return {
         type: 'error',
-        value: 'Erreur interne du serveur.'
+        value: 'interne du serveur.'
       }
     }
   }

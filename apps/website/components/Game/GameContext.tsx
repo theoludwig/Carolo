@@ -28,7 +28,20 @@ export const GameContextProvider = (
   useEffect(() => {
     let socket: Socket | null = null
     const gameStore = storeRef.current
-    const gameStoreState = gameStore.getState()
+
+    const playWithColors = [...gameStore.getState().playWithColors]
+    for (const gameUser of options.users) {
+      if (
+        authenticated &&
+        gameUser.id === user.id &&
+        !playWithColors.includes(gameUser.color)
+      ) {
+        playWithColors.push(gameUser.color)
+      }
+    }
+    gameStore.setState({
+      playWithColors
+    })
 
     if (options.gameId != null) {
       socket = io(API_URL)
@@ -49,7 +62,7 @@ export const GameContextProvider = (
             const gameUser = users.find((gameUser) => {
               return gameUser.id === user.id
             })
-            if (gameUser != null) {
+            if (gameUser != null && !playWithColors.includes(gameUser.color)) {
               playWithColors.push(gameUser.color)
             }
           }
@@ -58,17 +71,14 @@ export const GameContextProvider = (
             playWithColors
           }
         })
-        gameStoreState.game.restart()
-        gameStoreState.game.play()
+        gameStore.getState().game.restart()
+        gameStore.getState().game.play()
       })
 
       socket.on('game:action', (action: GameAction) => {
         console.log('socket.game:action: ', action)
-        const player = gameStoreState.game.getCurrentPlayer()
-        if (!options.playWithColors.includes(player.color)) {
-          console.log('socket.game:action: applied: ', action)
-          gameStoreState.playGlobalAction(action)
-        }
+        gameStore.getState().game.lastMove()
+        gameStore.getState().playGlobalAction(action)
       })
     }
 
@@ -77,7 +87,7 @@ export const GameContextProvider = (
         socket.disconnect()
       }
     }
-  }, [authenticated, options.gameId, options.playWithColors, user])
+  }, [authenticated, options, user])
 
   return (
     <GameContext.Provider value={storeRef.current}>

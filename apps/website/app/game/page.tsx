@@ -79,7 +79,7 @@ const GamePage = (): JSX.Element => {
               } catch (error) {
                 console.error(error)
                 setFetchState('error')
-                setMessage('Erreur interne du serveur.')
+                setMessage('interne du serveur.')
               }
             }}
           >
