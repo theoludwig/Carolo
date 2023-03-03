@@ -18,6 +18,13 @@ export const gamesServiceSchema = {
       })
     }
   },
+  '/games/current': {
+    get: {
+      response: Type.Object({
+        gameId: Type.Union([gameSchema.id, Type.Null()])
+      })
+    }
+  },
   '/games/:gameId/join': {
     post: {
       parameters: Type.Object({
@@ -59,6 +66,13 @@ export interface GamesServices {
       body: Static<(typeof gamesServiceSchema)['/games']['post']['body']>
       response: Static<
         (typeof gamesServiceSchema)['/games']['post']['response']
+      >
+    }
+  }
+  '/games/current': {
+    get: {
+      response: Static<
+        (typeof gamesServiceSchema)['/games/current']['get']['response']
       >
     }
   }

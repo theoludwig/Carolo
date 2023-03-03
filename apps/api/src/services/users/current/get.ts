@@ -1,4 +1,9 @@
 import type { FastifyPluginAsync, FastifySchema } from 'fastify'
+import type {
+  AuthenticationStrategy,
+  Locale,
+  UserCurrent
+} from '@carolo/models'
 import { fastifyErrors, userCurrentSchemaObject } from '@carolo/models'
 
 import prisma from '#src/tools/database/prisma.js'
@@ -24,7 +29,9 @@ const getCurrentUserSchema: FastifySchema = {
 export const getCurrentUser: FastifyPluginAsync = async (fastify) => {
   await fastify.register(authenticateUser)
 
-  fastify.route({
+  fastify.route<{
+    Reply: UserCurrent
+  }>({
     method: 'GET',
     url: '/users/current',
     schema: getCurrentUserSchema,
@@ -39,12 +46,19 @@ export const getCurrentUser: FastifyPluginAsync = async (fastify) => {
       if (settings == null) {
         throw fastify.httpErrors.internalServerError()
       }
-      const strategies = ['Local'] as const
+      const strategies = ['Local'] as AuthenticationStrategy[]
       reply.statusCode = 200
       return {
         user: {
           ...user.current,
-          settings,
+          createdAt: user.current.createdAt.toISOString(),
+          updatedAt: user.current.updatedAt.toISOString(),
+          settings: {
+            ...settings,
+            locale: settings.locale as Locale,
+            createdAt: settings.createdAt.toISOString(),
+            updatedAt: settings.updatedAt.toISOString()
+          },
           currentStrategy: user.currentStrategy,
           strategies
         }
