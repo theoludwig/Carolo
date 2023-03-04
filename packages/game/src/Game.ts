@@ -183,6 +183,12 @@ export class Game extends Observer<GameState> {
         state.status = `${currentPlayer.color}_WON`
         state.finalStatus = state.status
       })
+    } else if (this._board.isCheck(currentPlayer.color)) {
+      this.setState((state) => {
+        state.isBouncingOnGoing = false
+        state.status = `${oppositeColor}_WON`
+        state.finalStatus = state.status
+      })
     } else if (move.isNextPlayerTurn) {
       this.nextPlayer()
     } else {
