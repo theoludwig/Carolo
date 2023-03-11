@@ -17,7 +17,7 @@ export const application = fastify({
   ajv: {
     customOptions: {
       strict: 'log',
-      keywords: ['kind', 'modifier'],
+      keywords: ['kind', 'modifier', 'example'],
       formats: {
         full: true
       }

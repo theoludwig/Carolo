@@ -2,7 +2,10 @@ import crypto from 'node:crypto'
 
 import type { PieceColor } from '@carolo/game'
 import { getOppositePieceColor, Board, Game, Player } from '@carolo/game'
-import type { User, Game as GameModel } from '@carolo/models'
+import { playModelAction } from '@carolo/models'
+import type { User, Game as GameModel, GameActionBasic } from '@carolo/models'
+
+import prisma from '#src/tools/database/prisma.js'
 
 export interface GameMachine {
   id: GameModel['id']
@@ -29,6 +32,61 @@ export class GameRepository {
       this.instance = new GameRepository()
     }
     return this.instance
+  }
+
+  public async loadFromDatabase(): Promise<void> {
+    const games = await prisma.game.findMany({
+      where: {
+        status: 'PLAY'
+      }
+    })
+    await Promise.all(
+      games.map(async (game) => {
+        if (game.playerBlackId == null || game.playerWhiteId == null) {
+          return
+        }
+        const actions = await prisma.gameAction.findMany({
+          where: {
+            gameId: game.id
+          }
+        })
+        const board = new Board()
+        const player1 = new Player('WHITE')
+        const player2 = new Player('BLACK')
+        const players = [player1, player2]
+        const gameMachine = new Game(board, players)
+        gameMachine.restart()
+        gameMachine.play()
+        for (const action of actions) {
+          playModelAction({
+            action: {
+              type: action.type as GameActionBasic['type'],
+              fromPosition: action.fromPosition,
+              toPosition: action.toPosition,
+              color: action.color as GameActionBasic['color']
+            },
+            board,
+            game: gameMachine
+          })
+        }
+        this.games.set(game.id, {
+          id: game.id,
+          board,
+          players,
+          game: gameMachine
+        })
+        this.players.set(game.playerWhiteId, {
+          id: game.playerWhiteId,
+          gameId: game.id,
+          color: 'WHITE'
+        })
+        this.players.set(game.playerBlackId, {
+          id: game.playerBlackId,
+          gameId: game.id,
+          color: 'BLACK'
+        })
+      })
+    )
   }
 
   public createGame(playerId: User['id'], color: PieceColor): GameModel['id'] {

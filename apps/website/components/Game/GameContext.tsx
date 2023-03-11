@@ -26,9 +26,7 @@ export const GameContextProvider = (
   const { authenticated, user } = useAuthentication()
 
   useEffect(() => {
-    let socket: Socket | null = null
     const gameStore = storeRef.current
-
     const playWithColors = [...gameStore.getState().playWithColors]
     for (const gameUser of options.users) {
       if (
@@ -42,6 +40,11 @@ export const GameContextProvider = (
     gameStore.setState({
       playWithColors
     })
+  }, [authenticated, options.users, user])
+
+  useEffect(() => {
+    let socket: Socket | null = null
+    const gameStore = storeRef.current
 
     if (options.gameId != null) {
       socket = io(API_URL)
@@ -87,7 +90,7 @@ export const GameContextProvider = (
         socket.disconnect()
       }
     }
-  }, [authenticated, options, user])
+  }, [authenticated, options.gameId, user])
 
   return (
     <GameContext.Provider value={storeRef.current}>

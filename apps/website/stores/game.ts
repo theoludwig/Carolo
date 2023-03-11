@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import type { StoreApi } from 'zustand'
 import { createStore, useStore } from 'zustand'
+import { playModelAction } from '@carolo/models'
 import type {
   GameActionBasic,
   GameUser,
@@ -12,10 +13,10 @@ import type {
   BoardBaseState,
   AvailablePiecePositions,
   PieceColor,
-  PositionString,
-  Move
+  Move,
+  Position
 } from '@carolo/game'
-import { Game, Board, Player, Position } from '@carolo/game'
+import { Game, Board, Player } from '@carolo/game'
 
 import { GameContext } from '@/components/Game/GameContext'
 import { useAuthentication } from '@/stores/authentication'
@@ -68,42 +69,7 @@ export const createGameStore = (
     const game = new Game(board, players)
 
     const playGlobalAction = (action: GameActionBasic): Move | null => {
-      if (
-        action.type === 'MOVE' &&
-        action.fromPosition != null &&
-        action.toPosition != null
-      ) {
-        const fromPosition = Position.fromString(
-          action.fromPosition as PositionString
-        )
-        const toPosition = Position.fromString(
-          action.toPosition as PositionString
-        )
-
-        const lastMove = board.getLastMove()
-        if (
-          lastMove != null &&
-          lastMove.fromPosition.equals(fromPosition) &&
-          lastMove.toPosition.equals(toPosition)
-        ) {
-          return null
-        }
-
-        try {
-          const move = game.playMove(fromPosition, toPosition)
-          return move
-        } catch (error) {
-          console.error(error)
-          return null
-        }
-      }
-      if (action.type === 'SKIP_BOUNCING') {
-        game.skipBouncing()
-      }
-      if (action.type === 'RESIGN' && action.color != null) {
-        game.resign(action.color)
-      }
-      return null
+      return playModelAction({ action, board, game })
     }
 
     if (status === 'PLAY') {

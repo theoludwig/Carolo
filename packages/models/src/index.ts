@@ -1,4 +1,5 @@
 export * from './services/index.js'
+export * from './utils/playModelAction.js'
 export * from './authentication.js'
 export * from './Game.js'
 export * from './GameAction.js'
