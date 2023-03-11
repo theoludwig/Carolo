@@ -7,6 +7,8 @@ import {
 } from '../authentication.js'
 import { userSchema } from '../User.js'
 import { userSettingsSchema } from '../UserSetting.js'
+import { queryPaginationObjectSchema } from '../utils.js'
+import { gameSchema, gameUserSchemaObject } from '../Game.js'
 
 export const usersServiceSchema = {
   '/users/:userId': {
@@ -15,6 +17,26 @@ export const usersServiceSchema = {
         userId: userSchema.id
       }),
       response: userPublicSchemaObject
+    }
+  },
+  '/users/:userId/games': {
+    get: {
+      parameters: Type.Object({
+        userId: userSchema.id
+      }),
+      querystring: queryPaginationObjectSchema,
+      response: Type.Array(
+        Type.Object({
+          id: gameSchema.id,
+          status: gameSchema.status,
+          playerWhiteId: userSchema.id,
+          playerBlackId: userSchema.id,
+          playerWhite: gameUserSchemaObject,
+          playerBlack: gameUserSchemaObject,
+          createdAt: gameSchema.createdAt,
+          updatedAt: gameSchema.updatedAt
+        })
+      )
     }
   },
   '/users/signup': {
@@ -41,6 +63,19 @@ export interface UsersServices {
       >
       response: Static<
         (typeof usersServiceSchema)['/users/:userId']['get']['response']
+      >
+    }
+  }
+  '/users/:userId/games': {
+    get: {
+      parameters: Static<
+        (typeof usersServiceSchema)['/users/:userId/games']['get']['parameters']
+      >
+      querystring: Static<
+        (typeof usersServiceSchema)['/users/:userId/games']['get']['querystring']
+      >
+      response: Static<
+        (typeof usersServiceSchema)['/users/:userId/games']['get']['response']
       >
     }
   }

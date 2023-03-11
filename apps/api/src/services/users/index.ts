@@ -12,6 +12,7 @@ import { getCurrentUser } from '#src/services/users/current/get.js'
 import { putCurrentUser } from '#src/services/users/current/put.js'
 import { putCurrentUserSettings } from '#src/services/users/current/settings/put.js'
 import { getUserById } from '#src/services/users/[userId]/get.js'
+import { getGamesByUserId } from '#src/services/users/[userId]/games/get.js'
 
 export const usersService: FastifyPluginAsync = async (fastify) => {
   await fastify.register(postSignupUser)
@@ -26,4 +27,5 @@ export const usersService: FastifyPluginAsync = async (fastify) => {
   await fastify.register(putCurrentUser)
   await fastify.register(putCurrentUserSettings)
   await fastify.register(getUserById)
+  await fastify.register(getGamesByUserId)
 }

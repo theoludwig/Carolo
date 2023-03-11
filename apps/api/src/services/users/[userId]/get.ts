@@ -30,7 +30,7 @@ export const getUserById: FastifyPluginAsync = async (fastify) => {
         where: { userId }
       })
       if (settings == null) {
-        throw fastify.httpErrors.notFound('User not found')
+        throw fastify.httpErrors.notFound('User not found.')
       }
       const user = await prisma.user.findUnique({
         where: {
@@ -47,7 +47,7 @@ export const getUserById: FastifyPluginAsync = async (fastify) => {
         }
       })
       if (user == null) {
-        throw fastify.httpErrors.notFound('User not found')
+        throw fastify.httpErrors.notFound('User not found.')
       }
 
       const numberOfVictory = await prisma.game.count({
