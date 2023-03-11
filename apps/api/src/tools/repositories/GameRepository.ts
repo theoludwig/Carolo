@@ -48,6 +48,9 @@ export class GameRepository {
         const actions = await prisma.gameAction.findMany({
           where: {
             gameId: game.id
+          },
+          orderBy: {
+            createdAt: 'asc'
           }
         })
         const board = new Board()

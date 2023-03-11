@@ -72,7 +72,7 @@ export const createGameStore = (
       return playModelAction({ action, board, game })
     }
 
-    if (status === 'PLAY') {
+    if (status !== 'LOBBY') {
       game.restart()
       game.play()
       for (const action of actions) {

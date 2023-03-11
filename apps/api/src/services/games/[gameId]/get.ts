@@ -6,6 +6,28 @@ import type { GameStatus } from '@carolo/game'
 import prisma from '#src/tools/database/prisma.js'
 import { GameRepository } from '#src/tools/repositories/GameRepository.js'
 
+const getGameActionsFromDatabase = async (
+  gameId: string
+): Promise<GameActionBasic[]> => {
+  return (
+    await prisma.gameAction.findMany({
+      where: {
+        gameId
+      },
+      orderBy: {
+        createdAt: 'asc'
+      }
+    })
+  ).map((gameAction) => {
+    return {
+      type: gameAction.type,
+      fromPosition: gameAction.fromPosition,
+      toPosition: gameAction.toPosition,
+      color: gameAction.color
+    }
+  }) as GameActionBasic[]
+}
+
 const getServiceSchema: FastifySchema = {
   description: 'GET information about a Game.',
   tags: ['games'] as string[],
@@ -33,7 +55,50 @@ export const getGameById: FastifyPluginAsync = async (fastify) => {
       const games = GameRepository.getInstance()
       const gameMachine = games.getGameMachine(gameId)
       if (gameMachine == null) {
-        throw fastify.httpErrors.notFound('Game not found.')
+        const game = await prisma.game.findUnique({
+          where: {
+            id: gameId
+          }
+        })
+        if (
+          game == null ||
+          game.status === 'PLAY' ||
+          game.playerBlackId == null ||
+          game.playerWhiteId == null
+        ) {
+          throw fastify.httpErrors.notFound('Game not found.')
+        }
+        const playerBlack = await prisma.user.findUnique({
+          where: {
+            id: game.playerBlackId
+          }
+        })
+        const playerWhite = await prisma.user.findUnique({
+          where: {
+            id: game.playerWhiteId
+          }
+        })
+        if (playerBlack == null || playerWhite == null) {
+          throw fastify.httpErrors.internalServerError('Players not found.')
+        }
+        const actions = await getGameActionsFromDatabase(gameId)
+        return {
+          ...game,
+          status: game.status as GameStatus,
+          actions,
+          playerBlack: {
+            id: playerBlack.id,
+            name: playerBlack.name,
+            logo: playerBlack.logo,
+            color: 'BLACK'
+          },
+          playerWhite: {
+            id: playerWhite.id,
+            name: playerWhite.name,
+            logo: playerWhite.logo,
+            color: 'WHITE'
+          }
+        }
       }
 
       const players = games.getPlayers(gameId)
@@ -71,21 +136,7 @@ export const getGameById: FastifyPluginAsync = async (fastify) => {
       if (game != null) {
         status = game.status as GameStatus
       }
-
-      const actions = (
-        await prisma.gameAction.findMany({
-          where: {
-            gameId
-          }
-        })
-      ).map((gameAction) => {
-        return {
-          type: gameAction.type,
-          fromPosition: gameAction.fromPosition,
-          toPosition: gameAction.toPosition
-        }
-      }) as GameActionBasic[]
-
+      const actions = await getGameActionsFromDatabase(gameId)
       reply.statusCode = 200
       return {
         id: gameMachine.id,
