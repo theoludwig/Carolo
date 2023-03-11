@@ -53,7 +53,7 @@ await tap.test('Carolo Check', async (t) => {
     t.equal(egoPiecePosition.isOccupied(), true)
     t.equal(egoPiecePosition.piece.type, 'EGO')
     t.equal(egoPiecePosition.piece.color, 'BLACK')
-    t.equal(egoPiecePosition.position.toString(), 'column-4-row-0')
+    t.equal(egoPiecePosition.position.toString(), 'E8')
     const caroloPiecePosition = board.getPiecePosition(
       new Position({ column: 5, row: 0 })
     )
@@ -105,7 +105,7 @@ await tap.test('Carolo Check', async (t) => {
     t.equal(egoPiecePosition.isOccupied(), true)
     t.equal(egoPiecePosition.piece.type, 'EGO')
     t.equal(egoPiecePosition.piece.color, 'WHITE')
-    t.equal(egoPiecePosition.position.toString(), 'column-3-row-7')
+    t.equal(egoPiecePosition.position.toString(), 'D1')
     const caroloPiecePosition = board.getPiecePosition(
       new Position({ column: 2, row: 7 })
     )
@@ -180,12 +180,12 @@ await tap.test('Carolo Check', async (t) => {
       t.equal(egoPiecePosition.isOccupied(), true)
       t.equal(egoPiecePosition.piece.type, 'EGO')
       t.equal(egoPiecePosition.piece.color, 'BLACK')
-      t.equal(egoPiecePosition.position.toString(), 'column-4-row-4')
+      t.equal(egoPiecePosition.position.toString(), 'E4')
       t.same(
         board
           .getAvailablePiecePositions(new Position({ column: 4, row: 4 }))
           .keys(),
-        ['column-5-row-4', 'column-4-row-3']
+        ['F4', 'E5']
       )
     }
   )

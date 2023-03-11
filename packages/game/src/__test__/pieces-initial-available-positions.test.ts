@@ -44,7 +44,7 @@ await tap.test('Pieces Initial Available Positions', async (t) => {
     )
     t.same(
       board.getAvailablePiecePositions(bayardLeftPiecePosition.position).keys(),
-      ['column-1-row-5', 'column-3-row-5', 'column-0-row-6']
+      ['B3', 'D3', 'A2']
     )
 
     const bayardRightPiecePosition = board.getPiecePosition(
@@ -54,7 +54,7 @@ await tap.test('Pieces Initial Available Positions', async (t) => {
       board
         .getAvailablePiecePositions(bayardRightPiecePosition.position)
         .keys(),
-      ['column-7-row-6', 'column-4-row-5', 'column-6-row-5']
+      ['H2', 'E3', 'G3']
     )
 
     const aymonRow = board.getAymonInitialRow('WHITE')
@@ -73,24 +73,24 @@ await tap.test('Pieces Initial Available Positions', async (t) => {
       new Position({ row: 5, column: 2 })
     )
     t.same(board.getAvailablePiecePositions(leftHubris.position).keys(), [
-      'column-1-row-6',
-      'column-1-row-4',
-      'column-3-row-4',
-      'column-0-row-7',
-      'column-0-row-3',
-      'column-4-row-3'
+      'B2',
+      'B4',
+      'D4',
+      'A1',
+      'A5',
+      'E5'
     ])
 
     const rightHubris = board.getPiecePosition(
       new Position({ row: 5, column: 5 })
     )
     t.same(board.getAvailablePiecePositions(rightHubris.position).keys(), [
-      'column-6-row-6',
-      'column-4-row-4',
-      'column-6-row-4',
-      'column-7-row-7',
-      'column-3-row-3',
-      'column-7-row-3'
+      'G2',
+      'E4',
+      'G4',
+      'H1',
+      'D5',
+      'H5'
     ])
   })
 })

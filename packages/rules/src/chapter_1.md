@@ -1,3 +1,5 @@
 # Chapter 1
 
-<img src="/pieces/CAROLO_BLACK.png" alt="Carolo Black" width="200" height="200" />
+Ce jeu d’échiquier se veut similaire aux échecs. Il comporte 5 pièces différentes présentant toutes des comportements et capacités distincts.
+
+![Carolo WHITE](/pieces/CAROLO_WHITE.png)

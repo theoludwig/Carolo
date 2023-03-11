@@ -52,7 +52,7 @@ await tap.test('Hubris Attraction Power', async (t) => {
         board
           .getAvailablePiecePositions(new Position({ column: 3, row: 7 }))
           .keys(),
-        ['column-5-row-5']
+        ['F3']
       )
       t.same(
         board
@@ -99,7 +99,7 @@ await tap.test('Hubris Attraction Power', async (t) => {
       board
         .getAvailablePiecePositions(new Position({ column: 4, row: 0 }))
         .keys(),
-      ['column-2-row-2']
+      ['C6']
     )
   })
 
@@ -140,13 +140,13 @@ await tap.test('Hubris Attraction Power', async (t) => {
         board
           .getAvailablePiecePositions(new Position({ column: 4, row: 0 }))
           .keys(),
-        ['column-2-row-2']
+        ['C6']
       )
       t.same(
         board
           .getAvailablePiecePositions(new Position({ column: 4, row: 4 }))
           .keys(),
-        ['column-2-row-2'],
+        ['C6'],
         'Black Hubris can intercept White Hubris'
       )
       game.playMove(
@@ -216,13 +216,13 @@ await tap.test('Hubris Attraction Power', async (t) => {
         board
           .getAvailablePiecePositions(new Position({ column: 4, row: 0 }))
           .keys(),
-        ['column-2-row-2']
+        ['C6']
       )
       t.same(
         board
           .getAvailablePiecePositions(new Position({ column: 5, row: 3 }))
           .keys(),
-        ['column-3-row-1'],
+        ['D7'],
         'Black Hubris can intercept White Hubris on another position than the Ego attracted position'
       )
       t.same(
@@ -309,13 +309,13 @@ await tap.test('Hubris Attraction Power', async (t) => {
         board
           .getAvailablePiecePositions(new Position({ column: 4, row: 0 }))
           .keys(),
-        ['column-6-row-2']
+        ['G6']
       )
       t.same(
         board
           .getAvailablePiecePositions(new Position({ column: 3, row: 3 }))
           .keys(),
-        ['column-5-row-1'],
+        ['F7'],
         'Black Hubris can intercept White Hubris on another position than the Ego attracted position'
       )
       t.same(

@@ -44,7 +44,7 @@ await tap.test('Carolo Available Positions', async (t) => {
       board
         .getAvailablePiecePositions(new Position({ column: 4, row: 7 }))
         .keys(),
-      ['column-4-row-2']
+      ['E6']
     )
     game.playMove(
       new Position({ column: 0, row: 7 }),
@@ -68,7 +68,7 @@ await tap.test('Carolo Available Positions', async (t) => {
       board
         .getAvailablePiecePositions(new Position({ column: 4, row: 7 }))
         .keys(),
-      ['column-4-row-4']
+      ['E4']
     )
     t.equal(
       board.isCaptureMove(

@@ -63,8 +63,8 @@ model Game {
 model GameAction {
   id           Int      @id @default(autoincrement())
   type         String   @default("MOVE") @db.VarChar(30)
-  fromPosition String?  @db.VarChar(14)
-  toPosition   String?  @db.VarChar(14)
+  fromPosition String?  @db.VarChar(2)
+  toPosition   String?  @db.VarChar(2)
   color        String?  @db.VarChar(5)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now()) @updatedAt

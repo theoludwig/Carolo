@@ -103,7 +103,7 @@ await tap.test('Ego reconquest', async (t) => {
     t.equal(egoPiecePosition.isOccupied(), true)
     t.equal(egoPiecePosition.piece.type, 'EGO')
     t.equal(egoPiecePosition.piece.color, 'BLACK')
-    t.equal(egoPiecePosition.position.toString(), 'column-6-row-7')
+    t.equal(egoPiecePosition.position.toString(), 'G1')
   })
 
   await t.test('White Reconquest', async (t) => {
@@ -194,7 +194,7 @@ await tap.test('Ego reconquest', async (t) => {
     t.equal(egoPiecePosition.isOccupied(), true)
     t.equal(egoPiecePosition.piece.type, 'EGO')
     t.equal(egoPiecePosition.piece.color, 'WHITE')
-    t.equal(egoPiecePosition.position.toString(), 'column-1-row-0')
+    t.equal(egoPiecePosition.position.toString(), 'B8')
   })
 
   await t.test('White Reconquest first but White Ego is check', async (t) => {
@@ -268,12 +268,12 @@ await tap.test('Ego reconquest', async (t) => {
     t.equal(egoWhitePiecePosition.isOccupied(), true)
     t.equal(egoWhitePiecePosition.piece.type, 'EGO')
     t.equal(egoWhitePiecePosition.piece.color, 'WHITE')
-    t.equal(egoWhitePiecePosition.position.toString(), 'column-3-row-1')
+    t.equal(egoWhitePiecePosition.position.toString(), 'D7')
     t.same(
       board
         .getAvailablePiecePositions(new Position({ column: 3, row: 1 }))
         .keys(),
-      ['column-3-row-2', 'column-3-row-0', 'column-2-row-1']
+      ['D6', 'D8', 'C7']
     )
     t.equal(game.getCurrentPlayer().color, 'WHITE')
     game.playMove(

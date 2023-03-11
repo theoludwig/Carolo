@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import classNames from 'clsx'
-import { BoardBase, Position } from '@carolo/game'
+import { BoardBase } from '@carolo/game'
 
 import { useGame } from '@/stores/game'
 
@@ -32,6 +32,7 @@ export const Board = (): JSX.Element => {
           <div className='flex' key={rowIndex}>
             {row.map((piecePosition, columnIndex) => {
               const positionString = piecePosition.position.toString()
+              const [columnString, rowString] = positionString.split('')
               const isEven = (rowIndex + columnIndex) % 2 === 0
               const isAvailable = availablePiecePositions.has(positionString)
               const isSelected =
@@ -114,7 +115,7 @@ export const Board = (): JSX.Element => {
                         }
                       )}
                     >
-                      {Position.columnToHumanCoordinates(columnIndex)}
+                      {columnString}
                     </span>
                   ) : null}
                   {isLastColumn ? (
@@ -127,7 +128,7 @@ export const Board = (): JSX.Element => {
                         }
                       )}
                     >
-                      {Position.rowToHumanCoordinates(rowIndex, BoardBase.SIZE)}
+                      {rowString}
                     </span>
                   ) : null}
                   {isAvailable && piecePosition.isFree() ? (

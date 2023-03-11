@@ -32,19 +32,7 @@ await tap.test('Hubris Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 3, row: 4 }))
       .keys(),
-    [
-      'column-2-row-5',
-      'column-4-row-5',
-      'column-2-row-3',
-      'column-4-row-3',
-      'column-1-row-6',
-      'column-1-row-2',
-      'column-5-row-2',
-      'column-0-row-7',
-      'column-0-row-1',
-      'column-6-row-1',
-      'column-7-row-0'
-    ]
+    ['C3', 'E3', 'C5', 'E5', 'B2', 'B6', 'F6', 'A1', 'A7', 'G7', 'H8']
   )
   game.playMove(
     new Position({ column: 5, row: 6 }),
@@ -56,13 +44,7 @@ await tap.test('Hubris Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 6, row: 3 }))
       .keys(),
-    [
-      'column-5-row-4',
-      'column-7-row-4',
-      'column-5-row-2',
-      'column-7-row-2',
-      'column-4-row-5'
-    ]
+    ['F4', 'H4', 'F6', 'H6', 'E3']
   )
   game.playMove(
     new Position({ column: 2, row: 1 }),
@@ -75,19 +57,19 @@ await tap.test('Hubris Available Positions', async (t) => {
       .getAvailablePiecePositions(new Position({ column: 3, row: 4 }))
       .keys(),
     [
-      'column-2-row-5',
-      'column-4-row-5',
-      'column-2-row-3',
-      'column-4-row-3',
-      'column-1-row-6',
-      'column-5-row-6',
-      'column-1-row-2',
-      'column-5-row-2',
-      'column-0-row-7',
-      'column-6-row-7',
-      'column-0-row-1',
-      'column-6-row-1',
-      'column-7-row-0'
+      'C3',
+      'E3',
+      'C5',
+      'E5',
+      'B2',
+      'F2',
+      'B6',
+      'F6',
+      'A1',
+      'G1',
+      'A7',
+      'G7',
+      'H8'
     ]
   )
   game.playMove(
@@ -100,13 +82,7 @@ await tap.test('Hubris Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 6, row: 3 }))
       .keys(),
-    [
-      'column-5-row-4',
-      'column-7-row-4',
-      'column-5-row-2',
-      'column-7-row-2',
-      'column-4-row-5'
-    ]
+    ['F4', 'H4', 'F6', 'H6', 'E3']
   )
   t.equal(
     board.isCaptureMove(

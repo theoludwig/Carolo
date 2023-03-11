@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import classNames from 'clsx'
-import { BoardBase } from '@carolo/game'
 
 import { useGame } from '@/stores/game'
 
@@ -39,7 +38,7 @@ export const MovesHistory = (): JSX.Element => {
                   width={64}
                   height={64}
                 />
-                {move.fromPosition.toHumanCoordinates(BoardBase.SIZE)}
+                {move.fromPosition.toString()}
               </span>
               <span className='flex h-8 w-8 items-center justify-center'>
                 {move.capturedPiece != null ? (
@@ -52,7 +51,7 @@ export const MovesHistory = (): JSX.Element => {
                     height={64}
                   />
                 ) : null}
-                {move.toPosition.toHumanCoordinates(BoardBase.SIZE)}
+                {move.toPosition.toString()}
               </span>
             </li>
           )

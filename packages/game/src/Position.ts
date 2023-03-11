@@ -1,9 +1,17 @@
+import { BoardBase } from './BoardBase.js'
+
 export interface PositionOptions {
   column: number
   row: number
 }
 
-export type PositionString = `column-${number}-row-${number}`
+/**
+ * A string representing a position in the board.
+ *
+ * @example 'A1' // column: 'A' (index: 0) - row: 1 (index: 7)
+ * @example 'H8' // column: 'H' (index: 7) - row: 8 (index: 0)
+ */
+export type PositionString = `${string}${number}`
 
 export class Position implements PositionOptions {
   private readonly _column: number
@@ -73,10 +81,6 @@ export class Position implements PositionOptions {
     return false
   }
 
-  public toString(): PositionString {
-    return `column-${this.column}-row-${this.row}`
-  }
-
   public isOnSameDiagonal(position: Position): boolean {
     return (
       Math.abs(this.column - position.column) ===
@@ -92,24 +96,14 @@ export class Position implements PositionOptions {
   }
 
   public static fromString(positionString: PositionString): Position {
-    const [, column, , row] = positionString.split('-')
-    return new Position({
-      column: parseInt(column, 10),
-      row: parseInt(row, 10)
-    })
+    const column = positionString.charCodeAt(0) - 'A'.charCodeAt(0)
+    const row = BoardBase.SIZE - parseInt(positionString[1], 10)
+    return new Position({ column, row })
   }
 
-  public static columnToHumanCoordinates(column: number): string {
-    return String.fromCharCode(column + 65)
-  }
-
-  public static rowToHumanCoordinates(row: number, size: number): string {
-    return `${size - row}`
-  }
-
-  public toHumanCoordinates(size: number): string {
-    const column = Position.columnToHumanCoordinates(this.column)
-    const row = Position.rowToHumanCoordinates(this.row, size)
+  public toString(): PositionString {
+    const column = String.fromCharCode(this.column + 'A'.charCodeAt(0))
+    const row = BoardBase.SIZE - this.row
     return `${column}${row}`
   }
 }

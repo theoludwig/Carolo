@@ -17,7 +17,15 @@ export interface Move {
 }
 
 export interface BoardBaseState {
+  /**
+   * The board is a 2D array of PiecePosition.
+   *
+   * The first dimension is the row, going from 1 to 8.
+   *
+   * The second dimension is the column going from A to H.
+   */
   board: PiecePosition[][]
+
   moves: Move[]
   currentMoveIndex: number
 }

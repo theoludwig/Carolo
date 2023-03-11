@@ -37,7 +37,7 @@ await tap.test('Ego Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 3, row: 7 }))
       .keys(),
-    ['column-2-row-7']
+    ['C1']
   )
   t.equal(game.getCurrentPlayer().color, 'WHITE')
   game.playMove(
@@ -49,7 +49,7 @@ await tap.test('Ego Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 4, row: 0 }))
       .keys(),
-    ['column-4-row-1']
+    ['E7']
   )
   t.equal(game.getCurrentPlayer().color, 'BLACK')
   game.playMove(
@@ -61,7 +61,7 @@ await tap.test('Ego Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 2, row: 7 }))
       .keys(),
-    ['column-3-row-7', 'column-1-row-7']
+    ['D1', 'B1']
   )
   t.equal(game.getCurrentPlayer().color, 'WHITE')
   game.playMove(
@@ -74,7 +74,7 @@ await tap.test('Ego Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 4, row: 1 }))
       .keys(),
-    ['column-4-row-2', 'column-4-row-0']
+    ['E6', 'E8']
   )
   game.playMove(
     new Position({ column: 4, row: 1 }),
@@ -86,7 +86,7 @@ await tap.test('Ego Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 1, row: 7 }))
       .keys(),
-    ['column-2-row-7', 'column-1-row-6', 'column-0-row-7']
+    ['C1', 'B2', 'A1']
   )
   game.playMove(
     new Position({ column: 1, row: 7 }),
@@ -122,7 +122,7 @@ await tap.test('Ego Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 4, row: 3 }))
       .keys(),
-    ['column-4-row-4', 'column-5-row-3', 'column-4-row-2', 'column-3-row-3']
+    ['E4', 'F5', 'E6', 'D5']
   )
   game.playMove(
     new Position({ column: 1, row: 2 }),
@@ -142,7 +142,7 @@ await tap.test('Ego Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 2, row: 5 }))
       .keys(),
-    ['column-3-row-5', 'column-2-row-4', 'column-1-row-5']
+    ['D3', 'C4', 'B3']
   )
   t.equal(
     board.isCaptureMove(

@@ -60,8 +60,7 @@ await tap.test('Game Initialization', async (t) => {
       t.equal(egoPiecePosition.piece.type, 'EGO')
       t.equal(egoPiecePosition.piece.color, color)
       t.equal(egoPiecePosition.piece.hasMoved, false)
-      const piecePosition =
-        color === 'WHITE' ? 'column-3-row-7' : 'column-4-row-0'
+      const piecePosition = color === 'WHITE' ? 'D1' : 'E8'
       t.equal(egoPiecePosition.position.toString(), piecePosition)
 
       const caroloColumn = color === 'WHITE' ? 4 : 3

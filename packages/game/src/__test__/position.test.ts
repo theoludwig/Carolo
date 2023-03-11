@@ -7,12 +7,12 @@ await tap.test('Position', async (t) => {
     const position = new Position({ row: 0, column: 0 })
     t.equal(position.row, 0)
     t.equal(position.column, 0)
-    t.equal(position.toString(), 'column-0-row-0')
+    t.equal(position.toString(), 'A8')
 
     const position2 = new Position({ row: 3, column: 6 })
     t.equal(position2.row, 3)
     t.equal(position2.column, 6)
-    t.equal(position2.toString(), 'column-6-row-3')
+    t.equal(position2.toString(), 'G5')
   })
 
   await t.test('Equality', async (t) => {
@@ -45,11 +45,11 @@ await tap.test('Position', async (t) => {
   await t.test('add', async (t) => {
     const position = new Position({ row: 0, column: 0 })
     const position2 = new Position({ row: 1, column: 1 })
-    t.equal(position.add(position2).toString(), 'column-1-row-1')
+    t.equal(position.add(position2).toString(), 'B7')
 
     const position3 = new Position({ row: 6, column: 3 })
     const position4 = new Position({ row: 1, column: 1 })
-    t.equal(position3.add(position4).toString(), 'column-4-row-7')
+    t.equal(position3.add(position4).toString(), 'E1')
   })
 
   await t.test('getIntermediatePositions', async (t) => {
@@ -63,7 +63,7 @@ await tap.test('Position', async (t) => {
       position3.getIntermediatePositions(position4).map((position) => {
         return position.toString()
       }),
-      ['column-1-row-0', 'column-2-row-0', 'column-3-row-0', 'column-4-row-0']
+      ['B8', 'C8', 'D8', 'E8']
     )
 
     const position5 = new Position({ row: 0, column: 0 })
@@ -72,7 +72,7 @@ await tap.test('Position', async (t) => {
       position5.getIntermediatePositions(position6).map((position) => {
         return position.toString()
       }),
-      ['column-0-row-1', 'column-0-row-2', 'column-0-row-3', 'column-0-row-4']
+      ['A7', 'A6', 'A5', 'A4']
     )
 
     const position7 = new Position({ row: 0, column: 0 })
@@ -81,17 +81,25 @@ await tap.test('Position', async (t) => {
       position7.getIntermediatePositions(position8).map((position) => {
         return position.toString()
       }),
-      ['column-1-row-1', 'column-2-row-2', 'column-3-row-3', 'column-4-row-4']
+      ['B7', 'C6', 'D5', 'E4']
     )
   })
 
   await t.test('fromString', async (t) => {
-    const position = Position.fromString('column-0-row-0')
-    t.equal(position.row, 0)
-    t.equal(position.column, 0)
+    const position1 = Position.fromString('A8')
+    t.equal(position1.row, 0)
+    t.equal(position1.column, 0)
 
-    const position2 = Position.fromString('column-6-row-3')
+    const position2 = Position.fromString('G5')
     t.equal(position2.row, 3)
     t.equal(position2.column, 6)
+
+    const position3 = Position.fromString('A1')
+    t.equal(position3.row, 7)
+    t.equal(position3.column, 0)
+
+    const position4 = Position.fromString('H8')
+    t.equal(position4.row, 0)
+    t.equal(position4.column, 7)
   })
 })

@@ -24,7 +24,7 @@ await tap.test('Bayard Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 2, row: 7 }))
       .keys(),
-    ['column-1-row-5', 'column-3-row-5', 'column-0-row-6']
+    ['B3', 'D3', 'A2']
   )
   game.playMove(
     new Position({ column: 2, row: 7 }),
@@ -44,7 +44,7 @@ await tap.test('Bayard Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 2, row: 0 }))
       .keys(),
-    ['column-3-row-2', 'column-1-row-2', 'column-0-row-1']
+    ['D6', 'B6', 'A7']
   )
   game.playMove(
     new Position({ column: 2, row: 0 }),
@@ -56,15 +56,7 @@ await tap.test('Bayard Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 1, row: 5 }))
       .keys(),
-    [
-      'column-2-row-7',
-      'column-0-row-7',
-      'column-3-row-4',
-      'column-4-row-5',
-      'column-0-row-3',
-      'column-1-row-2',
-      'column-2-row-3'
-    ]
+    ['C1', 'A1', 'D4', 'E3', 'A5', 'B6', 'C5']
   )
   game.playMove(
     new Position({ column: 1, row: 5 }),
@@ -82,15 +74,7 @@ await tap.test('Bayard Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 3, row: 4 }))
       .keys(),
-    [
-      'column-5-row-3',
-      'column-6-row-4',
-      'column-3-row-1',
-      'column-4-row-2',
-      'column-1-row-5',
-      'column-0-row-4',
-      'column-1-row-3'
-    ]
+    ['F5', 'G4', 'D7', 'E6', 'B3', 'A4', 'B5']
   )
   t.equal(
     board.isCaptureMove(
@@ -116,16 +100,6 @@ await tap.test('Bayard Available Positions', async (t) => {
     board
       .getAvailablePiecePositions(new Position({ column: 5, row: 3 }))
       .keys(),
-    [
-      'column-6-row-5',
-      'column-4-row-5',
-      'column-7-row-2',
-      'column-7-row-4',
-      'column-4-row-1',
-      'column-6-row-1',
-      'column-3-row-4',
-      'column-2-row-3',
-      'column-3-row-2'
-    ]
+    ['G3', 'E3', 'H6', 'H4', 'E7', 'G7', 'D4', 'C5', 'D6']
   )
 })

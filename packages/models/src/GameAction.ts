@@ -16,11 +16,11 @@ export const gameActionSchema = {
   id,
   type: Type.Union(actionTypes),
   fromPosition: Type.Union([
-    Type.String({ minLength: 14, maxLength: 14, examples: ['column-0-row-0'] }),
+    Type.String({ minLength: 2, maxLength: 2, example: 'A1' }),
     Type.Null()
   ]),
   toPosition: Type.Union([
-    Type.String({ minLength: 14, maxLength: 14, examples: ['column-0-row-0'] }),
+    Type.String({ minLength: 2, maxLength: 2, example: 'C2' }),
     Type.Null()
   ]),
   color: Type.Union([...pieceColors, Type.Null()]),
@@ -47,8 +47,8 @@ export const gameActionsExamples: GameAction[] = [
   {
     id: 1,
     type: 'MOVE',
-    fromPosition: 'column-5-row-7',
-    toPosition: 'column-4-row-5',
+    fromPosition: 'F1',
+    toPosition: 'E3',
     color: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -57,8 +57,8 @@ export const gameActionsExamples: GameAction[] = [
   {
     id: 2,
     type: 'MOVE',
-    fromPosition: 'column-5-row-0',
-    toPosition: 'column-4-row-2',
+    fromPosition: 'F8',
+    toPosition: 'E6',
     color: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -67,8 +67,8 @@ export const gameActionsExamples: GameAction[] = [
   {
     id: 3,
     type: 'MOVE',
-    fromPosition: 'column-4-row-7',
-    toPosition: 'column-7-row-7',
+    fromPosition: 'E1',
+    toPosition: 'H1',
     color: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -77,8 +77,8 @@ export const gameActionsExamples: GameAction[] = [
   {
     id: 4,
     type: 'MOVE',
-    fromPosition: 'column-7-row-7',
-    toPosition: 'column-7-row-0',
+    fromPosition: 'H1',
+    toPosition: 'H8',
     color: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -87,8 +87,8 @@ export const gameActionsExamples: GameAction[] = [
   {
     id: 5,
     type: 'MOVE',
-    fromPosition: 'column-7-row-0',
-    toPosition: 'column-5-row-0',
+    fromPosition: 'H8',
+    toPosition: 'F8',
     color: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
