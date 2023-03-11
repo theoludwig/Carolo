@@ -23,6 +23,10 @@ await Promise.all(
     if (gameAction.fromPosition === null || gameAction.toPosition === null) {
       return
     }
+    const isOldNotation = gameAction.fromPosition.includes('-')
+    if (!isOldNotation) {
+      return
+    }
     await prisma.gameAction.update({
       where: {
         id: gameAction.id
