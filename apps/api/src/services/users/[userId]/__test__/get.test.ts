@@ -56,6 +56,6 @@ await tap.test('GET /users/[userId]', async (t) => {
     })
     const responseJson = response.json()
     t.equal(response.statusCode, 404)
-    t.equal(responseJson.message, 'User not found')
+    t.equal(responseJson.message, 'User not found.')
   })
 })

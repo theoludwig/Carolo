@@ -17,6 +17,7 @@ lint:
   script:
     - 'npm run lint:editorconfig'
     - 'npm run lint:prettier'
+    - 'npm run lint:markdown'
     - 'npm run lint'
   only:
     - 'develop'

@@ -17,7 +17,7 @@ export const MovesHistory = (): JSX.Element => {
           return (
             <li
               key={index}
-              className={classNames('flex justify-between py-2 px-4', {
+              className={classNames('flex justify-between px-4 py-2', {
                 'bg-[#272522]': !isEven,
                 'bg-[#2B2926]': isEven
               })}

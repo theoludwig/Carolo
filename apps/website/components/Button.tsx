@@ -49,7 +49,7 @@ export const Button = (props: ButtonProps): JSX.Element => {
       >
         {icon != null ? (
           <Image
-            className='my-1 mx-2'
+            className='mx-2 my-1'
             src={icon}
             width={20}
             height={20}
@@ -66,7 +66,7 @@ export const Button = (props: ButtonProps): JSX.Element => {
     <button className={classNames(className, givenClassName)} {...rest}>
       {icon != null ? (
         <Image
-          className='my-1 mx-2'
+          className='mx-2 my-1'
           src={icon}
           width={20}
           height={20}

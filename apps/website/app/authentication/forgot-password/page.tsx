@@ -39,19 +39,19 @@ const ForgotPasswordPage = (): JSX.Element => {
       formElement.reset()
       return {
         type: 'success',
-        value:
+        message:
           'Demande de réinitialisation du mot de passe envoyé, veuillez vérifier vos emails!'
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
         return {
           type: 'error',
-          value: errorsMessages['invalid-email']
+          message: errorsMessages['invalid-email']
         }
       }
       return {
         type: 'error',
-        value: 'interne du serveur.'
+        message: 'interne du serveur.'
       }
     }
   }

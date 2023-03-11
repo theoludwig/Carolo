@@ -12,13 +12,14 @@ import { API_URL, GRAVATAR_URL } from '#src/tools/configurations.js'
 
 const postSignupSchema: FastifySchema = {
   description:
-    'Allows a new user to signup, if success he would need to confirm his email.',
+    'Allows a new user to signup, if successful the user will need to confirm the email.',
   tags: ['users'] as string[],
   body: servicesSchema['/users/signup'].post.body,
   querystring: servicesSchema['/users/signup'].post.querystring,
   response: {
     201: servicesSchema['/users/signup'].post.response,
     400: fastifyErrors[400],
+    429: fastifyErrors[429],
     500: fastifyErrors[500]
   }
 } as const

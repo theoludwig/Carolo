@@ -54,7 +54,7 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
         formElement.reset()
         return {
           type: 'success',
-          value:
+          message:
             'Vous y êtes presque, veuillez vérifier vos emails pour confirmer votre inscription.'
         }
       } catch (error) {
@@ -63,13 +63,13 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
           if (message.endsWith('already taken')) {
             return {
               type: 'error',
-              value: 'Pseudo ou Adresse courriel est déjà utilisée.'
+              message: 'Pseudo ou Adresse courriel est déjà utilisée.'
             }
           }
         }
         return {
           type: 'error',
-          value: 'interne du serveur.'
+          message: 'interne du serveur.'
         }
       }
     }
@@ -83,12 +83,12 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
         return {
           type: 'error',
-          value: 'Adresse courriel ou Mot de passe invalide.'
+          message: 'Adresse courriel ou Mot de passe invalide.'
         }
       }
       return {
         type: 'error',
-        value: 'interne du serveur.'
+        message: 'interne du serveur.'
       }
     }
   }

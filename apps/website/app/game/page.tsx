@@ -62,7 +62,7 @@ const GamePage = (): JSX.Element => {
         {authenticated ? (
           <Button
             variant='purple'
-            className='!py-2 !px-6 !text-base disabled:cursor-not-allowed disabled:opacity-50'
+            className='!px-6 !py-2 !text-base disabled:cursor-not-allowed disabled:opacity-50'
             disabled={fetchState === 'loading'}
             onClick={async () => {
               setMessage(null)
@@ -89,7 +89,7 @@ const GamePage = (): JSX.Element => {
         <Button
           variant='white'
           disabled={fetchState === 'loading'}
-          className='!py-2 !px-6 !text-base disabled:cursor-not-allowed disabled:opacity-50'
+          className='!px-6 !py-2 !text-base disabled:cursor-not-allowed disabled:opacity-50'
           onClick={() => {
             router.push('/game/local')
           }}

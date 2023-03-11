@@ -8,8 +8,7 @@
       "outputs": ["dist/**", "build/**", ".next/**"]
     },
     "test": {
-      "dependsOn": ["build"],
-      "inputs": ["**/*.test.{ts,tsx}", "**/*.cy.{ts,tsx}"]
+      "dependsOn": ["build"]
     },
     "lint": {
       "dependsOn": ["build"],

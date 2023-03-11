@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import Image from 'next/image'
 import { getOppositePieceColor } from '@carolo/game'
 
 import { useGame } from '@/stores/game'
 import { Button } from '@/components/Button'
+import { User } from '@/components/User'
 
 export const EndGame = (): JSX.Element => {
   const board = useGame((state) => {
@@ -79,16 +79,13 @@ export const EndGame = (): JSX.Element => {
       </h2>
       {winner != null ? (
         <div className='flex flex-row items-center justify-center space-x-2 px-4 py-2'>
-          <Image
-            className='h-12 w-12 rounded-full ring-2 ring-green-500'
-            priority
-            quality={100}
-            src={winner.logo ?? '/data/user-default.png'}
-            alt='Player Picture'
-            width={64}
-            height={64}
+          <User
+            className='h-12 w-12'
+            user={{
+              name: winner.name,
+              logo: winner.logo
+            }}
           />
-          <h2 className='text-lg font-semibold'>{winner.name}</h2>
         </div>
       ) : null}
       <div className='mt-2'>

@@ -7,7 +7,7 @@ import { HeaderAuthentication } from '@/components/Header/HeaderAuthentication'
 
 export const Header = (): JSX.Element => {
   return (
-    <header className='sticky top-0 z-50 flex w-full items-center justify-center bg-[#171717] py-1 px-4'>
+    <header className='sticky top-0 z-50 flex w-full items-center justify-center bg-[#171717] px-4 py-1'>
       <div className='flex w-full flex-wrap items-center justify-between gap-y-4'>
         <NextLink href='/' className='mr-5'>
           <section className='flex items-center'>

@@ -26,6 +26,7 @@ const postRefreshTokenSchema: FastifySchema = {
       type: tokensJWTSchema.type
     }),
     400: fastifyErrors[400],
+    429: fastifyErrors[429],
     403: fastifyErrors[403],
     500: fastifyErrors[500]
   }

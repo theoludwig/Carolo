@@ -19,6 +19,7 @@ const getServiceSchema: FastifySchema = {
     401: fastifyErrors[401],
     403: fastifyErrors[403],
     404: fastifyErrors[404],
+    429: fastifyErrors[429],
     500: fastifyErrors[500]
   }
 } as const

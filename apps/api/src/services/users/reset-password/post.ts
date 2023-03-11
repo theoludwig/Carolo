@@ -34,6 +34,7 @@ const postResetPasswordSchema: FastifySchema = {
   response: {
     200: Type.String(),
     400: fastifyErrors[400],
+    429: fastifyErrors[429],
     500: fastifyErrors[500]
   }
 } as const

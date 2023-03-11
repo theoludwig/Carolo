@@ -20,6 +20,7 @@ const getConfirmEmailSchema: FastifySchema = {
     200: Type.String(),
     400: fastifyErrors[400],
     403: fastifyErrors[403],
+    429: fastifyErrors[429],
     500: fastifyErrors[500]
   }
 } as const

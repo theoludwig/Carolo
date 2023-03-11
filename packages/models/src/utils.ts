@@ -56,6 +56,11 @@ export const fastifyErrorsSchema = {
     error: Type.Literal('Not Found'),
     message: Type.String()
   },
+  429: {
+    statusCode: Type.Literal(429),
+    error: Type.Literal('Too Many Requests'),
+    message: Type.String()
+  },
   431: {
     statusCode: Type.Literal(431),
     error: Type.Literal('Request Header Fields Too Large'),
@@ -73,6 +78,7 @@ export const fastifyErrors = {
   401: Type.Object(fastifyErrorsSchema[401]),
   403: Type.Object(fastifyErrorsSchema[403]),
   404: Type.Object(fastifyErrorsSchema[404]),
+  429: Type.Object(fastifyErrorsSchema[429]),
   431: Type.Object(fastifyErrorsSchema[431]),
   500: Type.Object(fastifyErrorsSchema[500])
 }

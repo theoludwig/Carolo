@@ -10,7 +10,11 @@ const UsersSettingsPage = (): JSX.Element => {
     return redirect('/')
   }
 
-  return <UserSettings />
+  return (
+    <main className='flex flex-1 flex-col items-center justify-center'>
+      <UserSettings />
+    </main>
+  )
 }
 
 export default UsersSettingsPage

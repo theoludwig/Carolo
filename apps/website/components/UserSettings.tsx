@@ -50,7 +50,7 @@ export const UserSettings = (): JSX.Element => {
         authentication.signout()
         return {
           type: 'success',
-          value:
+          message:
             'Veuillez vérifier vos emails pour confirmer votre nouvelle adresse email. Vous êtes maintenant déconnecté.'
         }
       }
@@ -58,7 +58,7 @@ export const UserSettings = (): JSX.Element => {
       updateUser(data.user)
       return {
         type: 'success',
-        value: 'Vos informations ont été mises à jour.'
+        message: 'Vos informations ont été mises à jour.'
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
@@ -66,13 +66,13 @@ export const UserSettings = (): JSX.Element => {
         if (message.endsWith('already taken')) {
           return {
             type: 'error',
-            value: 'Pseudo ou Adresse courriel est déjà utilisée.'
+            message: 'Pseudo ou Adresse courriel est déjà utilisée.'
           }
         }
       }
       return {
         type: 'error',
-        value: 'interne du serveur.'
+        message: 'interne du serveur.'
       }
     }
   }

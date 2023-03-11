@@ -40,12 +40,12 @@ const ResetPasswordPage = (): JSX.Element => {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
         return {
           type: 'error',
-          value: errorsMessages.invalid
+          message: errorsMessages.invalid
         }
       }
       return {
         type: 'error',
-        value: 'interne du serveur.'
+        message: 'interne du serveur.'
       }
     }
   }

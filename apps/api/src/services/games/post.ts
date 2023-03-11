@@ -19,6 +19,7 @@ const postServiceSchema: FastifySchema = {
     400: fastifyErrors[400],
     401: fastifyErrors[401],
     403: fastifyErrors[403],
+    429: fastifyErrors[429],
     500: fastifyErrors[500]
   }
 } as const

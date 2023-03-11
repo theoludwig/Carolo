@@ -1,10 +1,10 @@
-FROM node:18.14.1 AS builder
+FROM node:18.15.0 AS builder
 WORKDIR /usr/src/app
-RUN npm install --global turbo@1.8.1
+RUN npm install --global turbo@1.8.3
 COPY ./ ./
 RUN turbo prune --scope=@carolo/website --docker
 
-FROM node:18.14.1 AS installer
+FROM node:18.15.0 AS installer
 WORKDIR /usr/src/app
 COPY .gitignore .gitignore
 COPY --from=builder /usr/src/app/out/json/ ./
@@ -16,7 +16,7 @@ COPY .prettierrc.json .prettierrc.json
 COPY turbo.json turbo.json
 RUN npx turbo run build --filter=@carolo/website...
 
-FROM node:18.14.1 AS runner
+FROM node:18.15.0 AS runner
 WORKDIR /usr/src/app
 
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs

@@ -22,6 +22,7 @@ const postSignoutSchema: FastifySchema = {
     200: Type.Object({}),
     400: fastifyErrors[400],
     404: fastifyErrors[404],
+    429: fastifyErrors[429],
     500: fastifyErrors[500]
   }
 } as const

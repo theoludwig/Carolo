@@ -37,7 +37,7 @@ await application.register(fastifySocketIo, {
 })
 await application.register(fastifyHelmet)
 await application.register(fastifyRateLimit, {
-  max: 200,
+  max: 100,
   timeWindow: '1 minute'
 })
 await application.register(fastifySwagger, {

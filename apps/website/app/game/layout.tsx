@@ -32,7 +32,11 @@ const GameLayout = (props: GameLayoutProps): JSX.Element => {
     })
   }, [authenticated, authentication, router])
 
-  return <>{children}</>
+  return (
+    <main className='flex flex-1 flex-col items-center justify-center'>
+      {children}
+    </main>
+  )
 }
 
 export default GameLayout

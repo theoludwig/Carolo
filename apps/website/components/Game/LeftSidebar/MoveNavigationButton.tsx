@@ -17,7 +17,7 @@ export const MoveNavigationButton = (
 
   return (
     <button
-      className='rounded-md bg-[#272522] py-1 px-4 hover:opacity-70'
+      className='rounded-md bg-[#272522] px-4 py-1 hover:opacity-70'
       {...rest}
     >
       <Image

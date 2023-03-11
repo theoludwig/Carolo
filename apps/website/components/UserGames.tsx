@@ -5,6 +5,8 @@ import Image from 'next/image'
 import type { Services } from '@carolo/models'
 
 import BoardInitialPositions from '@/public/board-initial-positions.png'
+import { Button } from '@/components/Button'
+import { User } from '@/components//User'
 
 export type Games = Services['/users/:userId/games']['get']['response']
 
@@ -18,6 +20,20 @@ export const UserGames = (props: UserGamesProps): JSX.Element => {
 
   return (
     <div className='flex w-full flex-col space-y-6'>
+      {games.length === 0 ? (
+        <div className='flex flex-col items-center'>
+          <h2 className='text-center text-lg font-bold'>
+            L{"'"}historique des parties est vide. C{"'"}est l{"'"}
+            occasion d{"'"}en lancer une !
+          </h2>
+          <div className='mt-2'>
+            <Button variant='purple' href='/game'>
+              Nouvelle partie
+            </Button>
+          </div>
+        </div>
+      ) : null}
+
       {games.map((game) => {
         const isPlayerBlack = game.playerBlack.id === userId
         const isPlayerWhite = game.playerWhite.id === userId
@@ -48,32 +64,26 @@ export const UserGames = (props: UserGamesProps): JSX.Element => {
                 />
                 <div className='ml-2 flex flex-col justify-between'>
                   <div className='flex items-center space-x-1 font-bold'>
-                    <Image
-                      priority
-                      className='h-10 w-10 rounded-full'
-                      quality={100}
-                      src={game.playerBlack.logo ?? '/data/user-default.png'}
-                      width={64}
-                      height={64}
-                      alt='User logo'
+                    <User
+                      className='h-10 w-10'
+                      user={{
+                        logo: game.playerBlack.logo,
+                        name: game.playerBlack.name
+                      }}
                     />
-                    <p>{game.playerBlack.name}</p>
                   </div>
                   <div className='flex items-center space-x-1 font-bold'>
-                    <Image
-                      priority
-                      className='h-10 w-10 rounded-full'
-                      quality={100}
-                      src={game.playerWhite.logo ?? '/data/user-default.png'}
-                      width={64}
-                      height={64}
-                      alt='User logo'
+                    <User
+                      className='h-10 w-10'
+                      user={{
+                        logo: game.playerWhite.logo,
+                        name: game.playerWhite.name
+                      }}
                     />
-                    <p>{game.playerWhite.name}</p>
                   </div>
                 </div>
               </div>
-              <div className='flex items-center px-4 text-[#D1D1D1]'>
+              <div className='hidden items-center px-4 text-[#D1D1D1] sm:flex'>
                 <div>{date.format(new Date(game.createdAt), 'DD/MM/YYYY')}</div>
               </div>
             </div>

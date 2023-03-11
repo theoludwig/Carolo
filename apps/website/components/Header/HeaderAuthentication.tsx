@@ -2,11 +2,11 @@
 
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 
 import { Button } from '@/components/Button'
 import { useAuthentication } from '@/stores/authentication'
 import { useClickOutsideAlerter } from '@/hooks/useClickOutsideAlerter'
+import { User } from '@/components/User'
 
 export const HeaderAuthentication = (): JSX.Element => {
   const { authenticated, user, authentication } = useAuthentication()
@@ -23,14 +23,14 @@ export const HeaderAuthentication = (): JSX.Element => {
       <div className='flex flex-col space-y-2'>
         <Button
           variant='white'
-          className='rounded-xl !py-[2px] !px-6 !text-base'
+          className='rounded-xl !px-6 !py-[2px] !text-base'
           href='/authentication/signin'
         >
           Connexion
         </Button>
         <Button
           variant='dark'
-          className='rounded-xl !py-[2px] !px-6 !text-base'
+          className='rounded-xl !px-6 !py-[2px] !text-base'
           href='/authentication/signup'
         >
           Inscription
@@ -52,22 +52,20 @@ export const HeaderAuthentication = (): JSX.Element => {
           })
         }}
       >
-        <Image
-          className='h-12 w-12 rounded-full'
-          quality={100}
-          src={user.logo ?? '/data/user-default.png'}
-          width={64}
-          height={64}
-          alt='User logo'
+        <User
+          className='h-12 w-12'
+          user={{
+            name: user.name,
+            logo: user.logo
+          }}
         />
-        <h2 className='font-bold'>{user.name}</h2>
       </div>
       {isOpen ? (
-        <div className='absolute top-[100%] right-0 flex w-full flex-col space-y-2 rounded-md bg-[#272522] p-3'>
+        <div className='absolute right-0 top-[100%] flex w-full flex-col space-y-2 rounded-md bg-[#272522] p-3'>
           <Button
             href='/users/settings'
             icon='/icons/settings.png'
-            className='!py-[2px] !px-0 !text-sm'
+            className='!px-0 !py-[2px] !text-sm'
             variant='white'
             onClick={() => {
               setIsOpen(false)
@@ -78,7 +76,7 @@ export const HeaderAuthentication = (): JSX.Element => {
           <Button
             href={`/users/${user.id}`}
             icon='/icons/profile.png'
-            className='!py-[2px] !px-0 !text-sm'
+            className='!px-0 !py-[2px] !text-sm'
             variant='purple'
             onClick={() => {
               setIsOpen(false)
@@ -88,7 +86,7 @@ export const HeaderAuthentication = (): JSX.Element => {
           </Button>
           <Button
             icon='/icons/signout.png'
-            className='!py-[2px] !px-0 !text-sm'
+            className='!px-0 !py-[2px] !text-sm'
             variant='red'
             onClick={async () => {
               setIsOpen(false)

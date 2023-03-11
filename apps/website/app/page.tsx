@@ -8,7 +8,7 @@ import { Features } from '@/components/Features/Features'
 
 const HomePage = (): JSX.Element => {
   return (
-    <>
+    <main className='flex flex-1 flex-col items-center justify-center'>
       <section className='mt-6 flex flex-col items-center justify-center space-y-4 md:w-full md:flex-row md:space-x-12 md:space-y-0'>
         <SocialMediaLink
           socialMedia='Reddit'
@@ -76,7 +76,7 @@ const HomePage = (): JSX.Element => {
           </div>
         </div>
       </section>
-    </>
+    </main>
   )
 }
 

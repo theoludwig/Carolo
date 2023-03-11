@@ -32,7 +32,7 @@ export const SocialMediaLink = (props: SocialMediaLinkProps): JSX.Element => {
       rel='noopener noreferrer'
       style={{ background: socialMediaColor }}
       className={classNames(
-        'mt-4 inline-flex w-36 cursor-pointer items-center rounded-lg py-2 px-4 font-semibold uppercase outline-none transition duration-300 ease-in-out hover:opacity-80 focus:outline-none md:mt-0 md:w-auto',
+        'mt-4 inline-flex w-36 cursor-pointer items-center rounded-lg px-4 py-2 font-semibold uppercase outline-none transition duration-300 ease-in-out hover:opacity-80 focus:outline-none md:mt-0 md:w-auto',
         className
       )}
     >
