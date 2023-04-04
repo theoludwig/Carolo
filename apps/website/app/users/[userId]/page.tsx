@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import classNames from 'clsx'
 
 import { api } from '@/lib/configurations'
@@ -11,15 +11,23 @@ export interface UsersProfilePageProps {
   params: {
     userId: string
   }
+  searchParams: {
+    before?: string
+    after?: string
+    originId?: string
+  }
 }
+
+const ITEMS_PER_PAGE_LIMIT = 20
 
 const UsersProfilePage = async (
   props: UsersProfilePageProps
 ): Promise<JSX.Element> => {
-  const { userId } = props.params
+  const { searchParams, params } = props
+  const { userId } = params
 
-  let userPublic: UserPublicById
-  let games: Games
+  let userPublic: UserPublicById | null = null
+  let games: Games | null = null
   try {
     const { data } = await api.get<UserPublicById>(`/users/${userId}`)
     userPublic = data
@@ -27,14 +35,38 @@ const UsersProfilePage = async (
     return notFound()
   }
 
+  let originId = searchParams.originId
+
   try {
-    const { data } = await api.get<Games>(`/users/${userId}/games?limit=100`)
+    const urlSearchParams = new URLSearchParams(searchParams)
+    urlSearchParams.set('limit', ITEMS_PER_PAGE_LIMIT.toString())
+    const { data } = await api.get<Games>(
+      `/users/${userId}/games?${urlSearchParams.toString()}`
+    )
     games = data
+    if (
+      games.length === 0 &&
+      (searchParams.before != null || searchParams.after != null)
+    ) {
+      return redirect(`/users/${userId}`)
+    }
+    if (originId == null && games.length > 0) {
+      originId = games[0].id.toString()
+    }
   } catch {
     return notFound()
   }
 
+  if (originId == null) {
+    return notFound()
+  }
+
   const hasAlreadyPlayed = games.length > 0
+  const showPrevious =
+    searchParams.after != null ||
+    (searchParams.before != null &&
+      games.length > 0 &&
+      games[0].id.toString() !== originId)
 
   return (
     <main className='flex flex-1 flex-col items-start justify-start overflow-hidden'>
@@ -50,7 +82,13 @@ const UsersProfilePage = async (
         )}
       >
         <UserPublic userPublic={userPublic} />
-        <UserGames games={games} userId={userPublic.user.id} />
+        <UserGames
+          games={games}
+          userId={userPublic.user.id}
+          showPrevious={showPrevious}
+          showNext={games.length >= ITEMS_PER_PAGE_LIMIT}
+          originId={originId}
+        />
       </div>
     </main>
   )

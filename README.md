@@ -12,7 +12,7 @@ Board game online similar to Chess but with different rules.
 
 - [Node.js](https://nodejs.org/) >= 18.0.0
 - [npm](https://www.npmjs.com/) >= 8.0.0
-- [PostgreSQL](https://www.postgresql.org/) >= 14.0.0
+- [PostgreSQL](https://www.postgresql.org/) >= 15.0.0
 
 ### Installation
 
@@ -42,6 +42,12 @@ ALTER USER carolo_user WITH SUPERUSER;
 ```
 
 Replace `DATABASE_URL` inside `apps/api/.env` with `postgresql://carolo_user:password@localhost:5432/carolo_database`.
+
+### Database Production migration
+
+```sh
+npm run prisma:migrate:deploy --workspace=apps/api
+```
 
 ### Local Development environment
 
@@ -80,26 +86,4 @@ npm run test
 
 # Test only one workspace (e.g: `apps/api`)
 npm run test --workspace=apps/api
-```
-
-### Production environment (with [Docker](https://www.docker.com/))
-
-#### Database Production migration
-
-```sh
-npm run prisma:migrate:deploy --workspace=apps/api
-```
-
-#### `apps/api`
-
-```sh
-docker build --tag="carolo-api" ./ --file="./apps/api/Dockerfile"
-docker run --network="host" --env-file="./apps/api/.env" --init --interactive --rm "carolo-api"
-```
-
-#### `apps/website`
-
-```sh
-docker build --tag="carolo-website" ./ --file="./apps/website/Dockerfile"
-docker run --network="host" --env-file="./apps/website/.env" --init --interactive --rm "carolo-website"
 ```

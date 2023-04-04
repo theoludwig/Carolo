@@ -13,10 +13,19 @@ export type Games = Services['/users/:userId/games']['get']['response']
 export interface UserGamesProps {
   userId: number
   games: Games
+  originId: string
+  showPrevious?: boolean
+  showNext?: boolean
 }
 
 export const UserGames = (props: UserGamesProps): JSX.Element => {
-  const { games, userId } = props
+  const {
+    games,
+    userId,
+    originId,
+    showPrevious = false,
+    showNext = false
+  } = props
 
   return (
     <div className='flex w-full flex-col space-y-6'>
@@ -45,6 +54,7 @@ export const UserGames = (props: UserGamesProps): JSX.Element => {
             className='inline-flex hover:opacity-80'
             key={game.id}
             href={`/game/${game.id}`}
+            id={`game-${game.id}`}
           >
             <div
               className={classNames('w-11 rounded-lg', {
@@ -90,6 +100,32 @@ export const UserGames = (props: UserGamesProps): JSX.Element => {
           </NextLink>
         )
       })}
+
+      {games.length > 0 && (showPrevious || showNext) ? (
+        <div className='flex justify-center space-x-6'>
+          {showPrevious ? (
+            <Button
+              variant='purple'
+              className='w-28'
+              href={`/users/${userId}?before=${games[0].id}&originId=${originId}`}
+            >
+              Précédent
+            </Button>
+          ) : null}
+
+          {showNext ? (
+            <Button
+              variant='purple'
+              className='w-28'
+              href={`/users/${userId}?after=${
+                games[games.length - 1].id
+              }&originId=${originId}`}
+            >
+              Suivant
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -22,11 +22,9 @@ export const queryPaginationSchema = {
 
   /** The before and after are mutually exclusive, only one may be passed at a time. */
   before: Type.Optional(
-    Type.Integer({ minimum: 1, description: 'Get items before this id' })
+    Type.String({ description: 'Get items before this id' })
   ),
-  after: Type.Optional(
-    Type.Integer({ minimum: 1, description: 'Get items after this id' })
-  )
+  after: Type.Optional(Type.String({ description: 'Get items after this id' }))
 }
 
 export const queryPaginationObjectSchema = Type.Object(queryPaginationSchema)
