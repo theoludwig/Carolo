@@ -5,8 +5,6 @@ skinparam classAttributeIconSize 0
 skinparam classFontStyle Bold
 hide enum methods
 
-' TODO: Update UML with current implementation
-
 enum GameStatus <<enumeration>> {
   LOBBY
   PLAY

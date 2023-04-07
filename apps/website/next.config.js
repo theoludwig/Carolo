@@ -1,12 +1,8 @@
-const path = require('node:path')
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   reactStrictMode: false,
   experimental: {
-    appDir: true,
-    outputFileTracingRoot: path.join(__dirname, '../../')
+    appDir: true
   },
   transpilePackages: ['@carolo/game', '@carolo/models'],
   images: {

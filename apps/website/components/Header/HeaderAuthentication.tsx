@@ -91,7 +91,8 @@ export const HeaderAuthentication = (): JSX.Element => {
             onClick={async () => {
               setIsOpen(false)
               await authentication.signoutServerSide()
-              router.replace('/api/hard-refresh')
+              router.refresh()
+              router.replace('/')
             }}
           >
             Déconnexion

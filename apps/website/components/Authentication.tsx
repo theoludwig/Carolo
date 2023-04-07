@@ -77,7 +77,8 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
     try {
       const { data } = await api.post<TokensJWT>('/users/signin', formData)
       await AuthenticationClass.signin(data.refreshToken)
-      router.replace('/api/hard-refresh')
+      router.refresh()
+      router.replace('/')
       return null
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {

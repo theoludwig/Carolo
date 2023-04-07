@@ -24,7 +24,7 @@ lint:
 
 test:
   stage: 'test'
-  image: 'cypress/base:18.12.1'
+  image: 'cypress/base:18.14.1'
   script:
     - 'npm run build'
     - 'npm run test'

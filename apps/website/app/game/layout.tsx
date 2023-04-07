@@ -15,7 +15,6 @@ const GameLayout = (props: GameLayoutProps): JSX.Element => {
   const { authenticated, authentication } = useAuthentication()
 
   useEffect(() => {
-    // TODO: Replace this with Server Side redirect when Next.js supports it (ref: <https://github.com/vercel/next.js/issues/42556>)
     const redirectGame = async (): Promise<void> => {
       if (authenticated) {
         const { data } = await authentication.api.get<
