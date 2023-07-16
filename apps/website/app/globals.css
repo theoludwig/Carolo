@@ -11,7 +11,8 @@
   --border-thickness: 4px;
   --border-size: 16px;
 
-  background: linear-gradient(
+  background:
+    linear-gradient(
         to right,
         var(--border-color) var(--border-thickness),
         transparent var(--border-thickness)

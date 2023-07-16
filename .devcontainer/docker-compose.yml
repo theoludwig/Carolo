@@ -10,7 +10,7 @@ services:
       - 'host.docker.internal:host-gateway'
 
   carolo-database:
-    image: 'postgres:15.2'
+    image: 'postgres:15.3'
     environment:
       POSTGRES_USER: 'user'
       POSTGRES_PASSWORD: 'password'

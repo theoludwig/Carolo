@@ -67,7 +67,7 @@ const HomePage = (): JSX.Element => {
           <div className='flex justify-center sm:justify-start'>
             <Button
               className='mt-6'
-              href='/rules'
+              href='/rules/carolo-fr-FR.pdf'
               target='_blank'
               rel='noopener noreferrer'
             >

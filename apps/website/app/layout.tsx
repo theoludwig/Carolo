@@ -23,13 +23,15 @@ export const dynamic = 'force-dynamic'
 const title = 'Carolo'
 const description =
   "Le Carolo est un jeu de plateau stratégique, fait par la communauté, pour la communauté, qui allie autant l'aspect tactique que romantique !"
-const image = 'https://carolo.org/home.png'
-const url = 'https://carolo.org'
+const image = '/home.png'
+const url = new URL('https://carolo.org')
+const locale = 'fr-FR'
 
 export const metadata = {
   title,
   description,
   colorScheme: 'dark',
+  metadataBase: url,
   openGraph: {
     title,
     description,
@@ -42,7 +44,7 @@ export const metadata = {
         height: 446
       }
     ],
-    locale: 'fr-FR',
+    locale,
     type: 'website'
   },
   icons: {
@@ -70,7 +72,7 @@ const RootLayout = async (props: RootLayoutProps): Promise<JSX.Element> => {
   user = result?.user ?? null
 
   return (
-    <html lang='fr-FR' className='dark' style={{ colorScheme: 'dark' }}>
+    <html lang={locale} className='dark' style={{ colorScheme: 'dark' }}>
       <head />
       <body className='font-inter flex h-screen flex-col bg-[#312E2B] pt-0'>
         <AuthenticationStoreInitializer tokens={tokens} user={user} />

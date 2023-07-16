@@ -1,8 +1,0 @@
-[book]
-language = "fr-FR"
-multilingual = false
-src = "src"
-title = "Carolo"
-
-[build]
-build-dir = "../../apps/website/public/rules"

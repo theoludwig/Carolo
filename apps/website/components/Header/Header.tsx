@@ -30,7 +30,7 @@ export const Header = (): JSX.Element => {
             </li>
             <li>
               <HeaderLink
-                href='/rules'
+                href='/rules/carolo-fr-FR.pdf'
                 target='_blank'
                 rel='noopener noreferrer'
               >

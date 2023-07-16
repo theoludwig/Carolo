@@ -4,7 +4,7 @@
 
 Carolo Application Programming Interface (API).
 
-Documentation: <http://localhost:8080/documentation>
+Documentation: <http://127.0.0.1:8080/documentation>
 
 ## Directory Structure
 

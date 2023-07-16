@@ -45,7 +45,6 @@ npm-debug.log*
 .DS_Store
 *.pem
 .turbo
-apps/website/public/rules
 bin/
 
 # typescript

@@ -19,6 +19,6 @@
     ]
   },
   "forwardPorts": [3000, 8080, 1080, 5555, 5432],
-  "postAttachCommand": ["npm", "install"],
+  "postCreateCommand": ["npm", "install"],
   "remoteUser": "node"
 }
