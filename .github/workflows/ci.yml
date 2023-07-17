@@ -1,0 +1,31 @@
+name: 'ci'
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  ci:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@v3.5.3'
+
+      - name: 'Setup Node.js'
+        uses: 'actions/setup-node@v3.6.0'
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+
+      - name: 'Install dependencies'
+        run: 'npm clean-install'
+
+      - run: 'cp apps/api/.env.example apps/api/.env'
+      - run: 'cp apps/website/.env.example apps/website/.env'
+
+      - run: 'npm run build'
+      - run: 'npm run lint'
+      - run: 'npm run lint:editorconfig'
+      - run: 'npm run lint:prettier'
+      - run: 'npm run test'

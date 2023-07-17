@@ -1,8 +1,10 @@
 # Carolo
 
-## About
+## À propos
 
-Board game online similar to Chess but with different [rules](./apps/website/public/rules/carolo-fr-FR.pdf).
+[Carolo](https://carolo.theoludwig.fr/), jeu de plateau stratégique similaire aux échecs qui permet des coups grandioses, reposant sur des enchaînements remarquables.
+
+[Règles du jeu Carolo](./apps/website/public/rules/carolo-fr-FR.pdf).
 
 ## Getting Started
 
@@ -100,3 +102,13 @@ docker run --network="host" --env-file="./apps/api/.env" --init --interactive --
 docker build --tag="carolo-website" ./ --file="./apps/website/Dockerfile"
 docker run --network="host" --env-file="./apps/website/.env" --init --interactive --rm "carolo-website"
 ```
+
+## 💡 Contributing
+
+Anyone can help to improve the project, submit a Feature Request, a bug report or even correct a simple spelling mistake.
+
+The steps to contribute can be found in the [CONTRIBUTING.md](./CONTRIBUTING.md) file.
+
+## 📄 License
+
+[MIT](./LICENSE)

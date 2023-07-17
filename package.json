@@ -16,7 +16,7 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "lint:editorconfig": "editorconfig-checker",
-    "lint:prettier": "prettier . --check --ignore-path .gitignore"
+    "lint:prettier": "prettier . --check"
   },
   "devDependencies": {
     "@carolo/eslint-config-custom": "*",
