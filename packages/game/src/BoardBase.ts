@@ -34,9 +34,9 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
   public static readonly SIZE = 8
 
   public constructor() {
-    const board = new Array(BoardBase.SIZE)
+    const board: PiecePosition[][] = Array.from({ length: BoardBase.SIZE })
     for (let row = 0; row < BoardBase.SIZE; row++) {
-      board[row] = new Array(BoardBase.SIZE)
+      board[row] = Array.from({ length: BoardBase.SIZE })
     }
     super({ board, moves: [], currentMoveIndex: -1 })
     this.reset()

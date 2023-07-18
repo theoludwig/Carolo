@@ -8,16 +8,16 @@
     ".eslintrc.json"
   ],
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "5.62.0",
-    "@typescript-eslint/parser": "5.62.0",
+    "@typescript-eslint/eslint-plugin": "6.1.0",
+    "@typescript-eslint/parser": "6.1.0",
     "eslint": "8.45.0",
-    "eslint-config-conventions": "10.0.0",
+    "eslint-config-conventions": "11.0.1",
     "eslint-config-prettier": "8.8.0",
-    "eslint-config-turbo": "1.10.7",
+    "eslint-config-turbo": "1.10.8",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-prettier": "5.0.0",
     "eslint-plugin-promise": "6.1.1",
-    "eslint-plugin-unicorn": "47.0.0"
+    "eslint-plugin-unicorn": "48.0.0"
   },
   "devDependencies": {
     "typescript": "5.1.6"

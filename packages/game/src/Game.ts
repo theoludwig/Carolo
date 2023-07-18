@@ -31,7 +31,7 @@ export class Game extends Observer<GameState> {
       throw new Error('Game must have 2 players.')
     }
     this._board = board
-    this._players = new Array(2)
+    this._players = Array.from({ length: 2 })
     this._players[0] = players[0]
     this._players[1] = players[1]
   }

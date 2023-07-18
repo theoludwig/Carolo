@@ -18,10 +18,7 @@ export class Carolo extends Piece {
       const bottom = new Position({ column: 0, row: -iteration })
       const left = new Position({ column: -iteration, row: 0 })
       const right = new Position({ column: iteration, row: 0 })
-      positionsOffsets.push(top)
-      positionsOffsets.push(bottom)
-      positionsOffsets.push(left)
-      positionsOffsets.push(right)
+      positionsOffsets.push(top, bottom, left, right)
     }
     return positionsOffsets
   }

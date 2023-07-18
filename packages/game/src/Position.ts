@@ -97,7 +97,7 @@ export class Position implements PositionOptions {
 
   public static fromString(positionString: PositionString): Position {
     const column = positionString.charCodeAt(0) - 'A'.charCodeAt(0)
-    const row = BoardBase.SIZE - parseInt(positionString[1], 10)
+    const row = BoardBase.SIZE - Number.parseInt(positionString[1], 10)
     return new Position({ column, row })
   }
 

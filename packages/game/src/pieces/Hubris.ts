@@ -10,10 +10,7 @@ export class Hubris extends Piece {
       const topRight = new Position({ column: iteration, row: iteration })
       const bottomLeft = new Position({ column: -iteration, row: -iteration })
       const bottomRight = new Position({ column: iteration, row: -iteration })
-      positionsOffsets.push(topLeft)
-      positionsOffsets.push(topRight)
-      positionsOffsets.push(bottomLeft)
-      positionsOffsets.push(bottomRight)
+      positionsOffsets.push(topLeft, topRight, bottomLeft, bottomRight)
     }
     return positionsOffsets
   }
