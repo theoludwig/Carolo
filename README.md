@@ -2,7 +2,7 @@
 
 ## À propos
 
-[Carolo](https://carolo.theoludwig.fr/), jeu de plateau stratégique similaire aux échecs qui permet des coups grandioses, reposant sur des enchaînements remarquables.
+Le [Carolo](https://carolo.theoludwig.fr/), est un jeu de plateau stratégique similaire aux échecs qui permet des coups grandioses, reposant sur des enchaînements remarquables.
 
 [Règles du jeu Carolo](./apps/website/public/rules/carolo-fr-FR.pdf).
 

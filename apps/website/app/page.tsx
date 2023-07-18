@@ -32,9 +32,9 @@ const HomePage = (): JSX.Element => {
             JOUEZ GRATUITEMENT AU CAROLO !
           </h2>
           <p className='mt-4 text-lg opacity-75'>
-            Le Carolo est un jeu de plateau stratégique, fait par la communauté,
-            pour la communauté, qui allie autant l{"'"}aspect tactique que
-            romantique !
+            Le Carolo est un jeu de plateau stratégique similaire aux échecs qui
+            permet des coups grandioses, reposant sur des enchaînements
+            remarquables.
           </p>
           <div className='flex justify-center sm:justify-start'>
             <Button className='mt-6' href='/game'>
