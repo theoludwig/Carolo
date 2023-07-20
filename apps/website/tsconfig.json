@@ -1,5 +1,5 @@
 {
-  "extends": "@carolo/tsconfig/base.json",
+  "extends": "@carolo/tsconfig/tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
@@ -11,7 +11,6 @@
       "@/*": ["./*"]
     },
     "noEmit": true,
-    "types": ["cypress"],
     "noUncheckedIndexedAccess": false,
     "resolveJsonModule": true,
     "isolatedModules": true,

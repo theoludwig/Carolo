@@ -1,4 +1,6 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
+
 import sinon from 'sinon'
 import { userSettingsExample } from '@carolo/models'
 
@@ -6,12 +8,12 @@ import { application } from '#src/application.js'
 import { authenticateUserTest } from '#src/__test__/utils/authenticateUserTest.js'
 import prisma from '#src/tools/database/prisma.js'
 
-await tap.test('PUT /users/current/settings', async (t) => {
+await test('PUT /users/current/settings', async (t) => {
   t.afterEach(() => {
     sinon.restore()
   })
 
-  await t.test('succeeds and edit the locale', async (t) => {
+  await t.test('succeeds and edit the locale', async () => {
     const newSettings = {
       locale: 'fr-FR'
     }
@@ -37,11 +39,11 @@ await tap.test('PUT /users/current/settings', async (t) => {
       payload: newSettings
     })
     const responseJson = response.json()
-    t.equal(response.statusCode, 200)
-    t.equal(responseJson.settings.locale, newSettings.locale)
+    assert.strictEqual(response.statusCode, 200)
+    assert.strictEqual(responseJson.settings.locale, newSettings.locale)
   })
 
-  await t.test('fails with invalid locale', async (t) => {
+  await t.test('fails with invalid locale', async () => {
     const newSettings = {
       locale: 'somerandomlocale'
     }
@@ -66,6 +68,6 @@ await tap.test('PUT /users/current/settings', async (t) => {
       },
       payload: newSettings
     })
-    t.equal(response.statusCode, 400)
+    assert.strictEqual(response.statusCode, 400)
   })
 })

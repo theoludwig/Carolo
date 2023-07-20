@@ -1,65 +1,66 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 import { Position } from '../index.js'
 
-await tap.test('Position', async (t) => {
-  await t.test('Initialization', async (t) => {
+await test('Position', async (t) => {
+  await t.test('Initialization', async () => {
     const position = new Position({ row: 0, column: 0 })
-    t.equal(position.row, 0)
-    t.equal(position.column, 0)
-    t.equal(position.toString(), 'A8')
+    assert.strictEqual(position.row, 0)
+    assert.strictEqual(position.column, 0)
+    assert.strictEqual(position.toString(), 'A8')
 
     const position2 = new Position({ row: 3, column: 6 })
-    t.equal(position2.row, 3)
-    t.equal(position2.column, 6)
-    t.equal(position2.toString(), 'G5')
+    assert.strictEqual(position2.row, 3)
+    assert.strictEqual(position2.column, 6)
+    assert.strictEqual(position2.toString(), 'G5')
   })
 
-  await t.test('Equality', async (t) => {
+  await t.test('Equality', async () => {
     const position = new Position({ row: 0, column: 0 })
     const position2 = new Position({ row: 0, column: 0 })
-    t.equal(position.equals(position2), true)
-    t.equal(position.equals({}), false)
+    assert.strictEqual(position.equals(position2), true)
+    assert.strictEqual(position.equals({}), false)
 
     const position3 = new Position({ row: 6, column: 3 })
     const position4 = new Position({ row: 6, column: 3 })
-    t.equal(position3.equals(position4), true)
+    assert.strictEqual(position3.equals(position4), true)
 
     const position5 = new Position({ row: 6, column: 3 })
     const position6 = new Position({ row: 3, column: 6 })
-    t.equal(position5.equals(position6), false)
+    assert.strictEqual(position5.equals(position6), false)
   })
 
-  await t.test('isInsideSquare', async (t) => {
+  await t.test('isInsideSquare', async () => {
     const size = 8
     const position = new Position({ row: 0, column: 0 })
-    t.equal(position.isInsideSquare(size), true)
+    assert.strictEqual(position.isInsideSquare(size), true)
 
     const position2 = new Position({ row: 7, column: 7 })
-    t.equal(position2.isInsideSquare(size), true)
+    assert.strictEqual(position2.isInsideSquare(size), true)
 
     const position3 = new Position({ row: 8, column: 8 })
-    t.equal(position3.isInsideSquare(size), false)
+    assert.strictEqual(position3.isInsideSquare(size), false)
   })
 
-  await t.test('add', async (t) => {
+  await t.test('add', async () => {
     const position = new Position({ row: 0, column: 0 })
     const position2 = new Position({ row: 1, column: 1 })
-    t.equal(position.add(position2).toString(), 'B7')
+    assert.strictEqual(position.add(position2).toString(), 'B7')
 
     const position3 = new Position({ row: 6, column: 3 })
     const position4 = new Position({ row: 1, column: 1 })
-    t.equal(position3.add(position4).toString(), 'E1')
+    assert.strictEqual(position3.add(position4).toString(), 'E1')
   })
 
-  await t.test('getIntermediatePositions', async (t) => {
+  await t.test('getIntermediatePositions', async () => {
     const position1 = new Position({ row: 0, column: 0 })
     const position2 = new Position({ row: 0, column: 0 })
-    t.equal(position1.getIntermediatePositions(position2).length, 0)
+    assert.strictEqual(position1.getIntermediatePositions(position2).length, 0)
 
     const position3 = new Position({ row: 0, column: 0 })
     const position4 = new Position({ row: 0, column: 5 })
-    t.same(
+    assert.deepStrictEqual(
       position3.getIntermediatePositions(position4).map((position) => {
         return position.toString()
       }),
@@ -68,7 +69,7 @@ await tap.test('Position', async (t) => {
 
     const position5 = new Position({ row: 0, column: 0 })
     const position6 = new Position({ row: 5, column: 0 })
-    t.same(
+    assert.deepStrictEqual(
       position5.getIntermediatePositions(position6).map((position) => {
         return position.toString()
       }),
@@ -77,7 +78,7 @@ await tap.test('Position', async (t) => {
 
     const position7 = new Position({ row: 0, column: 0 })
     const position8 = new Position({ row: 5, column: 5 })
-    t.same(
+    assert.deepStrictEqual(
       position7.getIntermediatePositions(position8).map((position) => {
         return position.toString()
       }),
@@ -85,21 +86,21 @@ await tap.test('Position', async (t) => {
     )
   })
 
-  await t.test('fromString', async (t) => {
+  await t.test('fromString', async () => {
     const position1 = Position.fromString('A8')
-    t.equal(position1.row, 0)
-    t.equal(position1.column, 0)
+    assert.strictEqual(position1.row, 0)
+    assert.strictEqual(position1.column, 0)
 
     const position2 = Position.fromString('G5')
-    t.equal(position2.row, 3)
-    t.equal(position2.column, 6)
+    assert.strictEqual(position2.row, 3)
+    assert.strictEqual(position2.column, 6)
 
     const position3 = Position.fromString('A1')
-    t.equal(position3.row, 7)
-    t.equal(position3.column, 0)
+    assert.strictEqual(position3.row, 7)
+    assert.strictEqual(position3.column, 0)
 
     const position4 = Position.fromString('H8')
-    t.equal(position4.row, 0)
-    t.equal(position4.column, 7)
+    assert.strictEqual(position4.row, 0)
+    assert.strictEqual(position4.column, 7)
   })
 })

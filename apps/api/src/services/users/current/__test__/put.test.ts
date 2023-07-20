@@ -1,16 +1,18 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
+
 import sinon from 'sinon'
 
 import { application } from '#src/application.js'
 import prisma from '#src/tools/database/prisma.js'
 import { authenticateUserTest } from '#src/__test__/utils/authenticateUserTest.js'
 
-await tap.test('PUT /users/current', async (t) => {
+await test('PUT /users/current', async (t) => {
   t.afterEach(() => {
     sinon.restore()
   })
 
-  await t.test('succeeds with valid accessToken and valid name', async (t) => {
+  await t.test('succeeds with valid accessToken and valid name', async () => {
     const newName = 'John DOE'
     const { accessToken, user, userStubValue } = await authenticateUserTest()
     sinon.stub(prisma, 'user').value({
@@ -36,11 +38,11 @@ await tap.test('PUT /users/current', async (t) => {
       }
     })
     const responseJson = response.json()
-    t.equal(response.statusCode, 200)
-    t.equal(responseJson.user.name, newName)
+    assert.strictEqual(response.statusCode, 200)
+    assert.strictEqual(responseJson.user.name, newName)
   })
 
-  await t.test('fails with name already used', async (t) => {
+  await t.test('fails with name already used', async () => {
     const newName = 'John DOE'
     const { accessToken, user, userStubValue } = await authenticateUserTest()
     sinon.stub(prisma, 'user').value({
@@ -59,6 +61,6 @@ await tap.test('PUT /users/current', async (t) => {
         name: newName
       }
     })
-    t.equal(response.statusCode, 400)
+    assert.strictEqual(response.statusCode, 400)
   })
 })

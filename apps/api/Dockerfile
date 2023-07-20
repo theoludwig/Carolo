@@ -1,6 +1,6 @@
 FROM node:18.17.0 AS builder
 WORKDIR /usr/src/app
-RUN npm install --global turbo@1.10.8
+RUN npm install --global turbo@1.10.9
 COPY ./ ./
 RUN turbo prune --scope=@carolo/api --docker
 
@@ -18,6 +18,7 @@ RUN npx turbo run build --filter=@carolo/api...
 FROM node:18.17.0 AS runner
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
+ENV NODE_OPTIONS=--enable-source-maps
 COPY --from=installer /usr/src/app ./
 USER node
 CMD ["node", "apps/api/build/index.js"]

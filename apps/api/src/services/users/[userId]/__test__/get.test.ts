@@ -1,16 +1,18 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
+
 import sinon from 'sinon'
 import { userExample, userSettingsExample } from '@carolo/models'
 
 import { application } from '#src/application.js'
 import prisma from '#src/tools/database/prisma.js'
 
-await tap.test('GET /users/[userId]', async (t) => {
+await test('GET /users/[userId]', async (t) => {
   t.afterEach(() => {
     sinon.restore()
   })
 
-  await t.test('succeeds', async (t) => {
+  await t.test('succeeds', async () => {
     sinon.stub(prisma, 'user').value({
       findUnique: async () => {
         return {
@@ -39,12 +41,12 @@ await tap.test('GET /users/[userId]', async (t) => {
       url: `/users/${userExample.id}`
     })
     const responseJson = response.json()
-    t.equal(response.statusCode, 200)
-    t.equal(responseJson.user.id, userExample.id)
-    t.equal(responseJson.user.name, userExample.name)
+    assert.strictEqual(response.statusCode, 200)
+    assert.strictEqual(responseJson.user.id, userExample.id)
+    assert.strictEqual(responseJson.user.name, userExample.name)
   })
 
-  await t.test('fails with not found user', async (t) => {
+  await t.test('fails with not found user', async () => {
     sinon.stub(prisma, 'userSetting').value({
       findFirst: async () => {
         return null
@@ -55,7 +57,7 @@ await tap.test('GET /users/[userId]', async (t) => {
       url: `/users/1`
     })
     const responseJson = response.json()
-    t.equal(response.statusCode, 404)
-    t.equal(responseJson.message, 'User not found.')
+    assert.strictEqual(response.statusCode, 404)
+    assert.strictEqual(responseJson.message, 'User not found.')
   })
 })

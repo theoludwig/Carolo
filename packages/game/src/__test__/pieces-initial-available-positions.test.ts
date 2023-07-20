@@ -1,32 +1,33 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 import { createGame } from './utils.js'
 import type { GameMachine } from './utils.js'
 import { Position } from '../index.js'
 
-await tap.test('Pieces Initial Available Positions', async (t) => {
+await test('Pieces Initial Available Positions', async (t) => {
   let createGameResult: GameMachine
 
   t.beforeEach(async () => {
     createGameResult = createGame()
   })
 
-  await t.test('White Pieces Initial Positions', async (t) => {
+  await t.test('White Pieces Initial Positions', async () => {
     const { game, board } = createGameResult
-    t.equal(game.status, 'LOBBY')
+    assert.strictEqual(game.status, 'LOBBY')
     game.play()
-    t.equal(game.status, 'PLAY')
-    t.equal(game.getCurrentPlayer().color, 'WHITE')
+    assert.strictEqual(game.status, 'PLAY')
+    assert.strictEqual(game.getCurrentPlayer().color, 'WHITE')
 
-    t.same(
+    assert.deepStrictEqual(
       board.getAvailablePiecePositions(new Position({ row: 0, column: 0 })),
       new Map(),
       'No available positions for free position (with no piece)'
     )
 
     const egoPiecePosition = board.getEgoPiecePosition('WHITE')
-    t.equal(egoPiecePosition.piece.type, 'EGO')
-    t.same(
+    assert.strictEqual(egoPiecePosition.piece.type, 'EGO')
+    assert.deepStrictEqual(
       board.getAvailablePiecePositions(egoPiecePosition.position),
       new Map()
     )
@@ -34,7 +35,7 @@ await tap.test('Pieces Initial Available Positions', async (t) => {
     const caroloPiecePosition = board.getPiecePosition(
       new Position({ row: 7, column: 4 })
     )
-    t.same(
+    assert.deepStrictEqual(
       board.getAvailablePiecePositions(caroloPiecePosition.position),
       new Map()
     )
@@ -42,18 +43,24 @@ await tap.test('Pieces Initial Available Positions', async (t) => {
     const bayardLeftPiecePosition = board.getPiecePosition(
       new Position({ row: 7, column: 2 })
     )
-    t.same(
-      board.getAvailablePiecePositions(bayardLeftPiecePosition.position).keys(),
+    assert.deepStrictEqual(
+      [
+        ...board
+          .getAvailablePiecePositions(bayardLeftPiecePosition.position)
+          .keys()
+      ],
       ['B3', 'D3', 'A2']
     )
 
     const bayardRightPiecePosition = board.getPiecePosition(
       new Position({ row: 7, column: 5 })
     )
-    t.same(
-      board
-        .getAvailablePiecePositions(bayardRightPiecePosition.position)
-        .keys(),
+    assert.deepStrictEqual(
+      [
+        ...board
+          .getAvailablePiecePositions(bayardRightPiecePosition.position)
+          .keys()
+      ],
       ['H2', 'E3', 'G3']
     )
 
@@ -62,7 +69,7 @@ await tap.test('Pieces Initial Available Positions', async (t) => {
       const aymonPiecePosition = board.getPiecePosition(
         new Position({ row: aymonRow, column })
       )
-      t.equal(
+      assert.strictEqual(
         board.getAvailablePiecePositions(aymonPiecePosition.position).size,
         44,
         'Aymon teleport to any free position on the board'
@@ -72,25 +79,17 @@ await tap.test('Pieces Initial Available Positions', async (t) => {
     const leftHubris = board.getPiecePosition(
       new Position({ row: 5, column: 2 })
     )
-    t.same(board.getAvailablePiecePositions(leftHubris.position).keys(), [
-      'B2',
-      'B4',
-      'D4',
-      'A1',
-      'A5',
-      'E5'
-    ])
+    assert.deepStrictEqual(
+      [...board.getAvailablePiecePositions(leftHubris.position).keys()],
+      ['B2', 'B4', 'D4', 'A1', 'A5', 'E5']
+    )
 
     const rightHubris = board.getPiecePosition(
       new Position({ row: 5, column: 5 })
     )
-    t.same(board.getAvailablePiecePositions(rightHubris.position).keys(), [
-      'G2',
-      'E4',
-      'G4',
-      'H1',
-      'D5',
-      'H5'
-    ])
+    assert.deepStrictEqual(
+      [...board.getAvailablePiecePositions(rightHubris.position).keys()],
+      ['G2', 'E4', 'G4', 'H1', 'D5', 'H5']
+    )
   })
 })

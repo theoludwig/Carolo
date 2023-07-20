@@ -5,7 +5,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**", ".next/**"],
+      "outputs": ["dist/**", "build/**", ".next/**", "!.next/cache/**"],
       "inputs": ["**/*.tsx", "**/*.ts"]
     },
     "test": {

@@ -1,18 +1,20 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 import { createGame } from '../utils.js'
 import type { GameMachine } from '../utils.js'
+import type { Piece } from '../../index.js'
 import { Position } from '../../index.js'
 
-await tap.test('Hubris Available Positions', async (t) => {
+await test('Hubris Available Positions', async () => {
   const createGameResult: GameMachine = createGame()
   const { game, board } = createGameResult
-  t.equal(game.status, 'LOBBY')
+  assert.strictEqual(game.status, 'LOBBY')
   game.play()
-  t.equal(game.status, 'PLAY')
+  assert.strictEqual(game.status, 'PLAY')
 
-  t.equal(game.getCurrentPlayer().color, 'WHITE')
-  t.equal(
+  assert.strictEqual(game.getCurrentPlayer().color, 'WHITE')
+  assert.strictEqual(
     board.getPiecePosition(new Position({ column: 2, row: 5 })).piece.type,
     'HUBRIS'
   )
@@ -21,17 +23,19 @@ await tap.test('Hubris Available Positions', async (t) => {
     new Position({ column: 3, row: 4 })
   )
 
-  t.equal(game.getCurrentPlayer().color, 'BLACK')
+  assert.strictEqual(game.getCurrentPlayer().color, 'BLACK')
   game.playMove(
     new Position({ column: 5, row: 2 }),
     new Position({ column: 6, row: 3 })
   )
 
-  t.equal(game.getCurrentPlayer().color, 'WHITE')
-  t.same(
-    board
-      .getAvailablePiecePositions(new Position({ column: 3, row: 4 }))
-      .keys(),
+  assert.strictEqual(game.getCurrentPlayer().color, 'WHITE')
+  assert.deepStrictEqual(
+    [
+      ...board
+        .getAvailablePiecePositions(new Position({ column: 3, row: 4 }))
+        .keys()
+    ],
     ['C3', 'E3', 'C5', 'E5', 'B2', 'B6', 'F6', 'A1', 'A7', 'G7', 'H8']
   )
   game.playMove(
@@ -39,11 +43,13 @@ await tap.test('Hubris Available Positions', async (t) => {
     new Position({ column: 1, row: 7 })
   )
 
-  t.equal(game.getCurrentPlayer().color, 'BLACK')
-  t.same(
-    board
-      .getAvailablePiecePositions(new Position({ column: 6, row: 3 }))
-      .keys(),
+  assert.strictEqual(game.getCurrentPlayer().color, 'BLACK')
+  assert.deepStrictEqual(
+    [
+      ...board
+        .getAvailablePiecePositions(new Position({ column: 6, row: 3 }))
+        .keys()
+    ],
     ['F4', 'H4', 'F6', 'H6', 'E3']
   )
   game.playMove(
@@ -51,11 +57,13 @@ await tap.test('Hubris Available Positions', async (t) => {
     new Position({ column: 0, row: 0 })
   )
 
-  t.equal(game.getCurrentPlayer().color, 'WHITE')
-  t.same(
-    board
-      .getAvailablePiecePositions(new Position({ column: 3, row: 4 }))
-      .keys(),
+  assert.strictEqual(game.getCurrentPlayer().color, 'WHITE')
+  assert.deepStrictEqual(
+    [
+      ...board
+        .getAvailablePiecePositions(new Position({ column: 3, row: 4 }))
+        .keys()
+    ],
     [
       'C3',
       'E3',
@@ -77,14 +85,16 @@ await tap.test('Hubris Available Positions', async (t) => {
     new Position({ column: 4, row: 5 })
   )
 
-  t.equal(game.getCurrentPlayer().color, 'BLACK')
-  t.same(
-    board
-      .getAvailablePiecePositions(new Position({ column: 6, row: 3 }))
-      .keys(),
+  assert.strictEqual(game.getCurrentPlayer().color, 'BLACK')
+  assert.deepStrictEqual(
+    [
+      ...board
+        .getAvailablePiecePositions(new Position({ column: 6, row: 3 }))
+        .keys()
+    ],
     ['F4', 'H4', 'F6', 'H6', 'E3']
   )
-  t.equal(
+  assert.strictEqual(
     board.isCaptureMove(
       new Position({ column: 4, row: 5 }),
       new Position({ column: 6, row: 3 })
@@ -92,26 +102,29 @@ await tap.test('Hubris Available Positions', async (t) => {
     true,
     'Black Hubris can capture White Bayard'
   )
-  t.equal(
+  assert.strictEqual(
     board.isCaptureMove(
       new Position({ column: 7, row: 2 }),
       new Position({ column: 6, row: 3 })
     ),
     false
   )
-  t.equal(
+  assert.strictEqual(
     board.getPiecePosition(new Position({ column: 4, row: 5 })).piece.type,
     'BAYARD'
   )
   const currentPlayer = game.getCurrentPlayer()
-  t.same(currentPlayer.capturedPieces, [])
+  assert.deepStrictEqual(currentPlayer.capturedPieces, [])
   game.playMove(
     new Position({ column: 6, row: 3 }),
     new Position({ column: 4, row: 5 })
   )
-  t.same(currentPlayer.capturedPieces.length, 1)
-  t.equal(currentPlayer.capturedPieces[0].type, 'BAYARD')
-  t.equal(
+  assert.deepStrictEqual(currentPlayer.capturedPieces.length, 1)
+  assert.strictEqual(
+    (currentPlayer.capturedPieces as Piece[])[0].type,
+    'BAYARD'
+  )
+  assert.strictEqual(
     board.getPiecePosition(new Position({ column: 4, row: 5 })).piece.type,
     'HUBRIS'
   )

@@ -1,17 +1,18 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 import { createGame } from './utils.js'
 import type { GameMachine } from './utils.js'
 import { Position } from '../index.js'
 
-await tap.test('Ego reconquest', async (t) => {
+await test('Ego reconquest', async (t) => {
   let createGameResult: GameMachine
 
   t.beforeEach(async () => {
     createGameResult = createGame()
   })
 
-  await t.test('Black Reconquest', async (t) => {
+  await t.test('Black Reconquest', async () => {
     const { game, board } = createGameResult
     game.play()
     game.playMove(
@@ -94,19 +95,19 @@ await tap.test('Ego reconquest', async (t) => {
       new Position({ column: 6, row: 6 }),
       new Position({ column: 6, row: 7 })
     )
-    t.equal(game.status, 'BLACK_WON')
-    t.equal(board.isReconquest('WHITE'), false)
-    t.equal(board.isReconquest('BLACK'), true)
-    t.equal(board.isCheck('WHITE'), false)
-    t.equal(board.isCheck('BLACK'), false)
+    assert.strictEqual(game.status, 'BLACK_WON')
+    assert.strictEqual(board.isReconquest('WHITE'), false)
+    assert.strictEqual(board.isReconquest('BLACK'), true)
+    assert.strictEqual(board.isCheck('WHITE'), false)
+    assert.strictEqual(board.isCheck('BLACK'), false)
     const egoPiecePosition = board.getEgoPiecePosition('BLACK')
-    t.equal(egoPiecePosition.isOccupied(), true)
-    t.equal(egoPiecePosition.piece.type, 'EGO')
-    t.equal(egoPiecePosition.piece.color, 'BLACK')
-    t.equal(egoPiecePosition.position.toString(), 'G1')
+    assert.strictEqual(egoPiecePosition.isOccupied(), true)
+    assert.strictEqual(egoPiecePosition.piece.type, 'EGO')
+    assert.strictEqual(egoPiecePosition.piece.color, 'BLACK')
+    assert.strictEqual(egoPiecePosition.position.toString(), 'G1')
   })
 
-  await t.test('White Reconquest', async (t) => {
+  await t.test('White Reconquest', async () => {
     const { game, board } = createGameResult
     game.play()
     game.playMove(
@@ -185,19 +186,19 @@ await tap.test('Ego reconquest', async (t) => {
       new Position({ column: 1, row: 1 }),
       new Position({ column: 1, row: 0 })
     )
-    t.equal(game.status, 'WHITE_WON')
-    t.equal(board.isReconquest('WHITE'), true)
-    t.equal(board.isReconquest('BLACK'), false)
-    t.equal(board.isCheck('WHITE'), false)
-    t.equal(board.isCheck('BLACK'), false)
+    assert.strictEqual(game.status, 'WHITE_WON')
+    assert.strictEqual(board.isReconquest('WHITE'), true)
+    assert.strictEqual(board.isReconquest('BLACK'), false)
+    assert.strictEqual(board.isCheck('WHITE'), false)
+    assert.strictEqual(board.isCheck('BLACK'), false)
     const egoPiecePosition = board.getEgoPiecePosition('WHITE')
-    t.equal(egoPiecePosition.isOccupied(), true)
-    t.equal(egoPiecePosition.piece.type, 'EGO')
-    t.equal(egoPiecePosition.piece.color, 'WHITE')
-    t.equal(egoPiecePosition.position.toString(), 'B8')
+    assert.strictEqual(egoPiecePosition.isOccupied(), true)
+    assert.strictEqual(egoPiecePosition.piece.type, 'EGO')
+    assert.strictEqual(egoPiecePosition.piece.color, 'WHITE')
+    assert.strictEqual(egoPiecePosition.position.toString(), 'B8')
   })
 
-  await t.test('White Reconquest first but White Ego is check', async (t) => {
+  await t.test('White Reconquest first but White Ego is check', async () => {
     const { game, board } = createGameResult
     game.play()
     game.playMove(
@@ -265,25 +266,27 @@ await tap.test('Ego reconquest', async (t) => {
       new Position({ column: 0, row: 1 })
     )
     const egoWhitePiecePosition = board.getEgoPiecePosition('WHITE')
-    t.equal(egoWhitePiecePosition.isOccupied(), true)
-    t.equal(egoWhitePiecePosition.piece.type, 'EGO')
-    t.equal(egoWhitePiecePosition.piece.color, 'WHITE')
-    t.equal(egoWhitePiecePosition.position.toString(), 'D7')
-    t.same(
-      board
-        .getAvailablePiecePositions(new Position({ column: 3, row: 1 }))
-        .keys(),
+    assert.strictEqual(egoWhitePiecePosition.isOccupied(), true)
+    assert.strictEqual(egoWhitePiecePosition.piece.type, 'EGO')
+    assert.strictEqual(egoWhitePiecePosition.piece.color, 'WHITE')
+    assert.strictEqual(egoWhitePiecePosition.position.toString(), 'D7')
+    assert.deepStrictEqual(
+      [
+        ...board
+          .getAvailablePiecePositions(new Position({ column: 3, row: 1 }))
+          .keys()
+      ],
       ['D6', 'D8', 'C7']
     )
-    t.equal(game.getCurrentPlayer().color, 'WHITE')
+    assert.strictEqual(game.getCurrentPlayer().color, 'WHITE')
     game.playMove(
       new Position({ column: 3, row: 1 }),
       new Position({ column: 3, row: 0 })
     )
-    t.equal(game.status, 'WHITE_WON')
-    t.equal(board.isReconquest('WHITE'), true)
-    t.equal(board.isReconquest('BLACK'), false)
-    t.equal(board.isCheck('WHITE'), true)
-    t.equal(board.isCheck('BLACK'), false)
+    assert.strictEqual(game.status, 'WHITE_WON')
+    assert.strictEqual(board.isReconquest('WHITE'), true)
+    assert.strictEqual(board.isReconquest('BLACK'), false)
+    assert.strictEqual(board.isCheck('WHITE'), true)
+    assert.strictEqual(board.isCheck('BLACK'), false)
   })
 })

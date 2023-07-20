@@ -1,31 +1,32 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 import { createGame } from '../utils.js'
 import type { GameMachine } from '../utils.js'
 import { Aymon, Position } from '../../index.js'
 
-await tap.test('Aymon Available Positions', async (t) => {
+await test('Aymon Available Positions', async () => {
   const createGameResult: GameMachine = createGame()
   const { game, board } = createGameResult
-  t.equal(game.status, 'LOBBY')
+  assert.strictEqual(game.status, 'LOBBY')
   game.play()
-  t.equal(game.status, 'PLAY')
-  t.equal(game.getCurrentPlayer().color, 'WHITE')
+  assert.strictEqual(game.status, 'PLAY')
+  assert.strictEqual(game.getCurrentPlayer().color, 'WHITE')
 
-  t.equal(
+  assert.strictEqual(
     board.getPiecePosition(new Position({ column: 3, row: 6 })).piece.type,
     'AYMON'
   )
-  t.equal(
+  assert.strictEqual(
     board.getPiecePosition(new Position({ column: 4, row: 4 })).isFree(),
     true
   )
-  t.equal(
+  assert.strictEqual(
     board.getAvailablePiecePositions(new Position({ column: 3, row: 6 })).size,
     44,
     'Aymon should be able to teleport to any position on the board'
   )
-  t.throws(() => {
+  assert.throws(() => {
     new Aymon('WHITE').getPositionsOffsets()
-  }, 'Not implemented')
+  })
 })

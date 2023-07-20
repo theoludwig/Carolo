@@ -1,5 +1,5 @@
 {
-  "extends": "@carolo/tsconfig/base.json",
+  "extends": "@carolo/tsconfig/tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",

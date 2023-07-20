@@ -1,4 +1,5 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 import { Observer } from '../Observer.js'
 
@@ -12,22 +13,22 @@ class ExampleObserver extends Observer<ExampleObserverState> {
   }
 }
 
-await tap.test('Observer', async (t) => {
-  await t.test('Initialization', async (t) => {
+await test('Observer', async (t) => {
+  await t.test('Initialization', async () => {
     const observer = new ExampleObserver()
-    t.equal(observer.state.value, 0)
+    assert.strictEqual(observer.state.value, 0)
   })
 
-  await t.test('setState', async (t) => {
+  await t.test('setState', async () => {
     const observer = new ExampleObserver()
     observer.setState((state) => {
       state.value = 1
     })
-    t.equal(observer.state.value, 1)
-    t.equal(observer.initialState.value, 0)
+    assert.strictEqual(observer.state.value, 1)
+    assert.strictEqual(observer.initialState.value, 0)
   })
 
-  await t.test('subscribe', async (t) => {
+  await t.test('subscribe', async () => {
     let valueSubscribed = 0
     const observer = new ExampleObserver()
     observer.subscribe((state) => {
@@ -36,11 +37,11 @@ await tap.test('Observer', async (t) => {
     observer.setState((state) => {
       state.value = 1
     })
-    t.equal(valueSubscribed, 1)
-    t.equal(observer.initialState.value, 0)
+    assert.strictEqual(valueSubscribed, 1)
+    assert.strictEqual(observer.initialState.value, 0)
   })
 
-  await t.test('unsubscribe', async (t) => {
+  await t.test('unsubscribe', async () => {
     let valueSubscribed = 0
     const observer = new ExampleObserver()
     const unsubscribe = observer.subscribe((state) => {
@@ -49,12 +50,12 @@ await tap.test('Observer', async (t) => {
     observer.setState((state) => {
       state.value = 1
     })
-    t.equal(valueSubscribed, 1)
+    assert.strictEqual(valueSubscribed, 1)
     unsubscribe()
     observer.setState((state) => {
       state.value = 2
     })
-    t.equal(valueSubscribed, 1)
-    t.equal(observer.initialState.value, 0)
+    assert.strictEqual(valueSubscribed, 1)
+    assert.strictEqual(observer.initialState.value, 0)
   })
 })

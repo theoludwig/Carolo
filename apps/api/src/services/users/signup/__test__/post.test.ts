@@ -1,4 +1,6 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
+
 import sinon from 'sinon'
 import { userExample, userSettingsExample } from '@carolo/models'
 
@@ -13,12 +15,12 @@ const payload = {
   locale: userSettingsExample.locale
 }
 
-await tap.test('POST /users/signup', async (t) => {
+await test('POST /users/signup', async (t) => {
   t.afterEach(() => {
     sinon.restore()
   })
 
-  await t.test('succeeds', async (t) => {
+  await t.test('succeeds', async () => {
     sinon.stub(prisma, 'user').value({
       findFirst: async () => {
         return null
@@ -47,12 +49,12 @@ await tap.test('POST /users/signup', async (t) => {
       payload
     })
     const responseJson = response.json()
-    t.equal(response.statusCode, 201)
-    t.equal(responseJson.user.name, userExample.name)
-    t.equal(responseJson.user.email, userExample.email)
+    assert.strictEqual(response.statusCode, 201)
+    assert.strictEqual(responseJson.user.name, userExample.name)
+    assert.strictEqual(responseJson.user.email, userExample.email)
   })
 
-  await t.test('fails with invalid email', async (t) => {
+  await t.test('fails with invalid email', async () => {
     sinon.stub(prisma, 'user').value({
       findFirst: async () => {
         return null
@@ -67,10 +69,10 @@ await tap.test('POST /users/signup', async (t) => {
         email: 'incorrect-email@abc'
       }
     })
-    t.equal(response.statusCode, 400)
+    assert.strictEqual(response.statusCode, 400)
   })
 
-  await t.test('fails with already taken `name` or `email`', async (t) => {
+  await t.test('fails with already taken `name` or `email`', async () => {
     sinon.stub(prisma, 'user').value({
       findFirst: async () => {
         return userExample
@@ -82,6 +84,6 @@ await tap.test('POST /users/signup', async (t) => {
       url: '/users/signup',
       payload
     })
-    t.equal(response.statusCode, 400)
+    assert.strictEqual(response.statusCode, 400)
   })
 })

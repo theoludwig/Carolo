@@ -2,9 +2,8 @@
   "name": "@carolo/eslint-config-custom",
   "version": "1.0.0",
   "private": true,
-  "main": "index.js",
+  "main": ".eslintrc.json",
   "files": [
-    "index.js",
     ".eslintrc.json"
   ],
   "dependencies": {
@@ -13,7 +12,7 @@
     "eslint": "8.45.0",
     "eslint-config-conventions": "11.0.1",
     "eslint-config-prettier": "8.8.0",
-    "eslint-config-turbo": "1.10.8",
+    "eslint-config-turbo": "1.10.9",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-prettier": "5.0.0",
     "eslint-plugin-promise": "6.1.1",

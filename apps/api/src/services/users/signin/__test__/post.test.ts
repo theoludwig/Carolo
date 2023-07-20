@@ -1,4 +1,6 @@
-import tap from 'tap'
+import test from 'node:test'
+import assert from 'node:assert/strict'
+
 import sinon from 'sinon'
 import bcrypt from 'bcryptjs'
 import { userExample, refreshTokenExample } from '@carolo/models'
@@ -12,12 +14,12 @@ const payload = {
   password: userExample.password
 }
 
-await tap.test('POST /users/signin', async (t) => {
+await test('POST /users/signin', async (t) => {
   t.afterEach(() => {
     sinon.restore()
   })
 
-  await t.test('succeeds', async (t) => {
+  await t.test('succeeds', async () => {
     sinon.stub(prisma, 'user').value({
       findUnique: async () => {
         return {
@@ -37,12 +39,12 @@ await tap.test('POST /users/signin', async (t) => {
       payload
     })
     const responseJson = response.json()
-    t.equal(response.statusCode, 200)
-    t.equal(responseJson.type, 'Bearer')
-    t.equal(responseJson.expiresIn, expiresIn)
+    assert.strictEqual(response.statusCode, 200)
+    assert.strictEqual(responseJson.type, 'Bearer')
+    assert.strictEqual(responseJson.expiresIn, expiresIn)
   })
 
-  await t.test('fails with invalid user', async (t) => {
+  await t.test('fails with invalid user', async () => {
     sinon.stub(prisma, 'user').value({
       findUnique: () => {
         return null
@@ -53,10 +55,10 @@ await tap.test('POST /users/signin', async (t) => {
       url: '/users/signin',
       payload
     })
-    t.equal(response.statusCode, 400)
+    assert.strictEqual(response.statusCode, 400)
   })
 
-  await t.test('fails with invalid email', async (t) => {
+  await t.test('fails with invalid email', async () => {
     sinon.stub(prisma, 'user').value({
       findUnique: () => {
         return null
@@ -70,10 +72,10 @@ await tap.test('POST /users/signin', async (t) => {
         email: 'incorrect-email'
       }
     })
-    t.equal(response.statusCode, 400)
+    assert.strictEqual(response.statusCode, 400)
   })
 
-  await t.test('fails with incorrect password', async (t) => {
+  await t.test('fails with incorrect password', async () => {
     sinon.stub(prisma, 'user').value({
       findUnique: async () => {
         return userExample
@@ -87,6 +89,6 @@ await tap.test('POST /users/signin', async (t) => {
         password: 'incorrect-password'
       }
     })
-    t.equal(response.statusCode, 400)
+    assert.strictEqual(response.statusCode, 400)
   })
 })
