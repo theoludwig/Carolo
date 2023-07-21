@@ -10,7 +10,6 @@ import { userSchema } from '@carolo/models'
 
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
-import { Link } from '@/components/Link'
 import { FormState } from '@/components/FormState'
 import { useFormTranslation } from '@/hooks/useFormTranslation'
 import { Authentication as AuthenticationClass } from '@/lib/Authentication'
@@ -163,10 +162,10 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
           </Button>
         </div>
 
-        <p className='mt-6 text-center text-xs'>
+        {/* <p className='mt-6 text-center text-xs'>
           <Link href='/'>Conditions générales d{"'"}utilisation</Link> et{' '}
           <Link href='/'>Politique de confidentialité</Link>
-        </p>
+        </p> */}
       </div>
     </>
   )
