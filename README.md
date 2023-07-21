@@ -21,9 +21,10 @@ Le [Carolo](https://carolo.theoludwig.fr/), est un jeu de plateau stratégique s
 cd Carolo
 
 # Install dependencies
-npm install
+npm clean-install
 
 # Configure the environment variables inside `apps/api` and `apps/website`
+cp .env.example .env
 cp apps/api/.env.example apps/api/.env
 cp apps/website/.env.example apps/website/.env
 ```
@@ -33,12 +34,10 @@ cp apps/website/.env.example apps/website/.env
 ```sh
 # Create a new user and database
 psql
-create database carolo_database;
-create user carolo_user with encrypted password 'password';
+CREATE DATABASE carolo;
+CREATE USER carolo_user with encrypted password 'password';
 ALTER USER carolo_user WITH SUPERUSER;
 ```
-
-Replace `DATABASE_URL` inside `apps/api/.env` with `postgresql://carolo_user:password@127.0.0.1:5432/carolo_database`.
 
 ### Database Production migration
 
@@ -91,9 +90,6 @@ npm run test --workspace=apps/api
 
 ```sh
 docker compose up --build
-
-# Run Prisma migrations
-docker compose exec carolo-api npm run prisma:migrate:deploy
 ```
 
 ## 💡 Contributing

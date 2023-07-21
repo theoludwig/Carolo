@@ -53,7 +53,7 @@ Here is what potentially look like a folder structure for this service :
             └── index.ts
 ```
 
-This folder structure will map to these REST API routes :
+This folder structure will map to these REST API routes:
 
 - GET `/channels`
 - DELETE `/channels/:channelId`

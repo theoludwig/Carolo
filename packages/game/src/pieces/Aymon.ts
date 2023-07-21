@@ -8,7 +8,7 @@ export class Aymon extends Piece {
   }
 
   /**
-   * Can teleport to any position on the board. (not implemented)
+   * Can teleport to any position on the board (not implemented).
    * @param maximumOffset
    * @returns
    */

@@ -21,6 +21,7 @@ jobs:
       - name: 'Install dependencies'
         run: 'npm clean-install'
 
+      - run: 'cp .env.example .env'
       - run: 'cp apps/api/.env.example apps/api/.env'
       - run: 'cp apps/website/.env.example apps/website/.env'
 
