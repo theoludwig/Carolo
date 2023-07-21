@@ -13,6 +13,7 @@ import AymonWhite from '@/public/pieces/AYMON_WHITE.png'
 import { Button } from '@/components/Button'
 import { useAuthentication } from '@/stores/authentication'
 import { FormState } from '@/components/FormState'
+import { Link } from '@/components/Link'
 
 const GamePage = (): JSX.Element => {
   const [selectedColor, setSelectedColor] = useState<PieceColor>('WHITE')
@@ -59,33 +60,35 @@ const GamePage = (): JSX.Element => {
       </div>
 
       <div className='mt-4 flex space-x-4'>
-        {authenticated ? (
-          <Button
-            variant='purple'
-            className='!px-6 !py-2 !text-base disabled:cursor-not-allowed disabled:opacity-50'
-            disabled={fetchState === 'loading'}
-            onClick={async () => {
-              setMessage(null)
-              setFetchState('loading')
-              const body: Services['/games']['post']['body'] = {
-                color: selectedColor
-              }
-              try {
-                const { data } = await authentication.api.post<
-                  Services['/games']['post']['response']
-                >('/games', body)
-                setFetchState('success')
-                router.push(`/game/${data.gameId}`)
-              } catch (error) {
-                console.error(error)
-                setFetchState('error')
-                setMessage('interne du serveur.')
-              }
-            }}
-          >
-            Lancer en Multijoueur
-          </Button>
-        ) : null}
+        <Button
+          variant='purple'
+          className='!px-6 !py-2 !text-base disabled:cursor-not-allowed disabled:opacity-50'
+          disabled={fetchState === 'loading' || !authenticated}
+          onClick={async () => {
+            if (!authenticated) {
+              return
+            }
+            setMessage(null)
+            setFetchState('loading')
+            const body: Services['/games']['post']['body'] = {
+              color: selectedColor
+            }
+            try {
+              const { data } = await authentication.api.post<
+                Services['/games']['post']['response']
+              >('/games', body)
+              setFetchState('success')
+              router.push(`/game/${data.gameId}`)
+            } catch (error) {
+              console.error(error)
+              setFetchState('error')
+              setMessage('interne du serveur.')
+            }
+          }}
+        >
+          Lancer en Multijoueur
+        </Button>
+
         <Button
           variant='white'
           disabled={fetchState === 'loading'}
@@ -103,6 +106,14 @@ const GamePage = (): JSX.Element => {
         state={fetchState}
         message={message != null ? message : undefined}
       />
+
+      {!authenticated ? (
+        <p className='mt-6'>
+          Vous devez vous{' '}
+          <Link href='/authentication/signup'>connecter/inscrire</Link> pour
+          jouer en multijoueur.
+        </p>
+      ) : null}
     </div>
   )
 }
