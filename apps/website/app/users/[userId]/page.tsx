@@ -57,10 +57,6 @@ const UsersProfilePage = async (
     return notFound()
   }
 
-  if (originId == null) {
-    return notFound()
-  }
-
   const hasAlreadyPlayed = games.length > 0
   const showPrevious =
     searchParams.after != null ||
@@ -82,13 +78,15 @@ const UsersProfilePage = async (
         )}
       >
         <UserPublic userPublic={userPublic} />
-        <UserGames
-          games={games}
-          userId={userPublic.user.id}
-          showPrevious={showPrevious}
-          showNext={games.length >= ITEMS_PER_PAGE_LIMIT}
-          originId={originId}
-        />
+        {originId != null ? (
+          <UserGames
+            games={games}
+            userId={userPublic.user.id}
+            showPrevious={showPrevious}
+            showNext={games.length >= ITEMS_PER_PAGE_LIMIT}
+            originId={originId}
+          />
+        ) : null}
       </div>
     </main>
   )
