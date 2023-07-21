@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto'
+import crypto from 'node:crypto'
 
 import type { Static } from '@sinclair/typebox'
 import { Type } from '@sinclair/typebox'
@@ -77,7 +77,7 @@ export const postResetPasswordUser: FastifyPluginAsync = async (fastify) => {
       if (userSettings == null) {
         throw fastify.httpErrors.badRequest()
       }
-      const temporaryToken = randomUUID()
+      const temporaryToken = crypto.randomUUID()
       await prisma.user.update({
         where: {
           id: user.id

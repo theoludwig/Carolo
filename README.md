@@ -10,7 +10,7 @@ Le [Carolo](https://carolo.theoludwig.fr/), est un jeu de plateau stratégique s
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) >= 18.0.0
+- [Node.js](https://nodejs.org/) >= 20.0.0
 - [npm](https://www.npmjs.com/) >= 9.0.0
 - [PostgreSQL](https://www.postgresql.org/) >= 15.0.0
 
@@ -89,18 +89,11 @@ npm run test --workspace=apps/api
 
 ### Production environment (with [Docker](https://www.docker.com/))
 
-#### `apps/api`
-
 ```sh
-docker build --tag="carolo-api" ./ --file="./apps/api/Dockerfile"
-docker run --network="host" --env-file="./apps/api/.env" --init --interactive --rm "carolo-api"
-```
+docker compose up --build
 
-#### `apps/website`
-
-```sh
-docker build --tag="carolo-website" ./ --file="./apps/website/Dockerfile"
-docker run --network="host" --env-file="./apps/website/.env" --init --interactive --rm "carolo-website"
+# Run Prisma migrations
+docker compose exec carolo-api npm run prisma:migrate:deploy
 ```
 
 ## 💡 Contributing

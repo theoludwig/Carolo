@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto'
+import crypto from 'node:crypto'
 
 import jwt from 'jsonwebtoken'
 import ms from 'ms'
@@ -18,7 +18,7 @@ export const generateAccessToken = (user: UserJWT): string => {
 }
 
 export const generateRefreshToken = async (user: UserJWT): Promise<string> => {
-  const tokenUUID = randomUUID()
+  const tokenUUID = crypto.randomUUID()
   const refreshToken = jwt.sign(
     {
       ...user,

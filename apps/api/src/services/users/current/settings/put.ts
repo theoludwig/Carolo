@@ -47,11 +47,13 @@ export const putCurrentUserSettings: FastifyPluginAsync = async (fastify) => {
         throw fastify.httpErrors.forbidden()
       }
       const { locale } = request.body
-      const settings = await prisma.userSetting.findFirst({
+      let settings = await prisma.userSetting.findFirst({
         where: { userId: request.user.current.id }
       })
       if (settings == null) {
-        throw fastify.httpErrors.internalServerError()
+        settings = await prisma.userSetting.create({
+          data: {}
+        })
       }
       const newSettings = await prisma.userSetting.update({
         where: { id: request.user.current.id },

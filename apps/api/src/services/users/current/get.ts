@@ -41,11 +41,13 @@ export const getCurrentUser: FastifyPluginAsync = async (fastify) => {
         throw fastify.httpErrors.forbidden()
       }
       const { user } = request
-      const settings = await prisma.userSetting.findFirst({
+      let settings = await prisma.userSetting.findFirst({
         where: { userId: user.current.id }
       })
       if (settings == null) {
-        throw fastify.httpErrors.internalServerError()
+        settings = await prisma.userSetting.create({
+          data: {}
+        })
       }
       const strategies = ['Local'] as AuthenticationStrategy[]
       reply.statusCode = 200
