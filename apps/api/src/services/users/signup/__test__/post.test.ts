@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 
 import sinon from 'sinon'
+import { PrismaClient } from '@prisma/client'
 import { userExample, userSettingsExample } from '@carolo/models'
 
 import { application } from '#src/application.js'
@@ -21,26 +22,30 @@ await test('POST /users/signup', async (t) => {
   })
 
   await t.test('succeeds', async () => {
-    sinon.stub(prisma, 'user').value({
-      findFirst: async () => {
-        return null
-      },
-      create: async () => {
-        return {
-          ...userExample,
-          createdAt: new Date(userExample.createdAt),
-          updatedAt: new Date(userExample.updatedAt)
+    sinon.stub(prisma, '$transaction').callsFake(async (callback) => {
+      const prismaTransaction = new PrismaClient()
+      sinon.stub(prismaTransaction, 'user').value({
+        findFirst: async () => {
+          return null
+        },
+        create: async () => {
+          return {
+            ...userExample,
+            createdAt: new Date(userExample.createdAt),
+            updatedAt: new Date(userExample.updatedAt)
+          }
         }
-      }
-    })
-    sinon.stub(prisma, 'userSetting').value({
-      create: async () => {
-        return {
-          ...userSettingsExample,
-          createdAt: new Date(userSettingsExample.createdAt),
-          updatedAt: new Date(userSettingsExample.updatedAt)
+      })
+      sinon.stub(prismaTransaction, 'userSetting').value({
+        create: async () => {
+          return {
+            ...userSettingsExample,
+            createdAt: new Date(userSettingsExample.createdAt),
+            updatedAt: new Date(userSettingsExample.updatedAt)
+          }
         }
-      }
+      })
+      return await callback(prismaTransaction)
     })
     sinon.stub(emailTransporter, 'sendMail').value(() => {})
     const response = await application.inject({
@@ -55,10 +60,14 @@ await test('POST /users/signup', async (t) => {
   })
 
   await t.test('fails with invalid email', async () => {
-    sinon.stub(prisma, 'user').value({
-      findFirst: async () => {
-        return null
-      }
+    sinon.stub(prisma, '$transaction').callsFake(async (callback) => {
+      const prismaTransaction = new PrismaClient()
+      sinon.stub(prismaTransaction, 'user').value({
+        findFirst: async () => {
+          return null
+        }
+      })
+      return await callback(prismaTransaction)
     })
     sinon.stub(emailTransporter, 'sendMail').value(() => {})
     const response = await application.inject({
@@ -73,10 +82,14 @@ await test('POST /users/signup', async (t) => {
   })
 
   await t.test('fails with already taken `name` or `email`', async () => {
-    sinon.stub(prisma, 'user').value({
-      findFirst: async () => {
-        return userExample
-      }
+    sinon.stub(prisma, '$transaction').callsFake(async (callback) => {
+      const prismaTransaction = new PrismaClient()
+      sinon.stub(prismaTransaction, 'user').value({
+        findFirst: async () => {
+          return userExample
+        }
+      })
+      return await callback(prismaTransaction)
     })
     sinon.stub(emailTransporter, 'sendMail').value(() => {})
     const response = await application.inject({
