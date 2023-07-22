@@ -14,7 +14,7 @@ export const Header = (): JSX.Element => {
             <Image src={Icon} priority quality={100} alt='Carolo' />
             <div className='ml-2'>
               <h1 className='font-goldman text-3xl font-bold leading-7'>
-                Carolo.org
+                Carolo
               </h1>
               <p className='text-xs font-extralight italic'>
                 Prin lod pennos arduo

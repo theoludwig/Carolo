@@ -24,7 +24,7 @@ const title = 'Carolo'
 const description =
   'Le Carolo est un jeu de plateau stratégique similaire aux échecs qui permet des coups grandioses, reposant sur des enchaînements remarquables.'
 const image = '/home.png'
-const url = new URL('https://carolo.org')
+const url = new URL('https://carolo.theoludwig.fr')
 const locale = 'fr-FR'
 
 export const metadata = {
