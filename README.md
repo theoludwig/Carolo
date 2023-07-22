@@ -4,10 +4,11 @@
 
 The [Carolo](https://carolo.theoludwig.fr/), is a strategy board game similar to chess which allows grandiose moves, based on remarkable sequences.
 
-[Carolo game rules (French)](./apps/website/public/rules/carolo-fr-FR.pdf).
+[Game rules (French)](./apps/website/public/rules/carolo-fr-FR.pdf).
 
 > **Note**
-> Carolo is only available in French for the moment.
+>
+> Only available in French for the moment.
 
 ## Getting Started
 
