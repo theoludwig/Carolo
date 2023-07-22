@@ -1,10 +1,13 @@
 # Carolo
 
-## À propos
+## About
 
-Le [Carolo](https://carolo.theoludwig.fr/), est un jeu de plateau stratégique similaire aux échecs qui permet des coups grandioses, reposant sur des enchaînements remarquables.
+The [Carolo](https://carolo.theoludwig.fr/), is a strategy board game similar to chess which allows grandiose moves, based on remarkable sequences.
 
-[Règles du jeu Carolo](./apps/website/public/rules/carolo-fr-FR.pdf).
+[Carolo game rules (French)](./apps/website/public/rules/carolo-fr-FR.pdf).
+
+> **Note**
+> Carolo is only available in French for the moment.
 
 ## Getting Started
 
