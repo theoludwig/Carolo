@@ -7,7 +7,6 @@ The [Carolo](https://carolo.theoludwig.fr/), is a strategy board game similar to
 [Game rules (French)](./apps/website/public/rules/carolo-fr-FR.pdf).
 
 > **Note**
->
 > Only available in French for the moment.
 
 ## Getting Started

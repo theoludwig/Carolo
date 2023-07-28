@@ -16,9 +16,6 @@ export const Header = (): JSX.Element => {
               <h1 className='font-goldman text-3xl font-bold leading-7'>
                 Carolo
               </h1>
-              <p className='text-xs font-extralight italic'>
-                Prin lod pennos arduo
-              </p>
             </div>
           </section>
         </NextLink>
