@@ -2,9 +2,9 @@
   "extends": "@carolo/tsconfig/tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
     "lib": ["ESNext"],
-    "moduleResolution": "Node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "./build",
     "rootDir": "./src",
     "baseUrl": ".",

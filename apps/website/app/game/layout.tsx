@@ -17,9 +17,10 @@ const GameLayout = (props: GameLayoutProps): JSX.Element => {
   useEffect(() => {
     const redirectGame = async (): Promise<void> => {
       if (authenticated) {
-        const { data } = await authentication.api.get<
-          Services['/games/current']['get']['response']
-        >('/games/current')
+        const { data } =
+          await authentication.api.get<
+            Services['/games/current']['get']['response']
+          >('/games/current')
         if (data.gameId != null) {
           return router.replace(`/game/${data.gameId}`)
         }

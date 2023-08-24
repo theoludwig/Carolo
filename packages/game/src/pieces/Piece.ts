@@ -1,4 +1,4 @@
-import type { Position } from '../Position'
+import type { Position } from '../Position.js'
 
 export const PieceColors = ['WHITE', 'BLACK'] as const
 export type PieceColor = (typeof PieceColors)[number]

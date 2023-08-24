@@ -125,9 +125,8 @@ export class Authentication {
     try {
       tokens = await fetchRefreshToken(refreshToken)
       authentication = new Authentication(tokens)
-      const { data } = await authentication.api.get<UserCurrent>(
-        '/users/current'
-      )
+      const { data } =
+        await authentication.api.get<UserCurrent>('/users/current')
       user = data.user
       useAuthentication.setState({ authenticated: true, authentication, user })
     } catch {

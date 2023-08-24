@@ -1,5 +1,5 @@
 import { Observer } from './Observer.js'
-import type { Piece, PieceColor } from './pieces/Piece'
+import type { Piece, PieceColor } from './pieces/Piece.js'
 
 export interface PlayerState {
   color: PieceColor

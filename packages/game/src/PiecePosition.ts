@@ -1,5 +1,5 @@
-import type { Piece } from './pieces/Piece'
-import type { Position } from './Position'
+import type { Piece } from './pieces/Piece.js'
+import type { Position } from './Position.js'
 
 export interface PiecePositionOptions {
   position: Position
