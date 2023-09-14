@@ -62,7 +62,7 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
           if (message.endsWith('already taken')) {
             return {
               type: 'error',
-              message: 'Pseudo ou Adresse courriel est déjà utilisée.'
+              message: 'Pseudo ou Email déjà utilisée.'
             }
           }
         }
@@ -83,7 +83,7 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
         return {
           type: 'error',
-          message: 'Adresse courriel ou Mot de passe invalide.'
+          message: 'Email ou Mot de passe invalide.'
         }
       }
       return {
@@ -115,7 +115,7 @@ export const Authentication = (props: AuthenticationProps): JSX.Element => {
           <Input
             type='email'
             name='email'
-            label='Adresse courriel'
+            label='Email'
             error={getFirstErrorTranslation(errors.email)}
           />
 

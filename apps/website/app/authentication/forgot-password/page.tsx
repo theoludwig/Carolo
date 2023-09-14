@@ -62,7 +62,7 @@ const ForgotPasswordPage = (): JSX.Element => {
         <Input
           type='email'
           name='email'
-          label='Adresse courriel'
+          label='Email'
           error={getFirstErrorTranslation(errors.email)}
         />
 

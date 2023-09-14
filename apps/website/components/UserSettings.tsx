@@ -66,7 +66,7 @@ export const UserSettings = (): JSX.Element => {
         if (message.endsWith('already taken')) {
           return {
             type: 'error',
-            message: 'Pseudo ou Adresse courriel est déjà utilisée.'
+            message: 'Pseudo ou Email déjà utilisée.'
           }
         }
       }
@@ -120,7 +120,7 @@ export const UserSettings = (): JSX.Element => {
         <Input
           type='email'
           name='email'
-          label='Adresse courriel'
+          label='Email'
           defaultValue={user?.email}
           error={getFirstErrorTranslation(errors.email)}
         />
