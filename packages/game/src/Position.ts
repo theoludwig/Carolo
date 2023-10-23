@@ -1,4 +1,4 @@
-import { BoardBase } from './BoardBase.js'
+import { BoardBase } from "./BoardBase.js"
 
 export interface PositionOptions {
   column: number
@@ -33,7 +33,7 @@ export class Position implements PositionOptions {
   public add(position: Position): Position {
     return new Position({
       column: this.column + position.column,
-      row: this.row + position.row
+      row: this.row + position.row,
     })
   }
 
@@ -66,7 +66,7 @@ export class Position implements PositionOptions {
     let newRow = this.row + rowDirection
     while (newColumn !== position.column || newRow !== position.row) {
       intermediatePositions.push(
-        new Position({ column: newColumn, row: newRow })
+        new Position({ column: newColumn, row: newRow }),
       )
       newColumn += columnDirection
       newRow += rowDirection
@@ -96,13 +96,13 @@ export class Position implements PositionOptions {
   }
 
   public static fromString(positionString: PositionString): Position {
-    const column = positionString.charCodeAt(0) - 'A'.charCodeAt(0)
+    const column = positionString.charCodeAt(0) - "A".charCodeAt(0)
     const row = BoardBase.SIZE - Number.parseInt(positionString[1], 10)
     return new Position({ column, row })
   }
 
   public toString(): PositionString {
-    const column = String.fromCharCode(this.column + 'A'.charCodeAt(0))
+    const column = String.fromCharCode(this.column + "A".charCodeAt(0))
     const row = BoardBase.SIZE - this.row
     return `${column}${row}`
   }

@@ -1,12 +1,12 @@
-import { useContext } from 'react'
-import type { StoreApi } from 'zustand'
-import { createStore, useStore } from 'zustand'
-import { playModelAction } from '@carolo/models'
+import { useContext } from "react"
+import type { StoreApi } from "zustand"
+import { createStore, useStore } from "zustand"
+import { playModelAction } from "@carolo/models"
 import type {
   GameActionBasic,
   GameUser,
-  Game as GameModel
-} from '@carolo/models'
+  Game as GameModel,
+} from "@carolo/models"
 import type {
   GameState,
   PlayerState,
@@ -14,23 +14,23 @@ import type {
   AvailablePiecePositions,
   PieceColor,
   Move,
-  Position
-} from '@carolo/game'
-import { Game, Board, Player } from '@carolo/game'
+  Position,
+} from "@carolo/game"
+import { Game, Board, Player } from "@carolo/game"
 
-import { GameContext } from '@/components/Game/GameContext'
-import { useAuthentication } from '@/stores/authentication'
+import { GameContext } from "@/components/Game/GameContext"
+import { useAuthentication } from "@/stores/authentication"
 
 export interface GameStoreOptions {
-  gameId?: GameModel['id']
+  gameId?: GameModel["id"]
   users: GameUser[]
   playWithColors: PieceColor[]
-  status: GameModel['status']
+  status: GameModel["status"]
   actions: GameActionBasic[]
 }
 
 export interface GameStore {
-  gameId?: GameModel['id']
+  gameId?: GameModel["id"]
   users: GameUser[]
   playWithColors: PieceColor[]
 
@@ -58,13 +58,13 @@ type PlayerSubscription = (playerState: PlayerState) => void
 type GameSubscription = (gameState: GameState) => void
 
 export const createGameStore = (
-  options: GameStoreOptions
+  options: GameStoreOptions,
 ): StoreApi<GameStore> => {
   return createStore<GameStore>()((set, get) => {
     const { gameId, users, playWithColors, status, actions } = options
     const board = new Board()
-    const player1 = new Player('WHITE')
-    const player2 = new Player('BLACK')
+    const player1 = new Player("WHITE")
+    const player2 = new Player("BLACK")
     const players = [player1, player2]
     const game = new Game(board, players)
 
@@ -72,7 +72,7 @@ export const createGameStore = (
       return playModelAction({ action, board, game })
     }
 
-    if (status !== 'LOBBY') {
+    if (status !== "LOBBY") {
       game.restart()
       game.play()
       for (const action of actions) {
@@ -135,7 +135,7 @@ export const createGameStore = (
 
         if (
           !store.canPlay() &&
-          (action.type === 'MOVE' || action.type === 'SKIP_BOUNCING')
+          (action.type === "MOVE" || action.type === "SKIP_BOUNCING")
         ) {
           return null
         }
@@ -156,38 +156,38 @@ export const createGameStore = (
         return set(() => {
           return {
             availablePiecePositions: new Map(),
-            selectedPosition: null
+            selectedPosition: null,
           }
         })
       },
       selectPosition: (fromPosition) => {
         return set((state) => {
-          if (state.gameState.status !== 'PLAY') {
+          if (state.gameState.status !== "PLAY") {
             return {
               availablePiecePositions: new Map(),
-              selectedPosition: null
+              selectedPosition: null,
             }
           }
           if (!state.canPlay()) {
             return {
               availablePiecePositions: new Map(),
-              selectedPosition: null
+              selectedPosition: null,
             }
           }
           if (fromPosition.equals(state.selectedPosition)) {
             const from = state.board.getPiecePosition(fromPosition)
             if (
               from.isOccupied() &&
-              from.piece.type === 'CAROLO' &&
+              from.piece.type === "CAROLO" &&
               state.gameState.isBouncingOnGoing
             ) {
               state.playAction({
-                type: 'SKIP_BOUNCING'
+                type: "SKIP_BOUNCING",
               })
             }
             return {
               availablePiecePositions: new Map(),
-              selectedPosition: null
+              selectedPosition: null,
             }
           }
           const piecePosition = state.board.getPiecePosition(fromPosition)
@@ -197,61 +197,61 @@ export const createGameStore = (
           ) {
             try {
               const move = state.playAction({
-                type: 'MOVE',
+                type: "MOVE",
                 fromPosition: state.selectedPosition.toString(),
-                toPosition: fromPosition.toString()
+                toPosition: fromPosition.toString(),
               })
               if (move == null || move?.isNextPlayerTurn) {
                 return {
                   availablePiecePositions: new Map(),
-                  selectedPosition: null
+                  selectedPosition: null,
                 }
               }
               return {
                 availablePiecePositions: state.board.getAvailablePiecePositions(
-                  move.toPosition
+                  move.toPosition,
                 ),
-                selectedPosition: fromPosition
+                selectedPosition: fromPosition,
               }
             } catch (error) {
               console.error(error)
               return {
                 availablePiecePositions: new Map(),
-                selectedPosition: null
+                selectedPosition: null,
               }
             }
           }
           if (piecePosition.isFree()) {
             return {
               availablePiecePositions: new Map(),
-              selectedPosition: null
+              selectedPosition: null,
             }
           }
           const currentPlayer = state.game.getCurrentPlayer()
           if (currentPlayer.color !== piecePosition.piece.color) {
             return {
               availablePiecePositions: new Map(),
-              selectedPosition: null
+              selectedPosition: null,
             }
           }
           return {
             selectedPosition: fromPosition,
             availablePiecePositions:
-              state.board.getAvailablePiecePositions(fromPosition)
+              state.board.getAvailablePiecePositions(fromPosition),
           }
         })
-      }
+      },
     }
   })
 }
 
 export const useGame = <T>(
   selector: (state: GameStore) => T,
-  equalityFn?: (left: T, right: T) => boolean
+  equalityFn?: (left: T, right: T) => boolean,
 ): T => {
   const store = useContext(GameContext)
   if (store == null) {
-    throw new Error('`useGame` must be used within `GameContextProvider`')
+    throw new Error("`useGame` must be used within `GameContextProvider`")
   }
   return useStore(store, selector, equalityFn)
 }

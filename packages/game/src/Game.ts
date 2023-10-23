@@ -1,12 +1,12 @@
-import type { Board } from './Board.js'
-import type { Move } from './BoardBase.js'
-import { Observer } from './Observer.js'
-import type { PieceColor } from './pieces/Piece.js'
-import { getOppositePieceColor } from './pieces/Piece.js'
-import type { Player } from './Player.js'
-import type { Position } from './Position.js'
+import type { Board } from "./Board.js"
+import type { Move } from "./BoardBase.js"
+import { Observer } from "./Observer.js"
+import type { PieceColor } from "./pieces/Piece.js"
+import { getOppositePieceColor } from "./pieces/Piece.js"
+import type { Player } from "./Player.js"
+import type { Position } from "./Position.js"
 
-export const GameStatuses = ['LOBBY', 'PLAY', 'WHITE_WON', 'BLACK_WON'] as const
+export const GameStatuses = ["LOBBY", "PLAY", "WHITE_WON", "BLACK_WON"] as const
 export type GameStatus = (typeof GameStatuses)[number]
 
 export interface GameState {
@@ -23,12 +23,12 @@ export class Game extends Observer<GameState> {
   public constructor(board: Board, players: Player[]) {
     super({
       currentPlayerIndex: 0,
-      status: 'LOBBY',
+      status: "LOBBY",
       isBouncingOnGoing: false,
-      finalStatus: 'PLAY'
+      finalStatus: "PLAY",
     })
     if (players.length !== 2) {
-      throw new Error('Game must have 2 players.')
+      throw new Error("Game must have 2 players.")
     }
     this._board = board
     this._players = Array.from({ length: 2 })
@@ -45,7 +45,7 @@ export class Game extends Observer<GameState> {
   }
 
   public getPlayerByColor(color: PieceColor): Player {
-    return this._players[color === 'WHITE' ? 0 : 1]
+    return this._players[color === "WHITE" ? 0 : 1]
   }
 
   public setPlayerColor(index: number, color: PieceColor): void {
@@ -54,7 +54,7 @@ export class Game extends Observer<GameState> {
   }
 
   public resign(color: PieceColor): void {
-    if (this.state.finalStatus !== 'PLAY') {
+    if (this.state.finalStatus !== "PLAY") {
       return
     }
     const oppositeColor = getOppositePieceColor(color)
@@ -65,9 +65,9 @@ export class Game extends Observer<GameState> {
   }
 
   public previousMove(): void {
-    if (this.state.status !== 'PLAY') {
+    if (this.state.status !== "PLAY") {
       this.setState((state) => {
-        state.status = 'PLAY'
+        state.status = "PLAY"
         state.currentPlayerIndex = 1 - state.currentPlayerIndex
       })
     }
@@ -78,7 +78,7 @@ export class Game extends Observer<GameState> {
     if (move != null) {
       if (move.capturedPiece != null) {
         this.getPlayerByColor(move.piece.color).removeCapturedPiece(
-          move.capturedPiece
+          move.capturedPiece,
         )
       }
       this.verifyMove(move)
@@ -86,14 +86,14 @@ export class Game extends Observer<GameState> {
   }
 
   public nextMove(): void {
-    if (this.state.status !== 'PLAY') {
+    if (this.state.status !== "PLAY") {
       return
     }
     if (
       this._board.state.currentMoveIndex ===
       this._board.state.moves.length - 1
     ) {
-      if (this.state.finalStatus !== 'PLAY') {
+      if (this.state.finalStatus !== "PLAY") {
         this.setState((state) => {
           state.status = state.finalStatus
         })
@@ -104,7 +104,7 @@ export class Game extends Observer<GameState> {
     if (move != null) {
       if (move.capturedPiece != null) {
         this.getPlayerByColor(move.piece.color).addCapturedPiece(
-          move.capturedPiece
+          move.capturedPiece,
         )
       }
       this.verifyMove(move)
@@ -141,10 +141,10 @@ export class Game extends Observer<GameState> {
       player.removeAllCapturedPiece()
     }
     this.setState((state) => {
-      state.status = 'PLAY'
+      state.status = "PLAY"
       state.isBouncingOnGoing = false
     })
-    if (this._players[1].color === 'WHITE') {
+    if (this._players[1].color === "WHITE") {
       this.setState((state) => {
         state.currentPlayerIndex = 1
       })
@@ -153,10 +153,10 @@ export class Game extends Observer<GameState> {
 
   public restart(): void {
     this.setState((state) => {
-      state.status = 'LOBBY'
+      state.status = "LOBBY"
       state.currentPlayerIndex = 0
       state.isBouncingOnGoing = false
-      state.finalStatus = 'PLAY'
+      state.finalStatus = "PLAY"
     })
   }
 
@@ -199,19 +199,19 @@ export class Game extends Observer<GameState> {
   }
 
   public playMove(fromPosition: Position, toPosition: Position): Move {
-    if (this.state.status !== 'PLAY') {
-      throw new Error('Game Status not in play mode.')
+    if (this.state.status !== "PLAY") {
+      throw new Error("Game Status not in play mode.")
     }
     const from = this._board.getPiecePosition(fromPosition)
     if (from.isFree()) {
-      throw new Error('No piece at this position.')
+      throw new Error("No piece at this position.")
     }
     const currentPlayer = this.getCurrentPlayer()
     if (from.piece.color !== currentPlayer.color) {
-      throw new Error('Not your turn.')
+      throw new Error("Not your turn.")
     }
     if (!this._board.canMove(fromPosition, toPosition)) {
-      throw new Error('This move is not allowed.')
+      throw new Error("This move is not allowed.")
     }
     const move = this._board.move(fromPosition, toPosition)
     if (move.capturedPiece != null) {

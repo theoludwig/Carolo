@@ -1,51 +1,51 @@
-import type { Static } from '@sinclair/typebox'
-import { Type } from '@sinclair/typebox'
+import type { Static } from "@sinclair/typebox"
+import { Type } from "@sinclair/typebox"
 
-import { gameSchema, gameUserSchemaObject, pieceColors } from '../Game.js'
+import { gameSchema, gameUserSchemaObject, pieceColors } from "../Game.js"
 import {
   gameActionBasicSchemaObject,
-  gameActionSchemaObject
-} from '../GameAction.js'
+  gameActionSchemaObject,
+} from "../GameAction.js"
 
 export const gamesServiceSchema = {
-  '/games': {
+  "/games": {
     post: {
       body: Type.Object({
-        color: Type.Union(pieceColors)
+        color: Type.Union(pieceColors),
       }),
       response: Type.Object({
-        gameId: gameSchema.id
-      })
-    }
+        gameId: gameSchema.id,
+      }),
+    },
   },
-  '/games/current': {
+  "/games/current": {
     get: {
       response: Type.Object({
-        gameId: Type.Union([gameSchema.id, Type.Null()])
-      })
-    }
-  },
-  '/games/:gameId/join': {
-    post: {
-      parameters: Type.Object({
-        gameId: gameSchema.id
+        gameId: Type.Union([gameSchema.id, Type.Null()]),
       }),
-      response: gameUserSchemaObject
-    }
+    },
   },
-  '/games/:gameId/actions': {
+  "/games/:gameId/join": {
     post: {
       parameters: Type.Object({
-        gameId: gameSchema.id
+        gameId: gameSchema.id,
+      }),
+      response: gameUserSchemaObject,
+    },
+  },
+  "/games/:gameId/actions": {
+    post: {
+      parameters: Type.Object({
+        gameId: gameSchema.id,
       }),
       body: gameActionBasicSchemaObject,
-      response: gameActionSchemaObject
-    }
+      response: gameActionSchemaObject,
+    },
   },
-  '/games/:gameId': {
+  "/games/:gameId": {
     get: {
       parameters: Type.Object({
-        gameId: gameSchema.id
+        gameId: gameSchema.id,
       }),
       response: Type.Object({
         id: gameSchema.id,
@@ -54,58 +54,58 @@ export const gamesServiceSchema = {
         playerBlackId: gameSchema.playerBlackId,
         playerWhite: Type.Union([gameUserSchemaObject, Type.Null()]),
         playerBlack: Type.Union([gameUserSchemaObject, Type.Null()]),
-        actions: Type.Array(gameActionBasicSchemaObject)
-      })
-    }
-  }
+        actions: Type.Array(gameActionBasicSchemaObject),
+      }),
+    },
+  },
 } as const
 
 export interface GamesServices {
-  '/games': {
+  "/games": {
     post: {
-      body: Static<(typeof gamesServiceSchema)['/games']['post']['body']>
+      body: Static<(typeof gamesServiceSchema)["/games"]["post"]["body"]>
       response: Static<
-        (typeof gamesServiceSchema)['/games']['post']['response']
+        (typeof gamesServiceSchema)["/games"]["post"]["response"]
       >
     }
   }
-  '/games/current': {
+  "/games/current": {
     get: {
       response: Static<
-        (typeof gamesServiceSchema)['/games/current']['get']['response']
+        (typeof gamesServiceSchema)["/games/current"]["get"]["response"]
       >
     }
   }
-  '/games/:gameId/join': {
+  "/games/:gameId/join": {
     post: {
       parameters: Static<
-        (typeof gamesServiceSchema)['/games/:gameId/join']['post']['parameters']
+        (typeof gamesServiceSchema)["/games/:gameId/join"]["post"]["parameters"]
       >
       response: Static<
-        (typeof gamesServiceSchema)['/games/:gameId/join']['post']['response']
+        (typeof gamesServiceSchema)["/games/:gameId/join"]["post"]["response"]
       >
     }
   }
-  '/games/:gameId/actions': {
+  "/games/:gameId/actions": {
     post: {
       parameters: Static<
-        (typeof gamesServiceSchema)['/games/:gameId/actions']['post']['parameters']
+        (typeof gamesServiceSchema)["/games/:gameId/actions"]["post"]["parameters"]
       >
       body: Static<
-        (typeof gamesServiceSchema)['/games/:gameId/actions']['post']['body']
+        (typeof gamesServiceSchema)["/games/:gameId/actions"]["post"]["body"]
       >
       response: Static<
-        (typeof gamesServiceSchema)['/games/:gameId/actions']['post']['response']
+        (typeof gamesServiceSchema)["/games/:gameId/actions"]["post"]["response"]
       >
     }
   }
-  '/games/:gameId': {
+  "/games/:gameId": {
     get: {
       parameters: Static<
-        (typeof gamesServiceSchema)['/games/:gameId']['get']['parameters']
+        (typeof gamesServiceSchema)["/games/:gameId"]["get"]["parameters"]
       >
       response: Static<
-        (typeof gamesServiceSchema)['/games/:gameId']['get']['response']
+        (typeof gamesServiceSchema)["/games/:gameId"]["get"]["response"]
       >
     }
   }

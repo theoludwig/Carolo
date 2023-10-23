@@ -1,358 +1,358 @@
-import test from 'node:test'
-import assert from 'node:assert/strict'
+import test from "node:test"
+import assert from "node:assert/strict"
 
-import { createGame } from './utils.js'
-import type { GameMachine } from './utils.js'
-import { Position } from '../index.js'
+import { createGame } from "./utils.js"
+import type { GameMachine } from "./utils.js"
+import { Position } from "../index.js"
 
-await test('Hubris Attraction Power', async (t) => {
+await test("Hubris Attraction Power", async (t) => {
   let createGameResult: GameMachine
 
   t.beforeEach(async () => {
     createGameResult = createGame()
   })
 
-  await t.test('White Ego attracted by Black Hubris (right side)', async () => {
+  await t.test("White Ego attracted by Black Hubris (right side)", async () => {
     const { game, board } = createGameResult
     game.play()
     game.playMove(
       new Position({ column: 5, row: 5 }),
-      new Position({ column: 7, row: 3 })
+      new Position({ column: 7, row: 3 }),
     )
     game.playMove(
       new Position({ column: 2, row: 2 }),
-      new Position({ column: 4, row: 4 })
+      new Position({ column: 4, row: 4 }),
     )
     game.playMove(
       new Position({ column: 4, row: 6 }),
-      new Position({ column: 0, row: 0 })
+      new Position({ column: 0, row: 0 }),
     )
     game.playMove(
       new Position({ column: 4, row: 4 }),
-      new Position({ column: 5, row: 3 })
+      new Position({ column: 5, row: 3 }),
     )
     game.playMove(
       new Position({ column: 0, row: 0 }),
-      new Position({ column: 0, row: 1 })
+      new Position({ column: 0, row: 1 }),
     )
     game.playMove(
       new Position({ column: 5, row: 3 }),
-      new Position({ column: 6, row: 4 })
+      new Position({ column: 6, row: 4 }),
     )
-    assert.strictEqual(game.getCurrentPlayer().color, 'WHITE')
-    const egoPiecePosition = board.getEgoPiecePosition('WHITE')
-    assert.strictEqual(egoPiecePosition.piece.type, 'EGO')
-    assert.strictEqual(egoPiecePosition.piece.color, 'WHITE')
+    assert.strictEqual(game.getCurrentPlayer().color, "WHITE")
+    const egoPiecePosition = board.getEgoPiecePosition("WHITE")
+    assert.strictEqual(egoPiecePosition.piece.type, "EGO")
+    assert.strictEqual(egoPiecePosition.piece.color, "WHITE")
     assert.strictEqual(
       egoPiecePosition.position.equals(new Position({ column: 3, row: 7 })),
-      true
+      true,
     )
     assert.deepStrictEqual(
       [
         ...board
           .getAvailablePiecePositions(new Position({ column: 3, row: 7 }))
-          .keys()
+          .keys(),
       ],
-      ['F3']
+      ["F3"],
     )
     assert.deepStrictEqual(
       [
         ...board
           .getAvailablePiecePositions(new Position({ column: 5, row: 6 }))
-          .keys()
+          .keys(),
       ],
       [],
-      "White Aymon can't move"
+      "White Aymon can't move",
     )
   })
 
-  await t.test('Black Ego attracted by White Hubris (left side)', async () => {
+  await t.test("Black Ego attracted by White Hubris (left side)", async () => {
     const { game, board } = createGameResult
     game.play()
     game.playMove(
       new Position({ column: 5, row: 5 }),
-      new Position({ column: 4, row: 4 })
+      new Position({ column: 4, row: 4 }),
     )
     game.playMove(
       new Position({ column: 3, row: 1 }),
-      new Position({ column: 7, row: 0 })
+      new Position({ column: 7, row: 0 }),
     )
     game.playMove(
       new Position({ column: 4, row: 4 }),
-      new Position({ column: 3, row: 5 })
+      new Position({ column: 3, row: 5 }),
     )
     game.playMove(
       new Position({ column: 2, row: 2 }),
-      new Position({ column: 0, row: 4 })
+      new Position({ column: 0, row: 4 }),
     )
     game.playMove(
       new Position({ column: 3, row: 5 }),
-      new Position({ column: 1, row: 3 })
+      new Position({ column: 1, row: 3 }),
     )
-    assert.strictEqual(game.getCurrentPlayer().color, 'BLACK')
-    const egoPiecePosition = board.getEgoPiecePosition('BLACK')
-    assert.strictEqual(egoPiecePosition.piece.type, 'EGO')
-    assert.strictEqual(egoPiecePosition.piece.color, 'BLACK')
+    assert.strictEqual(game.getCurrentPlayer().color, "BLACK")
+    const egoPiecePosition = board.getEgoPiecePosition("BLACK")
+    assert.strictEqual(egoPiecePosition.piece.type, "EGO")
+    assert.strictEqual(egoPiecePosition.piece.color, "BLACK")
     assert.strictEqual(
       egoPiecePosition.position.equals(new Position({ column: 4, row: 0 })),
-      true
+      true,
     )
     assert.deepStrictEqual(
       [
         ...board
           .getAvailablePiecePositions(new Position({ column: 4, row: 0 }))
-          .keys()
+          .keys(),
       ],
-      ['C6']
+      ["C6"],
     )
   })
 
   await t.test(
-    'Black Ego attracted by White Hubris (left side) but can be intercepted by Black Hubris',
+    "Black Ego attracted by White Hubris (left side) but can be intercepted by Black Hubris",
     async () => {
       const { game, board } = createGameResult
       game.play()
       game.playMove(
         new Position({ column: 5, row: 5 }),
-        new Position({ column: 4, row: 4 })
+        new Position({ column: 4, row: 4 }),
       )
       game.playMove(
         new Position({ column: 3, row: 1 }),
-        new Position({ column: 7, row: 0 })
+        new Position({ column: 7, row: 0 }),
       )
       game.playMove(
         new Position({ column: 4, row: 4 }),
-        new Position({ column: 3, row: 5 })
+        new Position({ column: 3, row: 5 }),
       )
       game.playMove(
         new Position({ column: 2, row: 2 }),
-        new Position({ column: 4, row: 4 })
+        new Position({ column: 4, row: 4 }),
       )
       game.playMove(
         new Position({ column: 3, row: 5 }),
-        new Position({ column: 1, row: 3 })
+        new Position({ column: 1, row: 3 }),
       )
-      assert.strictEqual(game.getCurrentPlayer().color, 'BLACK')
-      const egoPiecePosition = board.getEgoPiecePosition('BLACK')
-      assert.strictEqual(egoPiecePosition.piece.type, 'EGO')
-      assert.strictEqual(egoPiecePosition.piece.color, 'BLACK')
+      assert.strictEqual(game.getCurrentPlayer().color, "BLACK")
+      const egoPiecePosition = board.getEgoPiecePosition("BLACK")
+      assert.strictEqual(egoPiecePosition.piece.type, "EGO")
+      assert.strictEqual(egoPiecePosition.piece.color, "BLACK")
       assert.strictEqual(
         egoPiecePosition.position.equals(new Position({ column: 4, row: 0 })),
-        true
+        true,
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 4, row: 0 }))
-            .keys()
+            .keys(),
         ],
-        ['C6']
+        ["C6"],
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 4, row: 4 }))
-            .keys()
+            .keys(),
         ],
-        ['C6'],
-        'Black Hubris can intercept White Hubris'
+        ["C6"],
+        "Black Hubris can intercept White Hubris",
       )
       game.playMove(
         new Position({ column: 4, row: 4 }),
-        new Position({ column: 2, row: 2 })
+        new Position({ column: 2, row: 2 }),
       )
 
-      assert.strictEqual(game.getCurrentPlayer().color, 'WHITE')
+      assert.strictEqual(game.getCurrentPlayer().color, "WHITE")
       game.playMove(
         new Position({ column: 1, row: 3 }),
-        new Position({ column: 0, row: 4 })
+        new Position({ column: 0, row: 4 }),
       )
 
-      assert.strictEqual(game.getCurrentPlayer().color, 'BLACK')
+      assert.strictEqual(game.getCurrentPlayer().color, "BLACK")
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 4, row: 0 }))
-            .keys()
+            .keys(),
         ],
         [],
-        "Black Ego can't be attracted by White Hubris anymore"
+        "Black Ego can't be attracted by White Hubris anymore",
       )
-    }
+    },
   )
 
   await t.test(
-    'Black Ego attracted by White Hubris (left side) but can be intercepted by Black Hubris (on another position than the Ego attracted position)',
+    "Black Ego attracted by White Hubris (left side) but can be intercepted by Black Hubris (on another position than the Ego attracted position)",
     async () => {
       const { game, board } = createGameResult
       game.play()
       game.playMove(
         new Position({ column: 5, row: 5 }),
-        new Position({ column: 4, row: 4 })
+        new Position({ column: 4, row: 4 }),
       )
       game.playMove(
         new Position({ column: 3, row: 1 }),
-        new Position({ column: 7, row: 0 })
+        new Position({ column: 7, row: 0 }),
       )
       game.playMove(
         new Position({ column: 4, row: 4 }),
-        new Position({ column: 3, row: 5 })
+        new Position({ column: 3, row: 5 }),
       )
       game.playMove(
         new Position({ column: 2, row: 2 }),
-        new Position({ column: 4, row: 4 })
+        new Position({ column: 4, row: 4 }),
       )
       game.playMove(
         new Position({ column: 2, row: 6 }),
-        new Position({ column: 0, row: 7 })
+        new Position({ column: 0, row: 7 }),
       )
       game.playMove(
         new Position({ column: 4, row: 4 }),
-        new Position({ column: 5, row: 3 })
+        new Position({ column: 5, row: 3 }),
       )
       game.playMove(
         new Position({ column: 3, row: 5 }),
-        new Position({ column: 1, row: 3 })
+        new Position({ column: 1, row: 3 }),
       )
-      assert.strictEqual(game.getCurrentPlayer().color, 'BLACK')
-      const egoPiecePosition = board.getEgoPiecePosition('BLACK')
-      assert.strictEqual(egoPiecePosition.piece.type, 'EGO')
-      assert.strictEqual(egoPiecePosition.piece.color, 'BLACK')
+      assert.strictEqual(game.getCurrentPlayer().color, "BLACK")
+      const egoPiecePosition = board.getEgoPiecePosition("BLACK")
+      assert.strictEqual(egoPiecePosition.piece.type, "EGO")
+      assert.strictEqual(egoPiecePosition.piece.color, "BLACK")
       assert.strictEqual(
         egoPiecePosition.position.equals(new Position({ column: 4, row: 0 })),
-        true
+        true,
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 4, row: 0 }))
-            .keys()
+            .keys(),
         ],
-        ['C6']
+        ["C6"],
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 5, row: 3 }))
-            .keys()
+            .keys(),
         ],
-        ['D7'],
-        'Black Hubris can intercept White Hubris on another position than the Ego attracted position'
+        ["D7"],
+        "Black Hubris can intercept White Hubris on another position than the Ego attracted position",
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 5, row: 2 }))
-            .keys()
+            .keys(),
         ],
         [],
-        "Black Hubris can't move if can't intercept White Hubris"
+        "Black Hubris can't move if can't intercept White Hubris",
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 3, row: 0 }))
-            .keys()
+            .keys(),
         ],
         [],
-        "Black Carolo can't move"
+        "Black Carolo can't move",
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 2, row: 0 }))
-            .keys()
+            .keys(),
         ],
         [],
-        "Black Bayard can't move"
+        "Black Bayard can't move",
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 2, row: 1 }))
-            .keys()
+            .keys(),
         ],
         [],
-        "Black Aymon can't move"
+        "Black Aymon can't move",
       )
-    }
+    },
   )
 
   await t.test(
-    'Black Ego attracted by White Hubris (right side) but can be intercepted by Black Hubris (on another position than the Ego attracted position)',
+    "Black Ego attracted by White Hubris (right side) but can be intercepted by Black Hubris (on another position than the Ego attracted position)",
     async () => {
       const { game, board } = createGameResult
       game.play()
       game.playMove(
         new Position({ column: 5, row: 5 }),
-        new Position({ column: 4, row: 4 })
+        new Position({ column: 4, row: 4 }),
       )
       game.playMove(
         new Position({ column: 3, row: 1 }),
-        new Position({ column: 7, row: 0 })
+        new Position({ column: 7, row: 0 }),
       )
       game.playMove(
         new Position({ column: 4, row: 4 }),
-        new Position({ column: 3, row: 5 })
+        new Position({ column: 3, row: 5 }),
       )
       game.playMove(
         new Position({ column: 5, row: 1 }),
-        new Position({ column: 0, row: 0 })
+        new Position({ column: 0, row: 0 }),
       )
       game.playMove(
         new Position({ column: 3, row: 5 }),
-        new Position({ column: 4, row: 4 })
+        new Position({ column: 4, row: 4 }),
       )
       game.playMove(
         new Position({ column: 0, row: 0 }),
-        new Position({ column: 0, row: 1 })
+        new Position({ column: 0, row: 1 }),
       )
       game.playMove(
         new Position({ column: 4, row: 4 }),
-        new Position({ column: 5, row: 5 })
+        new Position({ column: 5, row: 5 }),
       )
       game.playMove(
         new Position({ column: 2, row: 2 }),
-        new Position({ column: 3, row: 3 })
+        new Position({ column: 3, row: 3 }),
       )
       game.playMove(
         new Position({ column: 5, row: 5 }),
-        new Position({ column: 7, row: 3 })
+        new Position({ column: 7, row: 3 }),
       )
-      assert.strictEqual(game.getCurrentPlayer().color, 'BLACK')
-      const egoPiecePosition = board.getEgoPiecePosition('BLACK')
-      assert.strictEqual(egoPiecePosition.piece.type, 'EGO')
-      assert.strictEqual(egoPiecePosition.piece.color, 'BLACK')
+      assert.strictEqual(game.getCurrentPlayer().color, "BLACK")
+      const egoPiecePosition = board.getEgoPiecePosition("BLACK")
+      assert.strictEqual(egoPiecePosition.piece.type, "EGO")
+      assert.strictEqual(egoPiecePosition.piece.color, "BLACK")
       assert.strictEqual(
         egoPiecePosition.position.equals(new Position({ column: 4, row: 0 })),
-        true
+        true,
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 4, row: 0 }))
-            .keys()
+            .keys(),
         ],
-        ['G6']
+        ["G6"],
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 3, row: 3 }))
-            .keys()
+            .keys(),
         ],
-        ['F7'],
-        'Black Hubris can intercept White Hubris on another position than the Ego attracted position'
+        ["F7"],
+        "Black Hubris can intercept White Hubris on another position than the Ego attracted position",
       )
       assert.deepStrictEqual(
         [
           ...board
             .getAvailablePiecePositions(new Position({ column: 2, row: 1 }))
-            .keys()
+            .keys(),
         ],
         [],
-        "Black Aymon can't move"
+        "Black Aymon can't move",
       )
-    }
+    },
   )
 })

@@ -1,28 +1,28 @@
-import type { Static } from '@sinclair/typebox'
-import { Type } from '@sinclair/typebox'
+import type { Static } from "@sinclair/typebox"
+import { Type } from "@sinclair/typebox"
 
 import {
   userCurrentSchemaObject,
-  userPublicSchemaObject
-} from '../authentication.js'
-import { userSchema } from '../User.js'
-import { userSettingsSchema } from '../UserSetting.js'
-import { queryPaginationObjectSchema } from '../utils.js'
-import { gameSchema, gameUserSchemaObject } from '../Game.js'
+  userPublicSchemaObject,
+} from "../authentication.js"
+import { userSchema } from "../User.js"
+import { userSettingsSchema } from "../UserSetting.js"
+import { queryPaginationObjectSchema } from "../utils.js"
+import { gameSchema, gameUserSchemaObject } from "../Game.js"
 
 export const usersServiceSchema = {
-  '/users/:userId': {
+  "/users/:userId": {
     get: {
       parameters: Type.Object({
-        userId: userSchema.id
+        userId: userSchema.id,
       }),
-      response: userPublicSchemaObject
-    }
+      response: userPublicSchemaObject,
+    },
   },
-  '/users/:userId/games': {
+  "/users/:userId/games": {
     get: {
       parameters: Type.Object({
-        userId: userSchema.id
+        userId: userSchema.id,
       }),
       querystring: queryPaginationObjectSchema,
       response: Type.Array(
@@ -34,59 +34,59 @@ export const usersServiceSchema = {
           playerWhite: gameUserSchemaObject,
           playerBlack: gameUserSchemaObject,
           createdAt: gameSchema.createdAt,
-          updatedAt: gameSchema.updatedAt
-        })
-      )
-    }
+          updatedAt: gameSchema.updatedAt,
+        }),
+      ),
+    },
   },
-  '/users/signup': {
+  "/users/signup": {
     post: {
       body: Type.Object({
         email: userSchema.email,
         name: userSchema.name,
         password: userSchema.password,
-        locale: userSettingsSchema.locale
+        locale: userSettingsSchema.locale,
       }),
       querystring: Type.Object({
-        redirectURI: Type.Optional(Type.String({ format: 'uri-reference' }))
+        redirectURI: Type.Optional(Type.String({ format: "uri-reference" })),
       }),
-      response: userCurrentSchemaObject
-    }
-  }
+      response: userCurrentSchemaObject,
+    },
+  },
 } as const
 
 export interface UsersServices {
-  '/users/:userId': {
+  "/users/:userId": {
     get: {
       parameters: Static<
-        (typeof usersServiceSchema)['/users/:userId']['get']['parameters']
+        (typeof usersServiceSchema)["/users/:userId"]["get"]["parameters"]
       >
       response: Static<
-        (typeof usersServiceSchema)['/users/:userId']['get']['response']
+        (typeof usersServiceSchema)["/users/:userId"]["get"]["response"]
       >
     }
   }
-  '/users/:userId/games': {
+  "/users/:userId/games": {
     get: {
       parameters: Static<
-        (typeof usersServiceSchema)['/users/:userId/games']['get']['parameters']
+        (typeof usersServiceSchema)["/users/:userId/games"]["get"]["parameters"]
       >
       querystring: Static<
-        (typeof usersServiceSchema)['/users/:userId/games']['get']['querystring']
+        (typeof usersServiceSchema)["/users/:userId/games"]["get"]["querystring"]
       >
       response: Static<
-        (typeof usersServiceSchema)['/users/:userId/games']['get']['response']
+        (typeof usersServiceSchema)["/users/:userId/games"]["get"]["response"]
       >
     }
   }
-  '/users/signup': {
+  "/users/signup": {
     post: {
-      body: Static<(typeof usersServiceSchema)['/users/signup']['post']['body']>
+      body: Static<(typeof usersServiceSchema)["/users/signup"]["post"]["body"]>
       querystring: Static<
-        (typeof usersServiceSchema)['/users/signup']['post']['querystring']
+        (typeof usersServiceSchema)["/users/signup"]["post"]["querystring"]
       >
       response: Static<
-        (typeof usersServiceSchema)['/users/signup']['post']['response']
+        (typeof usersServiceSchema)["/users/signup"]["post"]["response"]
       >
     }
   }

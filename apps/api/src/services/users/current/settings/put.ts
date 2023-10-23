@@ -1,36 +1,36 @@
-import type { Static } from '@sinclair/typebox'
-import { Type } from '@sinclair/typebox'
-import type { FastifyPluginAsync, FastifySchema } from 'fastify'
-import { fastifyErrors, userSettingsSchema } from '@carolo/models'
+import type { Static } from "@sinclair/typebox"
+import { Type } from "@sinclair/typebox"
+import type { FastifyPluginAsync, FastifySchema } from "fastify"
+import { fastifyErrors, userSettingsSchema } from "@carolo/models"
 
-import prisma from '#src/tools/database/prisma.js'
-import authenticateUser from '#src/tools/plugins/authenticateUser.js'
+import prisma from "#src/tools/database/prisma.js"
+import authenticateUser from "#src/tools/plugins/authenticateUser.js"
 
 const bodyPutServiceSchema = Type.Object({
-  locale: Type.Optional(userSettingsSchema.locale)
+  locale: Type.Optional(userSettingsSchema.locale),
 })
 
 type BodyPutServiceSchemaType = Static<typeof bodyPutServiceSchema>
 
 const putServiceSchema: FastifySchema = {
-  description: 'Edit the current connected user settings.',
-  tags: ['users'] as string[],
+  description: "Edit the current connected user settings.",
+  tags: ["users"] as string[],
   security: [
     {
-      bearerAuth: []
-    }
+      bearerAuth: [],
+    },
   ] as Array<{ [key: string]: [] }>,
   body: bodyPutServiceSchema,
   response: {
     200: Type.Object({
-      settings: Type.Object(userSettingsSchema)
+      settings: Type.Object(userSettingsSchema),
     }),
     400: fastifyErrors[400],
     401: fastifyErrors[401],
     403: fastifyErrors[403],
     429: fastifyErrors[429],
-    500: fastifyErrors[500]
-  }
+    500: fastifyErrors[500],
+  },
 } as const
 
 export const putCurrentUserSettings: FastifyPluginAsync = async (fastify) => {
@@ -39,8 +39,8 @@ export const putCurrentUserSettings: FastifyPluginAsync = async (fastify) => {
   fastify.route<{
     Body: BodyPutServiceSchemaType
   }>({
-    method: 'PUT',
-    url: '/users/current/settings',
+    method: "PUT",
+    url: "/users/current/settings",
     schema: putServiceSchema,
     handler: async (request, reply) => {
       if (request.user == null) {
@@ -48,21 +48,21 @@ export const putCurrentUserSettings: FastifyPluginAsync = async (fastify) => {
       }
       const { locale } = request.body
       let settings = await prisma.userSetting.findFirst({
-        where: { userId: request.user.current.id }
+        where: { userId: request.user.current.id },
       })
       if (settings == null) {
         settings = await prisma.userSetting.create({
-          data: {}
+          data: {},
         })
       }
       const newSettings = await prisma.userSetting.update({
         where: { id: request.user.current.id },
         data: {
-          locale: locale ?? settings.locale
-        }
+          locale: locale ?? settings.locale,
+        },
       })
       reply.statusCode = 200
       return { settings: newSettings }
-    }
+    },
   })
 }

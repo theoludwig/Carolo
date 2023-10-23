@@ -1,9 +1,9 @@
-import { useMemo } from 'react'
-import { getOppositePieceColor } from '@carolo/game'
+import { useMemo } from "react"
+import { getOppositePieceColor } from "@carolo/game"
 
-import { useGame } from '@/stores/game'
-import { Button } from '@/components/Button'
-import { User } from '@/components/User'
+import { useGame } from "@/stores/game"
+import { Button } from "@/components/Button"
+import { User } from "@/components/User"
 
 export const EndGame = (): JSX.Element => {
   const board = useGame((state) => {
@@ -17,52 +17,52 @@ export const EndGame = (): JSX.Element => {
   })
 
   const winnerColor = useMemo(() => {
-    if (gameState.status === 'WHITE_WON') {
-      return 'WHITE'
+    if (gameState.status === "WHITE_WON") {
+      return "WHITE"
     }
-    if (gameState.status === 'BLACK_WON') {
-      return 'BLACK'
+    if (gameState.status === "BLACK_WON") {
+      return "BLACK"
     }
     return null
   }, [gameState])
 
   const winnerColorDisplay = useMemo(() => {
-    if (winnerColor === 'WHITE') {
-      return 'Blanc'
+    if (winnerColor === "WHITE") {
+      return "Blanc"
     }
-    if (winnerColor === 'BLACK') {
-      return 'Noir'
+    if (winnerColor === "BLACK") {
+      return "Noir"
     }
     return null
   }, [winnerColor])
 
   const reason = useMemo(() => {
     if (winnerColor == null) {
-      return 'Draw'
+      return "Draw"
     }
     const isReconquest = board.isReconquest(winnerColor)
     if (isReconquest) {
-      return 'Reconquest'
+      return "Reconquest"
     }
     const oppositeColor = getOppositePieceColor(winnerColor)
     const isCheck = board.isCheck(oppositeColor)
     if (isCheck) {
-      return 'Check'
+      return "Check"
     }
-    return 'Resign'
+    return "Resign"
   }, [winnerColor, board])
 
   const reasonDisplay = useMemo(() => {
-    if (reason === 'Reconquest') {
-      return 'Reconquête'
+    if (reason === "Reconquest") {
+      return "Reconquête"
     }
-    if (reason === 'Check') {
-      return 'Mat'
+    if (reason === "Check") {
+      return "Mat"
     }
-    if (reason === 'Resign') {
-      return 'Abandon'
+    if (reason === "Resign") {
+      return "Abandon"
     }
-    return 'Pas de vainqueur'
+    return "Pas de vainqueur"
   }, [reason])
 
   const winner = useMemo(() => {
@@ -73,23 +73,23 @@ export const EndGame = (): JSX.Element => {
 
   return (
     <>
-      <h2 className='text-lg font-bold'>
-        {reasonDisplay}{' '}
+      <h2 className="text-lg font-bold">
+        {reasonDisplay}{" "}
         {winnerColorDisplay != null ? `• Victoire ${winnerColorDisplay}` : null}
       </h2>
       {winner != null ? (
-        <div className='flex flex-row items-center justify-center space-x-2 px-4 py-2'>
+        <div className="flex flex-row items-center justify-center space-x-2 px-4 py-2">
           <User
-            className='h-12 w-12'
+            className="h-12 w-12"
             user={{
               name: winner.name,
-              logo: winner.logo
+              logo: winner.logo,
             }}
           />
         </div>
       ) : null}
-      <div className='mt-2'>
-        <Button variant='purple' href='/game'>
+      <div className="mt-2">
+        <Button variant="purple" href="/game">
           Nouvelle partie
         </Button>
       </div>

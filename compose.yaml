@@ -1,38 +1,38 @@
 services:
   carolo-api:
-    container_name: 'carolo-api'
-    image: 'carolo-api'
-    restart: 'unless-stopped'
-    network_mode: 'host'
+    container_name: "carolo-api"
+    image: "carolo-api"
+    restart: "unless-stopped"
+    network_mode: "host"
     build:
-      context: './'
-      dockerfile: './apps/api/Dockerfile'
-    env_file: './apps/api/.env'
+      context: "./"
+      dockerfile: "./apps/api/Dockerfile"
+    env_file: "./apps/api/.env"
     depends_on:
-      - 'carolo-database'
+      - "carolo-database"
 
   carolo-website:
-    container_name: 'carolo-website'
-    image: 'carolo-website'
-    restart: 'unless-stopped'
-    network_mode: 'host'
+    container_name: "carolo-website"
+    image: "carolo-website"
+    restart: "unless-stopped"
+    network_mode: "host"
     build:
-      context: './'
-      dockerfile: './apps/website/Dockerfile'
-    env_file: './apps/website/.env'
+      context: "./"
+      dockerfile: "./apps/website/Dockerfile"
+    env_file: "./apps/website/.env"
 
   carolo-database:
-    container_name: 'carolo-database'
-    image: 'postgres:15.4'
-    restart: 'unless-stopped'
-    network_mode: 'host'
-    env_file: '.env'
+    container_name: "carolo-database"
+    image: "postgres:15.4"
+    restart: "unless-stopped"
+    network_mode: "host"
+    env_file: ".env"
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
     volumes:
-      - 'carolo-postgres-data:/var/lib/postgresql/data'
+      - "carolo-postgres-data:/var/lib/postgresql/data"
 
 volumes:
   carolo-postgres-data:

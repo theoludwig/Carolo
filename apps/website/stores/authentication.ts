@@ -1,10 +1,10 @@
-import { create } from 'zustand'
-import type { UserCurrent } from '@carolo/models'
+import { create } from "zustand"
+import type { UserCurrent } from "@carolo/models"
 
-import type { Authentication } from '@/lib/Authentication'
+import type { Authentication } from "@/lib/Authentication"
 
 interface AuthenticatedStore {
-  user: UserCurrent['user']
+  user: UserCurrent["user"]
   authentication: Authentication
 }
 
@@ -13,7 +13,7 @@ type AuthenticationUnion =
   | ({ [K in keyof AuthenticatedStore]: null } & { authenticated: false })
 
 export type AuthenticationStore = AuthenticationUnion & {
-  updateUser: (user: Partial<UserCurrent['user']>) => void
+  updateUser: (user: Partial<UserCurrent["user"]>) => void
 }
 
 export const useAuthentication = create<AuthenticationStore>()((set) => {
@@ -29,10 +29,10 @@ export const useAuthentication = create<AuthenticationStore>()((set) => {
         return {
           user: {
             ...state.user,
-            ...user
-          }
+            ...user,
+          },
         }
       })
-    }
+    },
   }
 })

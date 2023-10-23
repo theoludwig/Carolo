@@ -14,7 +14,7 @@ The [Carolo](https://carolo.theoludwig.fr/), is a strategy board game similar to
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) >= 20.0.0
-- [npm](https://www.npmjs.com/) >= 9.0.0
+- [npm](https://www.npmjs.com/) >= 10.0.0
 - [PostgreSQL](https://www.postgresql.org/) >= 15.0.0
 
 ### Installation

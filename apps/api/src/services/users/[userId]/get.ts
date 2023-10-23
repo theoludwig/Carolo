@@ -1,41 +1,41 @@
-import type { FastifyPluginAsync, FastifySchema } from 'fastify'
-import type { Locale, Services } from '@carolo/models'
-import { fastifyErrors, servicesSchema } from '@carolo/models'
+import type { FastifyPluginAsync, FastifySchema } from "fastify"
+import type { Locale, Services } from "@carolo/models"
+import { fastifyErrors, servicesSchema } from "@carolo/models"
 
-import prisma from '#src/tools/database/prisma.js'
+import prisma from "#src/tools/database/prisma.js"
 
 const getServiceSchema: FastifySchema = {
-  description: 'GET the public user informations with its id.',
-  tags: ['users'] as string[],
-  params: servicesSchema['/users/:userId'].get.parameters,
+  description: "GET the public user informations with its id.",
+  tags: ["users"] as string[],
+  params: servicesSchema["/users/:userId"].get.parameters,
   response: {
-    200: servicesSchema['/users/:userId'].get.response,
+    200: servicesSchema["/users/:userId"].get.response,
     400: fastifyErrors[400],
     404: fastifyErrors[404],
     429: fastifyErrors[429],
-    500: fastifyErrors[500]
-  }
+    500: fastifyErrors[500],
+  },
 } as const
 
 export const getUserById: FastifyPluginAsync = async (fastify) => {
   fastify.route<{
-    Params: Services['/users/:userId']['get']['parameters']
-    Reply: Services['/users/:userId']['get']['response']
+    Params: Services["/users/:userId"]["get"]["parameters"]
+    Reply: Services["/users/:userId"]["get"]["response"]
   }>({
-    method: 'GET',
-    url: '/users/:userId',
+    method: "GET",
+    url: "/users/:userId",
     schema: getServiceSchema,
     handler: async (request, reply) => {
       const { userId } = request.params
       const settings = await prisma.userSetting.findFirst({
-        where: { userId }
+        where: { userId },
       })
       if (settings == null) {
-        throw fastify.httpErrors.notFound('User not found.')
+        throw fastify.httpErrors.notFound("User not found.")
       }
       const user = await prisma.user.findUnique({
         where: {
-          id: userId
+          id: userId,
         },
         select: {
           id: true,
@@ -44,47 +44,47 @@ export const getUserById: FastifyPluginAsync = async (fastify) => {
           isConfirmed: true,
           logo: true,
           createdAt: true,
-          updatedAt: true
-        }
+          updatedAt: true,
+        },
       })
       if (user == null) {
-        throw fastify.httpErrors.notFound('User not found.')
+        throw fastify.httpErrors.notFound("User not found.")
       }
 
       const numberOfVictory = await prisma.game.count({
         where: {
           status: {
-            in: ['WHITE_WON', 'BLACK_WON']
+            in: ["WHITE_WON", "BLACK_WON"],
           },
           OR: [
             {
-              status: 'WHITE_WON',
-              playerWhiteId: userId
+              status: "WHITE_WON",
+              playerWhiteId: userId,
             },
             {
-              status: 'BLACK_WON',
-              playerBlackId: userId
-            }
-          ]
-        }
+              status: "BLACK_WON",
+              playerBlackId: userId,
+            },
+          ],
+        },
       })
 
       const numberOfDefeat = await prisma.game.count({
         where: {
           status: {
-            in: ['WHITE_WON', 'BLACK_WON']
+            in: ["WHITE_WON", "BLACK_WON"],
           },
           OR: [
             {
-              status: 'WHITE_WON',
-              playerBlackId: userId
+              status: "WHITE_WON",
+              playerBlackId: userId,
             },
             {
-              status: 'BLACK_WON',
-              playerWhiteId: userId
-            }
-          ]
-        }
+              status: "BLACK_WON",
+              playerWhiteId: userId,
+            },
+          ],
+        },
       })
 
       reply.statusCode = 200
@@ -97,12 +97,12 @@ export const getUserById: FastifyPluginAsync = async (fastify) => {
             ...settings,
             locale: settings.locale as Locale,
             createdAt: settings.createdAt.toISOString(),
-            updatedAt: settings.updatedAt.toISOString()
-          }
+            updatedAt: settings.updatedAt.toISOString(),
+          },
         },
         numberOfDefeat,
-        numberOfVictory
+        numberOfVictory,
       }
-    }
+    },
   })
 }

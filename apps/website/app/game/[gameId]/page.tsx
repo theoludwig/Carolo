@@ -1,9 +1,9 @@
-import { redirect } from 'next/navigation'
-import type { Services } from '@carolo/models'
+import { redirect } from "next/navigation"
+import type { Services } from "@carolo/models"
 
-import { Game } from '@/components/Game/Game'
-import type { GameStoreOptions } from '@/stores/game'
-import { api } from '@/lib/configurations'
+import { Game } from "@/components/Game/Game"
+import type { GameStoreOptions } from "@/stores/game"
+import { api } from "@/lib/configurations"
 
 export interface GameMultiplayerPageProps {
   params: {
@@ -12,7 +12,7 @@ export interface GameMultiplayerPageProps {
 }
 
 const GameMultiplayerPage = async (
-  props: GameMultiplayerPageProps
+  props: GameMultiplayerPageProps,
 ): Promise<JSX.Element> => {
   const { gameId } = props.params
 
@@ -20,13 +20,13 @@ const GameMultiplayerPage = async (
     gameId,
     users: [],
     playWithColors: [],
-    status: 'LOBBY',
-    actions: []
+    status: "LOBBY",
+    actions: [],
   }
 
   try {
     const { data } = await api.get<
-      Services['/games/:gameId']['get']['response']
+      Services["/games/:gameId"]["get"]["response"]
     >(`/games/${gameId}`)
 
     if (data.playerWhite != null) {
@@ -40,7 +40,7 @@ const GameMultiplayerPage = async (
     options.status = data.status
     options.actions = data.actions
   } catch {
-    return redirect('/game')
+    return redirect("/game")
   }
 
   return <Game options={options} />

@@ -1,5 +1,5 @@
-import type { Piece } from './pieces/Piece.js'
-import type { Position } from './Position.js'
+import type { Piece } from "./pieces/Piece.js"
+import type { Position } from "./Position.js"
 
 export interface PiecePositionOptions {
   position: Position
@@ -21,7 +21,7 @@ export class PiecePosition implements PiecePositionOptions {
 
   public get piece(): Piece {
     if (this._piece === null) {
-      throw new Error('Position must be occupied.')
+      throw new Error("Position must be occupied.")
     }
     return this._piece
   }

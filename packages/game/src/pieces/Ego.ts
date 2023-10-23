@@ -1,6 +1,6 @@
-import type { PieceType } from './Piece.js'
-import { Piece } from './Piece.js'
-import { Position } from '../Position.js'
+import type { PieceType } from "./Piece.js"
+import { Piece } from "./Piece.js"
+import { Position } from "../Position.js"
 
 export class Ego extends Piece {
   public getPositionsOffsets(): Position[] {
@@ -12,10 +12,10 @@ export class Ego extends Piece {
   }
 
   public getCapturablePiecesTypes(): PieceType[] {
-    return ['BAYARD']
+    return ["BAYARD"]
   }
 
   public get type(): PieceType {
-    return 'EGO'
+    return "EGO"
   }
 }

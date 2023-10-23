@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import type { Services } from '@carolo/models'
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import type { Services } from "@carolo/models"
 
-import { useAuthentication } from '@/stores/authentication'
+import { useAuthentication } from "@/stores/authentication"
 
 export type GameLayoutProps = React.PropsWithChildren
 
@@ -19,8 +19,8 @@ const GameLayout = (props: GameLayoutProps): JSX.Element => {
       if (authenticated) {
         const { data } =
           await authentication.api.get<
-            Services['/games/current']['get']['response']
-          >('/games/current')
+            Services["/games/current"]["get"]["response"]
+          >("/games/current")
         if (data.gameId != null) {
           return router.replace(`/game/${data.gameId}`)
         }
@@ -33,7 +33,7 @@ const GameLayout = (props: GameLayoutProps): JSX.Element => {
   }, [authenticated, authentication, router])
 
   return (
-    <main className='flex flex-1 flex-col items-center justify-center'>
+    <main className="flex flex-1 flex-col items-center justify-center">
       {children}
     </main>
   )

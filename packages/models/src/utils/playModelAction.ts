@@ -1,7 +1,7 @@
-import type { Board, Game, Move, PositionString } from '@carolo/game'
-import { Position } from '@carolo/game'
+import type { Board, Game, Move, PositionString } from "@carolo/game"
+import { Position } from "@carolo/game"
 
-import type { GameActionBasic } from '../GameAction.js'
+import type { GameActionBasic } from "../GameAction.js"
 
 export interface PlayModelActionOptions {
   action: GameActionBasic
@@ -10,16 +10,16 @@ export interface PlayModelActionOptions {
 }
 
 export const playModelAction = (
-  options: PlayModelActionOptions
+  options: PlayModelActionOptions,
 ): Move | null => {
   const { action, board, game } = options
   if (
-    action.type === 'MOVE' &&
+    action.type === "MOVE" &&
     action.fromPosition != null &&
     action.toPosition != null
   ) {
     const fromPosition = Position.fromString(
-      action.fromPosition as PositionString
+      action.fromPosition as PositionString,
     )
     const toPosition = Position.fromString(action.toPosition as PositionString)
 
@@ -40,10 +40,10 @@ export const playModelAction = (
       return null
     }
   }
-  if (action.type === 'SKIP_BOUNCING') {
+  if (action.type === "SKIP_BOUNCING") {
     game.skipBouncing()
   }
-  if (action.type === 'RESIGN' && action.color != null) {
+  if (action.type === "RESIGN" && action.color != null) {
     game.resign(action.color)
   }
   return null

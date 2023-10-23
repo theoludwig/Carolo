@@ -1,17 +1,17 @@
-import type { Static } from '@sinclair/typebox'
-import { Type } from '@sinclair/typebox'
+import type { Static } from "@sinclair/typebox"
+import { Type } from "@sinclair/typebox"
 
-import { userSchema } from './User.js'
-import { date, id } from './utils.js'
+import { userSchema } from "./User.js"
+import { date, id } from "./utils.js"
 
-export const locales = [Type.Literal('fr-FR')]
+export const locales = [Type.Literal("fr-FR")]
 
 export const userSettingsSchema = {
   id,
   locale: Type.Union(locales),
   createdAt: date.createdAt,
   updatedAt: date.updatedAt,
-  userId: userSchema.id
+  userId: userSchema.id,
 }
 
 export const userSettingsSchemaObject = Type.Object(userSettingsSchema)

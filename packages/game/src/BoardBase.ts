@@ -1,12 +1,12 @@
-import { Observer } from './Observer.js'
-import { PiecePosition } from './PiecePosition.js'
-import { Aymon } from './pieces/Aymon.js'
-import { Bayard } from './pieces/Bayard.js'
-import { Carolo } from './pieces/Carolo.js'
-import { Ego } from './pieces/Ego.js'
-import { Hubris } from './pieces/Hubris.js'
-import type { Piece, PieceColor } from './pieces/Piece.js'
-import { Position } from './Position.js'
+import { Observer } from "./Observer.js"
+import { PiecePosition } from "./PiecePosition.js"
+import { Aymon } from "./pieces/Aymon.js"
+import { Bayard } from "./pieces/Bayard.js"
+import { Carolo } from "./pieces/Carolo.js"
+import { Ego } from "./pieces/Ego.js"
+import { Hubris } from "./pieces/Hubris.js"
+import type { Piece, PieceColor } from "./pieces/Piece.js"
+import { Position } from "./Position.js"
 
 export interface Move {
   fromPosition: Position
@@ -47,27 +47,27 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
       for (let row = 0; row < BoardBase.SIZE; row++) {
         for (let column = 0; column < BoardBase.SIZE; column++) {
           state.board[row][column] = new PiecePosition({
-            position: new Position({ row, column })
+            position: new Position({ row, column }),
           })
         }
       }
-      this.setupPieces(state.board, 'WHITE')
-      this.setupPieces(state.board, 'BLACK')
+      this.setupPieces(state.board, "WHITE")
+      this.setupPieces(state.board, "BLACK")
       state.moves = []
       state.currentMoveIndex = -1
     })
   }
 
   public getLastRow(color: PieceColor): number {
-    return color === 'BLACK' ? 0 : BoardBase.SIZE - 1
+    return color === "BLACK" ? 0 : BoardBase.SIZE - 1
   }
 
   public getAymonInitialRow(color: PieceColor): number {
-    return color === 'BLACK' ? 1 : BoardBase.SIZE - 2
+    return color === "BLACK" ? 1 : BoardBase.SIZE - 2
   }
 
   public getHubrisInitialRow(color: PieceColor): number {
-    return color === 'BLACK' ? 2 : BoardBase.SIZE - 3
+    return color === "BLACK" ? 2 : BoardBase.SIZE - 3
   }
 
   public getEgoPiecePosition(color: PieceColor): PiecePosition {
@@ -77,26 +77,26 @@ export abstract class BoardBase extends Observer<BoardBaseState> {
         if (
           piecePosition.isOccupied() &&
           piecePosition.piece.color === color &&
-          piecePosition.piece.type === 'EGO'
+          piecePosition.piece.type === "EGO"
         ) {
           return piecePosition
         }
       }
     }
-    throw new Error('Ego piece not found.')
+    throw new Error("Ego piece not found.")
   }
 
   public getPiecePosition(position: Position): PiecePosition {
     return this.state.board[position.row][position.column]
   }
 
-  private setupPieces(board: BoardBaseState['board'], color: PieceColor): void {
+  private setupPieces(board: BoardBaseState["board"], color: PieceColor): void {
     const lastRow = this.getLastRow(color)
     board[lastRow][2].piece = new Bayard(color)
     board[lastRow][5].piece = new Bayard(color)
 
-    board[lastRow][color === 'WHITE' ? 3 : 4].piece = new Ego(color)
-    board[lastRow][color === 'WHITE' ? 4 : 3].piece = new Carolo(color)
+    board[lastRow][color === "WHITE" ? 3 : 4].piece = new Ego(color)
+    board[lastRow][color === "WHITE" ? 4 : 3].piece = new Carolo(color)
 
     const hubrisRow = this.getHubrisInitialRow(color)
     board[hubrisRow][2].piece = new Hubris(color)

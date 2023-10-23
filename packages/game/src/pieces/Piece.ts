@@ -1,18 +1,18 @@
-import type { Position } from '../Position.js'
+import type { Position } from "../Position.js"
 
-export const PieceColors = ['WHITE', 'BLACK'] as const
+export const PieceColors = ["WHITE", "BLACK"] as const
 export type PieceColor = (typeof PieceColors)[number]
 
 export const getOppositePieceColor = (color: PieceColor): PieceColor => {
-  return color === 'WHITE' ? 'BLACK' : 'WHITE'
+  return color === "WHITE" ? "BLACK" : "WHITE"
 }
 
 export const PieceTypes = [
-  'AYMON',
-  'BAYARD',
-  'CAROLO',
-  'EGO',
-  'HUBRIS'
+  "AYMON",
+  "BAYARD",
+  "CAROLO",
+  "EGO",
+  "HUBRIS",
 ] as const
 export type PieceType = (typeof PieceTypes)[number]
 
@@ -25,7 +25,7 @@ export abstract class Piece {
   }
 
   public static getDirection(color: PieceColor): number {
-    return color === 'WHITE' ? 1 : -1
+    return color === "WHITE" ? 1 : -1
   }
 
   public getDirection(): number {

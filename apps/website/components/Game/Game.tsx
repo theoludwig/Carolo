@@ -1,8 +1,8 @@
-'use client'
+"use client"
 
-import type { GameStoreOptions } from '@/stores/game'
-import { GameView } from '@/components/Game/GameView'
-import { GameContextProvider } from '@/components/Game/GameContext'
+import type { GameStoreOptions } from "@/stores/game"
+import { GameView } from "@/components/Game/GameView"
+import { GameContextProvider } from "@/components/Game/GameContext"
 
 export interface GameProps {
   options: GameStoreOptions

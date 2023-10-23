@@ -1,14 +1,14 @@
-'use client'
+"use client"
 
-import Image from 'next/image'
-import NextLink from 'next/link'
-import { useMemo } from 'react'
-import classNames from 'clsx'
-import type { PlayerState } from '@carolo/game'
-import type { GameUser } from '@carolo/models'
+import Image from "next/image"
+import NextLink from "next/link"
+import { useMemo } from "react"
+import classNames from "clsx"
+import type { PlayerState } from "@carolo/game"
+import type { GameUser } from "@carolo/models"
 
-import { useGame } from '@/stores/game'
-import { User } from '@/components/User'
+import { useGame } from "@/stores/game"
+import { User } from "@/components/User"
 
 export interface PlayerProps {
   playerState: PlayerState
@@ -24,17 +24,17 @@ const PlayerUser = (props: PlayerUserProps): JSX.Element => {
   const { user, isPlayerTurn = false } = props
 
   return (
-    <div className='flex flex-row items-center justify-center space-x-2 rounded-md bg-[#272522] px-4 py-1'>
+    <div className="flex flex-row items-center justify-center space-x-2 rounded-md bg-[#272522] px-4 py-1">
       {user == null ? (
         <h2>En attente d{"'"}adversaire</h2>
       ) : (
         <User
           user={{
             name: user.name,
-            logo: user.logo
+            logo: user.logo,
           }}
-          className={classNames('h-12 w-12', {
-            'ring-2 ring-green-500': isPlayerTurn
+          className={classNames("h-12 w-12", {
+            "ring-2 ring-green-500": isPlayerTurn,
           })}
         />
       )}
@@ -65,24 +65,24 @@ export const Player = (props: PlayerProps): JSX.Element => {
   }, [playerState.color, users])
 
   return (
-    <section className='flex justify-between text-sm'>
+    <section className="flex justify-between text-sm">
       {gameId == null || user == null ? (
         <PlayerUser user={user} isPlayerTurn={isPlayerTurn} />
       ) : (
-        <NextLink href={`/users/${user.id}`} className='hover:opacity-80'>
+        <NextLink href={`/users/${user.id}`} className="hover:opacity-80">
           <PlayerUser user={user} isPlayerTurn={isPlayerTurn} />
         </NextLink>
       )}
-      <div className='flex w-44 flex-wrap justify-center rounded-md bg-[#272522]'>
+      <div className="flex w-44 flex-wrap justify-center rounded-md bg-[#272522]">
         {playerState.capturedPieces.map((piece, index) => {
           return (
             <Image
               quality={100}
               priority
               key={index}
-              className='h-10 w-10'
+              className="h-10 w-10"
               src={`/pieces/${piece.type}_${piece.color}.png`}
-              alt='Piece'
+              alt="Piece"
               width={64}
               height={64}
             />

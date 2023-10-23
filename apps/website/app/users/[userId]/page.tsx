@@ -1,11 +1,11 @@
-import { notFound, redirect } from 'next/navigation'
-import classNames from 'clsx'
+import { notFound, redirect } from "next/navigation"
+import classNames from "clsx"
 
-import { api } from '@/lib/configurations'
-import type { UserPublicById } from '@/components/UserPublic'
-import { UserPublic } from '@/components/UserPublic'
-import type { Games } from '@/components/UserGames'
-import { UserGames } from '@/components/UserGames'
+import { api } from "@/lib/configurations"
+import type { UserPublicById } from "@/components/UserPublic"
+import { UserPublic } from "@/components/UserPublic"
+import type { Games } from "@/components/UserGames"
+import { UserGames } from "@/components/UserGames"
 
 export interface UsersProfilePageProps {
   params: {
@@ -21,7 +21,7 @@ export interface UsersProfilePageProps {
 const ITEMS_PER_PAGE_LIMIT = 20
 
 const UsersProfilePage = async (
-  props: UsersProfilePageProps
+  props: UsersProfilePageProps,
 ): Promise<JSX.Element> => {
   const { searchParams, params } = props
   const { userId } = params
@@ -39,9 +39,9 @@ const UsersProfilePage = async (
 
   try {
     const urlSearchParams = new URLSearchParams(searchParams)
-    urlSearchParams.set('limit', ITEMS_PER_PAGE_LIMIT.toString())
+    urlSearchParams.set("limit", ITEMS_PER_PAGE_LIMIT.toString())
     const { data } = await api.get<Games>(
-      `/users/${userId}/games?${urlSearchParams.toString()}`
+      `/users/${userId}/games?${urlSearchParams.toString()}`,
     )
     games = data
     if (
@@ -65,16 +65,16 @@ const UsersProfilePage = async (
       games[0].id.toString() !== originId)
 
   return (
-    <main className='flex flex-1 flex-col items-start justify-start overflow-hidden'>
+    <main className="flex flex-1 flex-col items-start justify-start overflow-hidden">
       <div
         className={classNames(
-          'scrollbar-firefox-support my-10 flex w-full flex-col items-center justify-between space-y-4 overflow-y-auto px-14 lg:flex-row lg:items-start lg:space-x-10 lg:space-y-0',
+          "scrollbar-firefox-support my-10 flex w-full flex-col items-center justify-between space-y-4 overflow-y-auto px-14 lg:flex-row lg:items-start lg:space-x-10 lg:space-y-0",
           {
-            '!h-full': !hasAlreadyPlayed,
-            '!items-center': !hasAlreadyPlayed,
-            '!justify-center': !hasAlreadyPlayed,
-            '!my-0': !hasAlreadyPlayed
-          }
+            "!h-full": !hasAlreadyPlayed,
+            "!items-center": !hasAlreadyPlayed,
+            "!justify-center": !hasAlreadyPlayed,
+            "!my-0": !hasAlreadyPlayed,
+          },
         )}
       >
         <UserPublic userPublic={userPublic} />

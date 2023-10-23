@@ -1,6 +1,6 @@
-import type { PieceType } from './Piece.js'
-import { Piece } from './Piece.js'
-import type { Position } from '../Position.js'
+import type { PieceType } from "./Piece.js"
+import { Piece } from "./Piece.js"
+import type { Position } from "../Position.js"
 
 export class Aymon extends Piece {
   public override canMoveTeleportAnywhere(): boolean {
@@ -13,7 +13,7 @@ export class Aymon extends Piece {
    * @returns
    */
   public getPositionsOffsets(): Position[] {
-    throw new Error('Not implemented')
+    throw new Error("Not implemented")
   }
 
   public getCapturablePiecesTypes(): PieceType[] {
@@ -21,6 +21,6 @@ export class Aymon extends Piece {
   }
 
   public get type(): PieceType {
-    return 'AYMON'
+    return "AYMON"
   }
 }

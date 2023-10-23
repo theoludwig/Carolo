@@ -1,11 +1,11 @@
-import type { Move } from './BoardBase.js'
-import { BoardBase } from './BoardBase.js'
-import type { PiecePosition } from './PiecePosition.js'
-import { HubrisEgoAttraction } from './pieces/HubrisEgoAttraction.js'
-import type { PieceColor } from './pieces/Piece.js'
-import { getOppositePieceColor } from './pieces/Piece.js'
-import type { PositionString } from './Position.js'
-import { Position } from './Position.js'
+import type { Move } from "./BoardBase.js"
+import { BoardBase } from "./BoardBase.js"
+import type { PiecePosition } from "./PiecePosition.js"
+import { HubrisEgoAttraction } from "./pieces/HubrisEgoAttraction.js"
+import type { PieceColor } from "./pieces/Piece.js"
+import { getOppositePieceColor } from "./pieces/Piece.js"
+import type { PositionString } from "./Position.js"
+import { Position } from "./Position.js"
 
 export type AvailablePiecePositions = Map<PositionString, PiecePosition>
 
@@ -18,7 +18,7 @@ export interface HubrisAttractionResult {
 
 export class Board extends BoardBase {
   private getAvailablePiecePositionsWithoutHubrisAttraction(
-    fromPosition: Position
+    fromPosition: Position,
   ): AvailablePiecePositions {
     const availablePiecePositions: AvailablePiecePositions = new Map()
     const from = this.getPiecePosition(fromPosition)
@@ -56,7 +56,7 @@ export class Board extends BoardBase {
       if (!from.piece.canJumpOverPieces()) {
         let isPathwayBlocked = false
         for (const intermediatePosition of fromPosition.getIntermediatePositions(
-          toPosition
+          toPosition,
         )) {
           if (this.getPiecePosition(intermediatePosition).isOccupied()) {
             isPathwayBlocked = true
@@ -121,25 +121,25 @@ export class Board extends BoardBase {
       if (maximumTop != null) {
         availableOnlyPiecePositions.set(
           maximumTop.position.toString(),
-          maximumTop
+          maximumTop,
         )
       }
       if (maximumBottom != null) {
         availableOnlyPiecePositions.set(
           maximumBottom.position.toString(),
-          maximumBottom
+          maximumBottom,
         )
       }
       if (maximumLeft != null) {
         availableOnlyPiecePositions.set(
           maximumLeft.position.toString(),
-          maximumLeft
+          maximumLeft,
         )
       }
       if (maximumRight != null) {
         availableOnlyPiecePositions.set(
           maximumRight.position.toString(),
-          maximumRight
+          maximumRight,
         )
       }
       return availableOnlyPiecePositions
@@ -157,11 +157,11 @@ export class Board extends BoardBase {
     for (let row = 0; row < BoardBase.SIZE; row++) {
       for (let column = 0; column < BoardBase.SIZE; column++) {
         const piecePosition = this.getPiecePosition(
-          new Position({ row, column })
+          new Position({ row, column }),
         )
         if (
           piecePosition.isOccupied() &&
-          piecePosition.piece.type === 'HUBRIS' &&
+          piecePosition.piece.type === "HUBRIS" &&
           piecePosition.piece.color === oppositeColor
         ) {
           const hubris = piecePosition.piece
@@ -169,12 +169,12 @@ export class Board extends BoardBase {
           piecePosition.piece = hubrisEgoAttraction
           const available =
             this.getAvailablePiecePositionsWithoutHubrisAttraction(
-              piecePosition.position
+              piecePosition.position,
             )
           piecePosition.piece = hubris
           if (
             egoPiecePosition.position.isOnlyOneSquareAway(
-              piecePosition.position
+              piecePosition.position,
             )
           ) {
             continue
@@ -193,7 +193,7 @@ export class Board extends BoardBase {
       egoPiecePosition,
       egoIsAttractedToHubris,
       hubrisPosition,
-      hubrisOpponentAvailable
+      hubrisOpponentAvailable,
     }
   }
 
@@ -203,7 +203,7 @@ export class Board extends BoardBase {
    * @returns Map of available positions (key: `column-${column}-row-${row}`, value: PiecePosition).
    */
   public getAvailablePiecePositions(
-    fromPosition: Position
+    fromPosition: Position,
   ): AvailablePiecePositions {
     let availablePiecePositions: AvailablePiecePositions = new Map()
     if (this.state.currentMoveIndex < this.state.moves.length - 1) {
@@ -223,30 +223,30 @@ export class Board extends BoardBase {
       egoPiecePosition,
       egoIsAttractedToHubris,
       hubrisPosition,
-      hubrisOpponentAvailable
+      hubrisOpponentAvailable,
     } = this.powerOfHubrisAttraction(from.piece.color)
     if (egoIsAttractedToHubris && hubrisPosition != null) {
-      if (from.piece.type === 'EGO') {
+      if (from.piece.type === "EGO") {
         const x1 = hubrisPosition.column
         const y1 = hubrisPosition.row
         const x2 = egoPiecePosition.position.column
         const y2 = egoPiecePosition.position.row
         const positionAttracted = new Position({
           column: x1 + (x2 - x1) / Math.abs(x2 - x1),
-          row: y1 + (y2 - y1) / Math.abs(y2 - y1)
+          row: y1 + (y2 - y1) / Math.abs(y2 - y1),
         })
         availablePiecePositions.set(
           positionAttracted.toString(),
-          this.getPiecePosition(positionAttracted)
+          this.getPiecePosition(positionAttracted),
         )
         return availablePiecePositions
       }
-      if (from.piece.type === 'HUBRIS') {
+      if (from.piece.type === "HUBRIS") {
         const available =
           this.getAvailablePiecePositionsWithoutHubrisAttraction(fromPosition)
         for (const [key, value] of available) {
           const isSameDiagonalAsEgo = value.position.isOnSameDiagonal(
-            egoPiecePosition.position
+            egoPiecePosition.position,
           )
           if (hubrisOpponentAvailable.has(key) && isSameDiagonalAsEgo) {
             availablePiecePositions.set(key, value)
@@ -304,7 +304,7 @@ export class Board extends BoardBase {
 
   public canMove(fromPosition: Position, toPosition: Position): boolean {
     return this.getAvailablePiecePositions(fromPosition).has(
-      toPosition.toString()
+      toPosition.toString(),
     )
   }
 
@@ -321,7 +321,7 @@ export class Board extends BoardBase {
 
   private canBounceBorder(
     fromPosition: Position,
-    toPosition: Position
+    toPosition: Position,
   ): boolean {
     const piecePosition = this.getPiecePosition(toPosition)
     const { position } = piecePosition
@@ -347,43 +347,43 @@ export class Board extends BoardBase {
 
   private canBounceAymon(
     fromPosition: Position,
-    toPosition: Position
+    toPosition: Position,
   ): boolean {
     const piecePosition = this.getPiecePosition(toPosition)
     const topPosition = piecePosition.position.add(
-      new Position({ row: -1, column: 0 })
+      new Position({ row: -1, column: 0 }),
     )
     const bottomPosition = piecePosition.position.add(
-      new Position({ row: 1, column: 0 })
+      new Position({ row: 1, column: 0 }),
     )
     const leftPosition = piecePosition.position.add(
-      new Position({ row: 0, column: -1 })
+      new Position({ row: 0, column: -1 }),
     )
     const rightPosition = piecePosition.position.add(
-      new Position({ row: 0, column: 1 })
+      new Position({ row: 0, column: 1 }),
     )
     if (fromPosition.row > toPosition.row) {
       return (
         this.getPiecePosition(topPosition).isOccupied() &&
-        this.getPiecePosition(topPosition).piece.type === 'AYMON'
+        this.getPiecePosition(topPosition).piece.type === "AYMON"
       )
     }
     if (fromPosition.row < toPosition.row) {
       return (
         this.getPiecePosition(bottomPosition).isOccupied() &&
-        this.getPiecePosition(bottomPosition).piece.type === 'AYMON'
+        this.getPiecePosition(bottomPosition).piece.type === "AYMON"
       )
     }
     if (fromPosition.column > toPosition.column) {
       return (
         this.getPiecePosition(leftPosition).isOccupied() &&
-        this.getPiecePosition(leftPosition).piece.type === 'AYMON'
+        this.getPiecePosition(leftPosition).piece.type === "AYMON"
       )
     }
     if (fromPosition.column < toPosition.column) {
       return (
         this.getPiecePosition(rightPosition).isOccupied() &&
-        this.getPiecePosition(rightPosition).piece.type === 'AYMON'
+        this.getPiecePosition(rightPosition).piece.type === "AYMON"
       )
     }
     return false
@@ -405,7 +405,7 @@ export class Board extends BoardBase {
           !this.canBounceBorder(fromPosition, toPosition) &&
           !this.canBounceAymon(fromPosition, toPosition)) ||
         (to.piece.canBounce() && capturedPiece != null) ||
-        this.getAvailablePiecePositions(toPosition).size === 0
+        this.getAvailablePiecePositions(toPosition).size === 0,
     }
     this.setState((state) => {
       state.currentMoveIndex += 1
@@ -423,7 +423,7 @@ export class Board extends BoardBase {
 
   private isReconquestAfterMove(
     fromPosition: Position,
-    toPosition: Position
+    toPosition: Position,
   ): boolean {
     const from = this.getPiecePosition(fromPosition)
     const to = this.getPiecePosition(toPosition)
@@ -444,7 +444,7 @@ export class Board extends BoardBase {
     const fromPosition = egoPiecePosition.position
     const oppositeColor = getOppositePieceColor(color)
     const positionsOffsets = egoPiecePosition.piece.getPositionsOffsets(
-      BoardBase.SIZE
+      BoardBase.SIZE,
     )
     for (const positionOffset of positionsOffsets) {
       const position = fromPosition.add(positionOffset)
@@ -455,7 +455,7 @@ export class Board extends BoardBase {
       if (
         piecePosition.isOccupied() &&
         piecePosition.piece.color === oppositeColor &&
-        piecePosition.piece.type === 'CAROLO'
+        piecePosition.piece.type === "CAROLO"
       ) {
         return true
       }
@@ -465,7 +465,7 @@ export class Board extends BoardBase {
 
   private isCheckAfterMove(
     fromPosition: Position,
-    toPosition: Position
+    toPosition: Position,
   ): boolean {
     const from = this.getPiecePosition(fromPosition)
     const to = this.getPiecePosition(toPosition)

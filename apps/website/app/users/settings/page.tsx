@@ -1,17 +1,17 @@
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation"
 
-import { useAuthentication } from '@/stores/authentication'
-import { UserSettings } from '@/components/UserSettings'
+import { useAuthentication } from "@/stores/authentication"
+import { UserSettings } from "@/components/UserSettings"
 
 const UsersSettingsPage = (): JSX.Element => {
   const { authenticated } = useAuthentication.getState()
 
   if (!authenticated) {
-    return redirect('/')
+    return redirect("/")
   }
 
   return (
-    <main className='flex flex-1 flex-col items-center justify-center'>
+    <main className="flex flex-1 flex-col items-center justify-center">
       <UserSettings />
     </main>
   )

@@ -1,7 +1,7 @@
-import { Authentication } from '@/components/Authentication'
+import { Authentication } from "@/components/Authentication"
 
 const SignupPage = (): JSX.Element => {
-  return <Authentication mode='signup' />
+  return <Authentication mode="signup" />
 }
 
 export default SignupPage

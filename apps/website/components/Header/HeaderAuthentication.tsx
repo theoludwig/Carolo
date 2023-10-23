@@ -1,12 +1,12 @@
-'use client'
+"use client"
 
-import { useState, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useRef } from "react"
+import { useRouter } from "next/navigation"
 
-import { Button } from '@/components/Button'
-import { useAuthentication } from '@/stores/authentication'
-import { useClickOutsideAlerter } from '@/hooks/useClickOutsideAlerter'
-import { User } from '@/components/User'
+import { Button } from "@/components/Button"
+import { useAuthentication } from "@/stores/authentication"
+import { useClickOutsideAlerter } from "@/hooks/useClickOutsideAlerter"
+import { User } from "@/components/User"
 
 export const HeaderAuthentication = (): JSX.Element => {
   const { authenticated, user, authentication } = useAuthentication()
@@ -20,18 +20,18 @@ export const HeaderAuthentication = (): JSX.Element => {
 
   if (!authenticated) {
     return (
-      <div className='flex flex-col space-y-2'>
+      <div className="flex flex-col space-y-2">
         <Button
-          variant='white'
-          className='rounded-xl !px-6 !py-[2px] !text-base'
-          href='/authentication/signin'
+          variant="white"
+          className="rounded-xl !px-6 !py-[2px] !text-base"
+          href="/authentication/signin"
         >
           Connexion
         </Button>
         <Button
-          variant='dark'
-          className='rounded-xl !px-6 !py-[2px] !text-base'
-          href='/authentication/signup'
+          variant="dark"
+          className="rounded-xl !px-6 !py-[2px] !text-base"
+          href="/authentication/signup"
         >
           Inscription
         </Button>
@@ -41,11 +41,11 @@ export const HeaderAuthentication = (): JSX.Element => {
 
   return (
     <div
-      className='relative flex min-w-[160px] flex-col items-center rounded-md bg-[#272522] px-2 py-1'
+      className="relative flex min-w-[160px] flex-col items-center rounded-md bg-[#272522] px-2 py-1"
       ref={popupClickRef}
     >
       <div
-        className='flex cursor-pointer items-center space-x-2 hover:opacity-80'
+        className="flex cursor-pointer items-center space-x-2 hover:opacity-80"
         onClick={() => {
           setIsOpen((oldIsOpen) => {
             return !oldIsOpen
@@ -53,20 +53,20 @@ export const HeaderAuthentication = (): JSX.Element => {
         }}
       >
         <User
-          className='h-12 w-12'
+          className="h-12 w-12"
           user={{
             name: user.name,
-            logo: user.logo
+            logo: user.logo,
           }}
         />
       </div>
       {isOpen ? (
-        <div className='absolute right-0 top-[100%] flex w-full flex-col space-y-2 rounded-md bg-[#272522] p-3'>
+        <div className="absolute right-0 top-[100%] flex w-full flex-col space-y-2 rounded-md bg-[#272522] p-3">
           <Button
-            href='/users/settings'
-            icon='/icons/settings.png'
-            className='!px-0 !py-[2px] !text-sm'
-            variant='white'
+            href="/users/settings"
+            icon="/icons/settings.png"
+            className="!px-0 !py-[2px] !text-sm"
+            variant="white"
             onClick={() => {
               setIsOpen(false)
             }}
@@ -75,9 +75,9 @@ export const HeaderAuthentication = (): JSX.Element => {
           </Button>
           <Button
             href={`/users/${user.id}`}
-            icon='/icons/profile.png'
-            className='!px-0 !py-[2px] !text-sm'
-            variant='purple'
+            icon="/icons/profile.png"
+            className="!px-0 !py-[2px] !text-sm"
+            variant="purple"
             onClick={() => {
               setIsOpen(false)
             }}
@@ -85,14 +85,14 @@ export const HeaderAuthentication = (): JSX.Element => {
             Profil
           </Button>
           <Button
-            icon='/icons/signout.png'
-            className='!px-0 !py-[2px] !text-sm'
-            variant='red'
+            icon="/icons/signout.png"
+            className="!px-0 !py-[2px] !text-sm"
+            variant="red"
             onClick={async () => {
               setIsOpen(false)
               await authentication.signoutServerSide()
               router.refresh()
-              router.replace('/')
+              router.replace("/")
             }}
           >
             Déconnexion

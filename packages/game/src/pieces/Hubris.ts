@@ -1,6 +1,6 @@
-import type { PieceType } from './Piece.js'
-import { Piece } from './Piece.js'
-import { Position } from '../Position.js'
+import type { PieceType } from "./Piece.js"
+import { Piece } from "./Piece.js"
+import { Position } from "../Position.js"
 
 export class Hubris extends Piece {
   public getPositionsOffsets(maximumOffset: number): Position[] {
@@ -16,10 +16,10 @@ export class Hubris extends Piece {
   }
 
   public getCapturablePiecesTypes(): PieceType[] {
-    return ['BAYARD']
+    return ["BAYARD"]
   }
 
   public get type(): PieceType {
-    return 'HUBRIS'
+    return "HUBRIS"
   }
 }

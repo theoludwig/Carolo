@@ -1,23 +1,23 @@
-import type { AxiosInstance } from 'axios'
-import axios from 'axios'
-import type { TokensJWT, UserCurrent } from '@carolo/models'
+import type { AxiosInstance } from "axios"
+import axios from "axios"
+import type { TokensJWT, UserCurrent } from "@carolo/models"
 
-import { API_URL, api } from '@/lib/configurations'
-import { useAuthentication } from '@/stores/authentication'
-import { cookies } from '@/lib/cookies'
+import { API_URL, api } from "@/lib/configurations"
+import { useAuthentication } from "@/stores/authentication"
+import { cookies } from "@/lib/cookies"
 
 export const fetchRefreshToken = async (
-  refreshToken: string
+  refreshToken: string,
 ): Promise<TokensJWT> => {
-  const { data } = await api.post<TokensJWT>('/users/refresh-token', {
-    refreshToken
+  const { data } = await api.post<TokensJWT>("/users/refresh-token", {
+    refreshToken,
   })
   return { ...data, refreshToken }
 }
 
 export interface SigninResult {
   tokens: TokensJWT | null
-  user: UserCurrent['user'] | null
+  user: UserCurrent["user"] | null
   authentication: Authentication | null
 }
 
@@ -32,8 +32,8 @@ export class Authentication {
     this.api = axios.create({
       baseURL: API_URL,
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     })
     this.api.interceptors.request.use(
       async (config) => {
@@ -41,7 +41,7 @@ export class Authentication {
           this.accessTokenAge + tokens.expiresIn > Date.now()
         if (!isValidAccessToken) {
           const { accessToken } = await fetchRefreshToken(
-            this.tokens.refreshToken
+            this.tokens.refreshToken,
           )
           this.setAccessToken(accessToken)
         }
@@ -51,7 +51,7 @@ export class Authentication {
       async (error) => {
         this.signout()
         return await Promise.reject(error)
-      }
+      },
     )
     this.api.interceptors.response.use(
       (response) => {
@@ -64,7 +64,7 @@ export class Authentication {
         error.config._retry = true
         try {
           const { accessToken } = await fetchRefreshToken(
-            this.tokens.refreshToken
+            this.tokens.refreshToken,
           )
           this.setAccessToken(accessToken)
           error.response.config.headers.Authorization = `${this.tokens.type} ${this.tokens.accessToken}`
@@ -73,7 +73,7 @@ export class Authentication {
           this.signout()
           return await Promise.reject(error)
         }
-      }
+      },
     )
   }
 
@@ -83,18 +83,18 @@ export class Authentication {
   }
 
   public signout(): void {
-    cookies.remove('refreshToken')
+    cookies.remove("refreshToken")
     useAuthentication.setState({
       authenticated: false,
       authentication: null,
-      user: null
+      user: null,
     })
   }
 
   public async signoutServerSide(): Promise<void> {
     try {
-      await this.api.post('/users/signout', {
-        refreshToken: this.tokens.refreshToken
+      await this.api.post("/users/signout", {
+        refreshToken: this.tokens.refreshToken,
       })
     } catch {}
     this.signout()
@@ -102,38 +102,38 @@ export class Authentication {
 
   public async signoutAllDevicesServerSide(): Promise<void> {
     try {
-      await this.api.delete('/users/signout')
+      await this.api.delete("/users/signout")
     } catch {}
     this.signout()
   }
 
   public static async signin(
-    refreshToken?: string
+    refreshToken?: string,
   ): Promise<SigninResult | null> {
     if (refreshToken == null) {
       useAuthentication.setState({
         authenticated: false,
         authentication: null,
-        user: null
+        user: null,
       })
       return null
     }
-    cookies.set('refreshToken', refreshToken)
+    cookies.set("refreshToken", refreshToken)
     let tokens: TokensJWT | null = null
     let authentication: Authentication | null = null
-    let user: UserCurrent['user'] | null = null
+    let user: UserCurrent["user"] | null = null
     try {
       tokens = await fetchRefreshToken(refreshToken)
       authentication = new Authentication(tokens)
       const { data } =
-        await authentication.api.get<UserCurrent>('/users/current')
+        await authentication.api.get<UserCurrent>("/users/current")
       user = data.user
       useAuthentication.setState({ authenticated: true, authentication, user })
     } catch {
       useAuthentication.setState({
         authenticated: false,
         authentication: null,
-        user: null
+        user: null,
       })
     }
     return { tokens, authentication, user }

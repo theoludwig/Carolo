@@ -1,18 +1,18 @@
-'use client'
+"use client"
 
-import { useRef } from 'react'
-import type { TokensJWT, UserCurrent } from '@carolo/models'
+import { useRef } from "react"
+import type { TokensJWT, UserCurrent } from "@carolo/models"
 
-import { Authentication } from '@/lib/Authentication'
-import { useAuthentication } from '@/stores/authentication'
+import { Authentication } from "@/lib/Authentication"
+import { useAuthentication } from "@/stores/authentication"
 
 export interface AuthenticationStoreInitializerProps {
   tokens: TokensJWT | null
-  user: UserCurrent['user'] | null
+  user: UserCurrent["user"] | null
 }
 
 export const AuthenticationStoreInitializer = (
-  props: AuthenticationStoreInitializerProps
+  props: AuthenticationStoreInitializerProps,
 ): JSX.Element => {
   const { tokens, user } = props
 
@@ -25,7 +25,7 @@ export const AuthenticationStoreInitializer = (
       useAuthentication.setState({
         authenticated: false,
         authentication: null,
-        user: null
+        user: null,
       })
     }
     initialized.current = true

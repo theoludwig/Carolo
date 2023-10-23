@@ -1,12 +1,12 @@
-import NextLink from 'next/link'
-import type { LinkProps as NextLinkProps } from 'next/link'
-import classNames from 'clsx'
+import NextLink from "next/link"
+import type { LinkProps as NextLinkProps } from "next/link"
+import classNames from "clsx"
 
 type LinkTypeProps = NextLinkProps &
-  Omit<React.ComponentPropsWithoutRef<'a'>, 'href'>
+  Omit<React.ComponentPropsWithoutRef<"a">, "href">
 
 export interface LinkProps extends LinkTypeProps {
-  href: LinkTypeProps['href']
+  href: LinkTypeProps["href"]
 }
 
 export const Link = (props: LinkProps): JSX.Element => {
@@ -15,8 +15,8 @@ export const Link = (props: LinkProps): JSX.Element => {
   return (
     <NextLink
       className={classNames(
-        'font-inter text-[#2885F2] hover:underline',
-        className
+        "font-inter text-[#2885F2] hover:underline",
+        className,
       )}
       {...rest}
     >

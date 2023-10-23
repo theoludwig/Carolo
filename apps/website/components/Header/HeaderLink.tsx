@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import NextLink from 'next/link'
-import { usePathname } from 'next/navigation'
-import classNames from 'clsx'
+import NextLink from "next/link"
+import { usePathname } from "next/navigation"
+import classNames from "clsx"
 
-import type { LinkProps } from '@/components/Link'
+import type { LinkProps } from "@/components/Link"
 
 export interface HeaderLinkProps extends LinkProps {}
 
@@ -16,11 +16,11 @@ export const HeaderLink = (props: HeaderLinkProps): JSX.Element => {
   return (
     <NextLink
       className={classNames(
-        'font-inter underline-offset-2 hover:underline',
+        "font-inter underline-offset-2 hover:underline",
         {
-          underline: pathname === href
+          underline: pathname === href,
         },
-        className
+        className,
       )}
       href={href}
       {...rest}

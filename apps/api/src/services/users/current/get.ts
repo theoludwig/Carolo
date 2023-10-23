@@ -1,21 +1,21 @@
-import type { FastifyPluginAsync, FastifySchema } from 'fastify'
+import type { FastifyPluginAsync, FastifySchema } from "fastify"
 import type {
   AuthenticationStrategy,
   Locale,
-  UserCurrent
-} from '@carolo/models'
-import { fastifyErrors, userCurrentSchemaObject } from '@carolo/models'
+  UserCurrent,
+} from "@carolo/models"
+import { fastifyErrors, userCurrentSchemaObject } from "@carolo/models"
 
-import prisma from '#src/tools/database/prisma.js'
-import authenticateUser from '#src/tools/plugins/authenticateUser.js'
+import prisma from "#src/tools/database/prisma.js"
+import authenticateUser from "#src/tools/plugins/authenticateUser.js"
 
 const getCurrentUserSchema: FastifySchema = {
-  description: 'GET the current connected user.',
-  tags: ['users'] as string[],
+  description: "GET the current connected user.",
+  tags: ["users"] as string[],
   security: [
     {
-      bearerAuth: []
-    }
+      bearerAuth: [],
+    },
   ] as Array<{ [key: string]: [] }>,
   response: {
     200: userCurrentSchemaObject,
@@ -23,8 +23,8 @@ const getCurrentUserSchema: FastifySchema = {
     401: fastifyErrors[401],
     403: fastifyErrors[403],
     429: fastifyErrors[429],
-    500: fastifyErrors[500]
-  }
+    500: fastifyErrors[500],
+  },
 } as const
 
 export const getCurrentUser: FastifyPluginAsync = async (fastify) => {
@@ -33,8 +33,8 @@ export const getCurrentUser: FastifyPluginAsync = async (fastify) => {
   fastify.route<{
     Reply: UserCurrent
   }>({
-    method: 'GET',
-    url: '/users/current',
+    method: "GET",
+    url: "/users/current",
     schema: getCurrentUserSchema,
     handler: async (request, reply) => {
       if (request.user == null) {
@@ -42,14 +42,14 @@ export const getCurrentUser: FastifyPluginAsync = async (fastify) => {
       }
       const { user } = request
       let settings = await prisma.userSetting.findFirst({
-        where: { userId: user.current.id }
+        where: { userId: user.current.id },
       })
       if (settings == null) {
         settings = await prisma.userSetting.create({
-          data: {}
+          data: {},
         })
       }
-      const strategies = ['Local'] as AuthenticationStrategy[]
+      const strategies = ["Local"] as AuthenticationStrategy[]
       reply.statusCode = 200
       return {
         user: {
@@ -60,12 +60,12 @@ export const getCurrentUser: FastifyPluginAsync = async (fastify) => {
             ...settings,
             locale: settings.locale as Locale,
             createdAt: settings.createdAt.toISOString(),
-            updatedAt: settings.updatedAt.toISOString()
+            updatedAt: settings.updatedAt.toISOString(),
           },
           currentStrategy: user.currentStrategy,
-          strategies
-        }
+          strategies,
+        },
       }
-    }
+    },
   })
 }

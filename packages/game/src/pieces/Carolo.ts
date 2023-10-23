@@ -1,6 +1,6 @@
-import { Position } from '../Position.js'
-import type { PieceType } from './Piece.js'
-import { Piece } from './Piece.js'
+import { Position } from "../Position.js"
+import type { PieceType } from "./Piece.js"
+import { Piece } from "./Piece.js"
 
 export class Carolo extends Piece {
   public override shouldMoveUntilObstacle(): boolean {
@@ -24,10 +24,10 @@ export class Carolo extends Piece {
   }
 
   public getCapturablePiecesTypes(): PieceType[] {
-    return ['HUBRIS']
+    return ["HUBRIS"]
   }
 
   public get type(): PieceType {
-    return 'CAROLO'
+    return "CAROLO"
   }
 }
