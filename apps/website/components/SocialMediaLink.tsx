@@ -39,7 +39,7 @@ export const SocialMediaLink = (props: SocialMediaLinkProps): JSX.Element => {
     >
       <Image
         priority
-        className="h-auto w-auto"
+        className="h-[25px] w-[25px]"
         quality={100}
         width={25}
         height={25}

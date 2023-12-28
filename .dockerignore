@@ -1,3 +1,21 @@
-build
-coverage
-node_modules
+**/.turbo
+**/.next
+**/out
+**/build
+**/coverage
+**/node_modules
+
+# envs
+.env
+.env.production
+.env.development
+secrets
+
+# misc
+.DS_Store
+*.pem
+Dockerfile
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

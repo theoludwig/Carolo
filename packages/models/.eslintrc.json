@@ -1,5 +1,6 @@
 {
   "root": true,
+  "ignorePatterns": ["build"],
   "extends": ["@carolo/eslint-config-custom"],
   "parserOptions": {
     "project": "./tsconfig.json"

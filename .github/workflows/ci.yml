@@ -10,23 +10,26 @@ jobs:
   ci:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "actions/checkout@v4.0.0"
+      - uses: "actions/checkout@v4.1.1"
+
+      - uses: "pnpm/action-setup@v2.4.0"
 
       - name: "Setup Node.js"
-        uses: "actions/setup-node@v3.8.1"
+        uses: "actions/setup-node@v4.0.1"
         with:
           node-version: "20.x"
-          cache: "npm"
+          cache: "pnpm"
 
       - name: "Install dependencies"
-        run: "npm clean-install"
+        run: "pnpm install --frozen-lockfile"
 
       - run: "cp .env.example .env"
       - run: "cp apps/api/.env.example apps/api/.env"
       - run: "cp apps/website/.env.example apps/website/.env"
 
-      - run: "npm run build"
-      - run: "npm run lint"
-      - run: "npm run lint:editorconfig"
-      - run: "npm run lint:prettier"
-      - run: "npm run test"
+      - run: "pnpm run build"
+      - run: "pnpm run lint"
+      - run: 'npm run lint:commit -- --to "${{ github.sha }}"'
+      - run: "pnpm run lint:editorconfig"
+      - run: "pnpm run lint:prettier"
+      - run: "pnpm run test"

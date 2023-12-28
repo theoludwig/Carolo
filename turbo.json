@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": ["NODE_ENV"],
-  "globalDependencies": ["**/.env"],
+  "globalEnv": [],
+  "globalDependencies": [],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
@@ -9,13 +9,12 @@
       "inputs": ["**/*.tsx", "**/*.ts"]
     },
     "test": {
-      "dependsOn": ["build"],
+      "dependsOn": ["^build"],
       "inputs": ["**/*.tsx", "**/*.ts"]
     },
     "lint": {
-      "dependsOn": ["build"],
-      "outputs": [],
-      "inputs": ["**/*.tsx", "**/*.ts"]
+      "dependsOn": ["^build"],
+      "inputs": ["**/*.tsx", "**/*.ts", "**/schema.prisma"]
     },
     "dev": {
       "cache": false,

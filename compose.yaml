@@ -3,7 +3,9 @@ services:
     container_name: "carolo-api"
     image: "carolo-api"
     restart: "unless-stopped"
-    network_mode: "host"
+    ports:
+      - "9001:9001"
+      # - "5555:5555"
     build:
       context: "./"
       dockerfile: "./apps/api/Dockerfile"
@@ -15,7 +17,8 @@ services:
     container_name: "carolo-website"
     image: "carolo-website"
     restart: "unless-stopped"
-    network_mode: "host"
+    ports:
+      - "9000:9000"
     build:
       context: "./"
       dockerfile: "./apps/website/Dockerfile"
@@ -23,9 +26,8 @@ services:
 
   carolo-database:
     container_name: "carolo-database"
-    image: "postgres:15.4"
+    image: "postgres:16.1"
     restart: "unless-stopped"
-    network_mode: "host"
     env_file: ".env"
     environment:
       POSTGRES_USER: ${DATABASE_USER}

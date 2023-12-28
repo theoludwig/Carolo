@@ -14,9 +14,6 @@ dist
 
 # testing
 coverage
-cypress/screenshots
-cypress/videos
-cypress/downloads
 
 # envs
 .env

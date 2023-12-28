@@ -1,8 +1,8 @@
-const path = require("node:path")
+const IS_STANDALONE = process.env.IS_STANDALONE === "true"
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+  output: IS_STANDALONE ? "standalone" : undefined,
   reactStrictMode: false,
   eslint: {
     ignoreDuringBuilds: true,
@@ -14,10 +14,6 @@ const nextConfig = {
     })
     return config
   },
-  experimental: {
-    outputFileTracingRoot: path.join(__dirname, "../../"),
-  },
-  transpilePackages: ["@carolo/game", "@carolo/models"],
   images: {
     remotePatterns: [
       {
